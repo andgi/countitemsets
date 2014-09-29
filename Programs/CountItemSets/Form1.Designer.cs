@@ -35,6 +35,8 @@
             this.buttonStart = new System.Windows.Forms.Button();
             this.dataGridViewResults = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
+            this.labelTransactionCount = new System.Windows.Forms.Label();
+            this.textBoxTransactionCount = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,7 +72,7 @@
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(69, 52);
+            this.buttonStart.Location = new System.Drawing.Point(629, 54);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 3;
@@ -95,11 +97,29 @@
             this.label2.TabIndex = 5;
             this.label2.Text = "Results:";
             // 
+            // labelTransactionCount
+            // 
+            this.labelTransactionCount.AutoSize = true;
+            this.labelTransactionCount.Location = new System.Drawing.Point(14, 59);
+            this.labelTransactionCount.Name = "labelTransactionCount";
+            this.labelTransactionCount.Size = new System.Drawing.Size(93, 13);
+            this.labelTransactionCount.TabIndex = 6;
+            this.labelTransactionCount.Text = "Nr of transactions:";
+            // 
+            // textBoxTransactionCount
+            // 
+            this.textBoxTransactionCount.Location = new System.Drawing.Point(113, 56);
+            this.textBoxTransactionCount.Name = "textBoxTransactionCount";
+            this.textBoxTransactionCount.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTransactionCount.TabIndex = 7;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(716, 532);
+            this.Controls.Add(this.textBoxTransactionCount);
+            this.Controls.Add(this.labelTransactionCount);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dataGridViewResults);
             this.Controls.Add(this.buttonStart);
@@ -123,6 +143,8 @@
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.DataGridView dataGridViewResults;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelTransactionCount;
+        private System.Windows.Forms.TextBox textBoxTransactionCount;
     }
 }
 

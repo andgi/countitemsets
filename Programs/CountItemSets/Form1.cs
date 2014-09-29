@@ -39,6 +39,8 @@ namespace CountItemSets
         Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
         Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
         Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>();
+        Dictionary<string, double> dictionaryRule = new Dictionary<string, double>();
+        int transactionCount = 0;
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
@@ -127,6 +129,7 @@ namespace CountItemSets
                         if (transNrLast == 0)
                         {
                             transNrLast = transNr;
+                            transactionCount++;
                         }
                         if (dictionary.ContainsKey(eanNr))
                             dictionary[eanNr]++;
@@ -134,6 +137,8 @@ namespace CountItemSets
                             dictionary.Add(eanNr, 1);
                         if (transNrLast != transNr)
                         {
+                            transNrLast = transNr;
+                            transactionCount++;
                         }
                         if (!dictionaryEANtoVGR.ContainsKey(eanNr))
                             dictionaryEANtoVGR.Add(eanNr, vgrNr);
@@ -144,6 +149,7 @@ namespace CountItemSets
                     MessageBox.Show(ex.Message);
                 };
             }
+            textBoxTransactionCount.Text = transactionCount.ToString();
             dictionary = dictionary.Where(item => item.Value >= 1000 && item.Key!=1 && item.Key!=2).ToDictionary(item => item.Key, item => item.Value);
 
 
@@ -172,6 +178,7 @@ namespace CountItemSets
                         if (transNrLast != transNr)
                         {
                             keys.Sort();
+                            keys = new List<long>(keys.Distinct());
                             for (int i = 0; i < (keys.Count-1); i++)
                             {
                                 for (int j = i + 1; j < keys.Count; j++)
@@ -201,12 +208,25 @@ namespace CountItemSets
                 };
             }
 
+            foreach (KeyValuePair<string, int> pair in dictionary2)
+            {
+                String[] columns = pair.Key.Split(',');
+                long eanNr1 = 0;
+                Int64.TryParse(columns[0], out eanNr1);
+                long eanNr2 = 0;
+                Int64.TryParse(columns[1], out eanNr2);
+                double value = (double)pair.Value / (double)dictionary[eanNr1];
+                if (value > 1.0)
+                    value = 1.0;
+                dictionaryRule.Add(pair.Key, value);
+            }
+
+            /*
             dictionary2 = dictionary2.Where(item => item.Value >= 1000).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value);
-
             List<KeyValuePair<string,int>> results = dictionary2.OrderByDescending(item => item.Value).ToList();
-
+             */
+            List<KeyValuePair<string, double>> results = dictionaryRule.Where(item => item.Value >= 0.05).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value).OrderByDescending(item => item.Value).ToList();
             dataGridViewResults.DataSource = results;
-
             buttonStart.Enabled = true;
 
         }
