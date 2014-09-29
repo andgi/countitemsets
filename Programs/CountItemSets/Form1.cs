@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
+using System.Configuration;
 
 namespace CountItemSets
 {
@@ -17,13 +18,22 @@ namespace CountItemSets
         public Form1()
         {
             InitializeComponent();
+
+            try
+            {
+                textBoxFileName.Text = ConfigurationManager.AppSettings["TransactionFileName"];
+            }
+            catch (Exception) { }
         }
 
         private void browseButton1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
-            textBoxFileName.Text = openFileDialog1.FileName; 
+            textBoxFileName.Text = openFileDialog1.FileName;
 
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            config.AppSettings.Settings.Add("TransactionFileName", openFileDialog1.FileName);
+            config.Save(ConfigurationSaveMode.Modified);
         }
 
         Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
@@ -34,7 +44,23 @@ namespace CountItemSets
         {
             buttonStart.Enabled = false;
 
-            TextFieldParser parser = new TextFieldParser("C:\\Users\\HSU\\EAN.csv");
+            String eanPath = "EAN.csv";
+            try
+            {
+                eanPath = ConfigurationManager.AppSettings["EANTable"];
+                if (eanPath == null) throw new Exception();
+            }
+            catch (Exception)
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Title = "Select EAN translation table";
+                dialog.ShowDialog();
+                eanPath = dialog.FileName;
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                config.AppSettings.Settings.Add("EANTable",eanPath);
+                config.Save(ConfigurationSaveMode.Modified);
+            }
+            TextFieldParser parser = new TextFieldParser(eanPath);
             parser.SetDelimiters(";");
             parser.ReadLine();
             while (!parser.EndOfData)
@@ -49,7 +75,24 @@ namespace CountItemSets
                 catch (Exception) { }
             }
 
-            parser = new TextFieldParser("C:\\Users\\HSU\\VGR.csv");
+
+            String vgrPath = "VGR.csv";
+            try
+            {
+                vgrPath = ConfigurationManager.AppSettings["VGRTable"];
+                if (vgrPath == null) throw new Exception();
+            }
+            catch (Exception)
+            {
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Title = "Select VGR translation table";
+                dialog.ShowDialog();
+                vgrPath = dialog.FileName;
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                config.AppSettings.Settings.Add("VGRTable", vgrPath);
+                config.Save(ConfigurationSaveMode.Modified);
+            }          
+            parser = new TextFieldParser(vgrPath);
             parser.SetDelimiters(";");
             parser.ReadLine();
             while (!parser.EndOfData)
