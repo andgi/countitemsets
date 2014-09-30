@@ -40,6 +40,11 @@ namespace CountItemSets
         Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
         Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>();
         Dictionary<string, double> dictionaryRule = new Dictionary<string, double>();
+
+        Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
+        Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
+        Dictionary<string, int> dictionaryLevel3 = new Dictionary<string, int>();
+
         int transactionCount = 0;
 
         private void buttonStart_Click(object sender, EventArgs e)
@@ -114,7 +119,8 @@ namespace CountItemSets
             StreamReader reader = new StreamReader(textBoxFileName.Text);
             int rowCount = 0;
             int transNrLast = 0;
-            Dictionary<long,int> dictionary = new Dictionary<long,int>();
+
+            dictionaryLevel1.Clear();
             while (!reader.EndOfStream)
             {
                 try
@@ -131,10 +137,10 @@ namespace CountItemSets
                             transNrLast = transNr;
                             transactionCount++;
                         }
-                        if (dictionary.ContainsKey(eanNr))
-                            dictionary[eanNr]++;
+                        if (dictionaryLevel1.ContainsKey(eanNr))
+                            dictionaryLevel1[eanNr]++;
                         else
-                            dictionary.Add(eanNr, 1);
+                            dictionaryLevel1.Add(eanNr, 1);
                         if (transNrLast != transNr)
                         {
                             transNrLast = transNr;
@@ -150,11 +156,10 @@ namespace CountItemSets
                 };
             }
             textBoxTransactionCount.Text = transactionCount.ToString();
-            dictionary = dictionary.Where(item => item.Value >= 1000 && item.Key!=1 && item.Key!=2).ToDictionary(item => item.Key, item => item.Value);
+            dictionaryLevel1 = dictionaryLevel1.Where(item => (transactionCount/item.Value) <= 1000 && item.Key != 1 && item.Key != 2).ToDictionary(item => item.Key, item => item.Value);
 
 
-            Dictionary<string, int> dictionary2 = new Dictionary<string, int>();
-
+            dictionaryLevel2.Clear();
             reader.Close();
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
@@ -185,13 +190,73 @@ namespace CountItemSets
                                 {
                                     long key1 = keys[i];
                                     long key2 = keys[j];
-                                    if (dictionary.ContainsKey(key1) && dictionary.ContainsKey(key2) && key1!=key2)
+                                    if (dictionaryLevel1.ContainsKey(key1) && dictionaryLevel1.ContainsKey(key2) && key1 != key2)
                                     {
                                         string keyName = key1 + "," + key2;
-                                        if (dictionary2.ContainsKey(keyName))
-                                            dictionary2[keyName]++;
+                                        if (dictionaryLevel2.ContainsKey(keyName))
+                                            dictionaryLevel2[keyName]++;
                                         else
-                                            dictionary2.Add(keyName, 1);
+                                            dictionaryLevel2.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            dictionaryLevel2 = dictionaryLevel2.Where(item => (transactionCount / item.Value) <= 1000).ToDictionary(item => item.Key, item => item.Value);
+
+            dictionaryLevel3.Clear();
+            reader.Close();
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            for (int i = 0; i < (keys.Count - 1); i++)
+                            {
+                                for (int j = i + 1; j < keys.Count; j++)
+                                {
+                                    for (int k = j + 1; k < keys.Count; k++)
+                                    {
+                                        long key1 = keys[i];
+                                        long key2 = keys[j];
+                                        long key3 = keys[k];
+                                        if (dictionaryLevel1.ContainsKey(key1) && dictionaryLevel1.ContainsKey(key2) && dictionaryLevel1.ContainsKey(key3)
+                                            && dictionaryLevel2.ContainsKey(key1 + "," + key2) && dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3))
+                                        {
+                                            string keyName = key1 + "," + key2 + "," + key3;
+                                            if (dictionaryLevel3.ContainsKey(keyName))
+                                                dictionaryLevel3[keyName]++;
+                                            else
+                                                dictionaryLevel3.Add(keyName, 1);
+                                        }
                                     }
                                 }
                             }
@@ -208,18 +273,36 @@ namespace CountItemSets
                 };
             }
 
-            foreach (KeyValuePair<string, int> pair in dictionary2)
+            /*
+            dictionaryRule.Clear();
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
             {
                 String[] columns = pair.Key.Split(',');
                 long eanNr1 = 0;
                 Int64.TryParse(columns[0], out eanNr1);
                 long eanNr2 = 0;
                 Int64.TryParse(columns[1], out eanNr2);
-                double value = (double)pair.Value / (double)dictionary[eanNr1];
-                if (value > 1.0)
-                    value = 1.0;
+                double value = (double)pair.Value / (double)dictionaryLevel1[eanNr1];
                 dictionaryRule.Add(pair.Key, value);
             }
+            */
+
+            dictionaryRule.Clear();
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
+            {
+                String[] columns = pair.Key.Split(',');
+                long eanNr1 = 0;
+                Int64.TryParse(columns[0], out eanNr1);
+                long eanNr2 = 0;
+                Int64.TryParse(columns[1], out eanNr2);
+                long eanNr3 = 0;
+                Int64.TryParse(columns[1], out eanNr3);
+                double value = (double)pair.Value / (double)dictionaryLevel2[eanNr1+","+eanNr2];
+                dictionaryRule.Add(pair.Key, value);
+            }
+
+
+
 
             /*
             dictionary2 = dictionary2.Where(item => item.Value >= 1000).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value);
