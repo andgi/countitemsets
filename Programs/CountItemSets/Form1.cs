@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
+using System.Diagnostics;
 
 namespace CountItemSets
 {
@@ -115,7 +116,8 @@ namespace CountItemSets
             }
 
 
-
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             StreamReader reader = new StreamReader(textBoxFileName.Text);
             int rowCount = 0;
             int transNrLast = 0;
@@ -239,24 +241,36 @@ namespace CountItemSets
                         {
                             keys.Sort();
                             keys = new List<long>(keys.Distinct());
-                            for (int i = 0; i < (keys.Count - 1); i++)
+                            if (keys.Count > 2)
                             {
-                                for (int j = i + 1; j < keys.Count; j++)
+                                List<string>[] keyNames = new List<string>[keys.Count - 2];
+                                Parallel.For(0, keys.Count - 2, i =>
                                 {
-                                    for (int k = j + 1; k < keys.Count; k++)
+                                    keyNames[i] = new List<string>();
+                                    for (int j = i + 1; j < (keys.Count - 1); j++)
                                     {
-                                        long key1 = keys[i];
-                                        long key2 = keys[j];
-                                        long key3 = keys[k];
-                                        if (dictionaryLevel1.ContainsKey(key1) && dictionaryLevel1.ContainsKey(key2) && dictionaryLevel1.ContainsKey(key3)
-                                            && dictionaryLevel2.ContainsKey(key1 + "," + key2) && dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3))
+                                        for (int k = j + 1; k < keys.Count; k++)
                                         {
-                                            string keyName = key1 + "," + key2 + "," + key3;
-                                            if (dictionaryLevel3.ContainsKey(keyName))
-                                                dictionaryLevel3[keyName]++;
-                                            else
-                                                dictionaryLevel3.Add(keyName, 1);
+                                            long key1 = keys[i];
+                                            long key2 = keys[j];
+                                            long key3 = keys[k];
+                                            if (dictionaryLevel1.ContainsKey(key1) && dictionaryLevel1.ContainsKey(key2) && dictionaryLevel1.ContainsKey(key3)
+                                                && dictionaryLevel2.ContainsKey(key1 + "," + key2) && dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3))
+                                            {
+                                                string keyName = key1 + "," + key2 + "," + key3;
+                                                keyNames[i].Add(keyName);
+                                            }
                                         }
+                                    }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count - 2); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel3.ContainsKey(keyName))
+                                            dictionaryLevel3[keyName]++;
+                                        else
+                                            dictionaryLevel3.Add(keyName, 1);
                                     }
                                 }
                             }
@@ -272,6 +286,8 @@ namespace CountItemSets
                     MessageBox.Show(ex.Message);
                 };
             }
+            stopwatch.Stop();
+            textBoxTime.Text = stopwatch.Elapsed.ToString();
 
             /*
             dictionaryRule.Clear();

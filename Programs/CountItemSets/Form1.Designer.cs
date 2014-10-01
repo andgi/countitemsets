@@ -37,6 +37,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.labelTransactionCount = new System.Windows.Forms.Label();
             this.textBoxTransactionCount = new System.Windows.Forms.TextBox();
+            this.labelTime = new System.Windows.Forms.Label();
+            this.textBoxTime = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,11 +115,29 @@
             this.textBoxTransactionCount.Size = new System.Drawing.Size(100, 20);
             this.textBoxTransactionCount.TabIndex = 7;
             // 
+            // labelTime
+            // 
+            this.labelTime.AutoSize = true;
+            this.labelTime.Location = new System.Drawing.Point(233, 59);
+            this.labelTime.Name = "labelTime";
+            this.labelTime.Size = new System.Drawing.Size(33, 13);
+            this.labelTime.TabIndex = 8;
+            this.labelTime.Text = "Time:";
+            // 
+            // textBoxTime
+            // 
+            this.textBoxTime.Location = new System.Drawing.Point(273, 56);
+            this.textBoxTime.Name = "textBoxTime";
+            this.textBoxTime.Size = new System.Drawing.Size(100, 20);
+            this.textBoxTime.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(716, 532);
+            this.Controls.Add(this.textBoxTime);
+            this.Controls.Add(this.labelTime);
             this.Controls.Add(this.textBoxTransactionCount);
             this.Controls.Add(this.labelTransactionCount);
             this.Controls.Add(this.label2);
@@ -145,6 +165,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelTransactionCount;
         private System.Windows.Forms.TextBox textBoxTransactionCount;
+        private System.Windows.Forms.Label labelTime;
+        private System.Windows.Forms.TextBox textBoxTime;
     }
 }
 
