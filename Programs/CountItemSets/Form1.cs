@@ -402,9 +402,10 @@ namespace CountItemSets
                 Int64.TryParse(columns[0], out eanNr1);
                 long eanNr2 = 0;
                 Int64.TryParse(columns[1], out eanNr2);
-                dictionaryRule.Add(eanNr1 + "," + eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1]);
-                dictionaryRule.Add(eanNr2 + "," + eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2]);
+                dictionaryRule.Add(eanNr1 + "," + eanNr2, ((double)pair.Value / (double)dictionaryLevel1[eanNr1]) / ((double)dictionaryLevel1[eanNr2] / (double)transactionCount));
+                dictionaryRule.Add(eanNr2 + "," + eanNr1, ((double)pair.Value / (double)dictionaryLevel1[eanNr2]) / ((double)dictionaryLevel1[eanNr1] / (double)transactionCount));
             }
+            /*
             foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
             {
                 String[] columns = pair.Key.Split(',');
@@ -434,6 +435,7 @@ namespace CountItemSets
                 dictionaryRule.Add(eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4]);
                 dictionaryRule.Add(eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4]);
             }
+            */
 
 
 
