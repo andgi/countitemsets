@@ -33,14 +33,16 @@ namespace CountItemSets
             textBoxFileName.Text = openFileDialog1.FileName;
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            if (config.AppSettings.Settings["TransactionFileName"] != null)
+                config.AppSettings.Settings.Remove("TransactionFileName");
             config.AppSettings.Settings.Add("TransactionFileName", openFileDialog1.FileName);
             config.Save(ConfigurationSaveMode.Modified);
         }
 
-        Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
-        Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
-        Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>();
-        Dictionary<string, double> dictionaryRule = new Dictionary<string, double>();
+        static Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
+        static Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
+        static Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>();
+        static Dictionary<string, double> dictionaryRule = new Dictionary<string, double>();
 
         Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
         Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
@@ -393,7 +395,7 @@ namespace CountItemSets
             }
             */
 
-
+            /*
             dictionaryRule.Clear();
             foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
             {
@@ -405,7 +407,6 @@ namespace CountItemSets
                 dictionaryRule.Add(eanNr1 + "," + eanNr2, ((double)pair.Value / (double)dictionaryLevel1[eanNr1]) / ((double)dictionaryLevel1[eanNr2] / (double)transactionCount));
                 dictionaryRule.Add(eanNr2 + "," + eanNr1, ((double)pair.Value / (double)dictionaryLevel1[eanNr2]) / ((double)dictionaryLevel1[eanNr1] / (double)transactionCount));
             }
-            /*
             foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
             {
                 String[] columns = pair.Key.Split(',');
@@ -435,22 +436,29 @@ namespace CountItemSets
                 dictionaryRule.Add(eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4]);
                 dictionaryRule.Add(eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4]);
             }
+
+            List<KeyValuePair<string, double>> results = dictionaryRule.Where(item => item.Value >= 0.05).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value).OrderByDescending(item => item.Value).ToList();
             */
 
+            List<AssociationRule> results = new List<AssociationRule>();
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
+            {
+                String[] columns = pair.Key.Split(',');
+                long eanNr1 = 0;
+                Int64.TryParse(columns[0], out eanNr1);
+                long eanNr2 = 0;
+                Int64.TryParse(columns[1], out eanNr2);
+                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value / (double)dictionaryLevel1[eanNr1]) / ((double)dictionaryLevel1[eanNr2] / (double)transactionCount),(double)dictionaryLevel1[eanNr1]/(double)transactionCount));
+            }
 
+            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0));
 
-
-            /*
-            dictionary2 = dictionary2.Where(item => item.Value >= 1000).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value);
-            List<KeyValuePair<string,int>> results = dictionary2.OrderByDescending(item => item.Value).ToList();
-             */
-            List<KeyValuePair<string, double>> results = dictionaryRule.Where(item => item.Value >= 0.05).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value).OrderByDescending(item => item.Value).ToList();
             dataGridViewResults.DataSource = results;
             buttonStart.Enabled = true;
 
         }
 
-        private string TranslateEANpairs(string textPair)
+        static private string TranslateEANpairs(string textPair)
         {
             String[] columns = textPair.Split(',');
             List<string> results = new List<string>();
@@ -475,6 +483,48 @@ namespace CountItemSets
                 results.Add(result);
             }
             return String.Join(",",results.ToArray());
+        }
+
+        public class AssociationRule
+        {
+            public TransactionItem Condition1 { get; set; }
+            public TransactionItem Condition2 { get; set; }
+            public TransactionItem Condition3 { get; set; }
+            public TransactionItem Condition4 { get; set; }
+            public TransactionItem Then { get; set; }
+            public double Confidence { get; set; }
+            public double Lift { get; set; }
+            public double Support { get; set; }
+
+            public AssociationRule(long condition1, long condition2, long condition3, long condition4, long then, double confidence, double lift, double support)
+            {
+                Condition1 = new TransactionItem(condition1);
+                Condition2 = new TransactionItem(condition2);
+                Condition3 = new TransactionItem(condition3);
+                Condition4 = new TransactionItem(condition4);
+                Then = new TransactionItem(then);
+                Confidence = confidence;
+                Lift = lift;
+                Support = support;
+            }
+
+            public class TransactionItem
+            {
+                public long EANCode { get; set; }
+
+                public string Text { get; set; }
+                public TransactionItem(long eanCode)
+                {
+                    EANCode = eanCode;
+                }
+
+                public override string ToString()
+                {
+                    if (Text != null) return Text;
+                    return Text = TranslateEANpairs(EANCode.ToString());
+                }
+            }
+
         }
 
     }
