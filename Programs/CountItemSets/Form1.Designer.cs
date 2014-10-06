@@ -34,12 +34,13 @@
             this.browseButton1 = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.dataGridViewResults = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
             this.labelTransactionCount = new System.Windows.Forms.Label();
             this.textBoxTransactionCount = new System.Windows.Forms.TextBox();
             this.labelTime = new System.Windows.Forms.Label();
             this.textBoxTime = new System.Windows.Forms.TextBox();
+            this.groupBoxAssociationRules = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
+            this.groupBoxAssociationRules.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -84,20 +85,17 @@
             // 
             // dataGridViewResults
             // 
+            this.dataGridViewResults.AllowUserToAddRows = false;
+            this.dataGridViewResults.AllowUserToDeleteRows = false;
+            this.dataGridViewResults.AllowUserToResizeRows = false;
             this.dataGridViewResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewResults.Location = new System.Drawing.Point(69, 100);
+            this.dataGridViewResults.Location = new System.Drawing.Point(6, 19);
             this.dataGridViewResults.Name = "dataGridViewResults";
-            this.dataGridViewResults.Size = new System.Drawing.Size(635, 420);
+            this.dataGridViewResults.ReadOnly = true;
+            this.dataGridViewResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewResults.ShowCellErrors = false;
+            this.dataGridViewResults.Size = new System.Drawing.Size(919, 491);
             this.dataGridViewResults.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 100);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Results:";
             // 
             // labelTransactionCount
             // 
@@ -131,17 +129,26 @@
             this.textBoxTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxTime.TabIndex = 9;
             // 
+            // groupBoxAssociationRules
+            // 
+            this.groupBoxAssociationRules.Controls.Add(this.dataGridViewResults);
+            this.groupBoxAssociationRules.Location = new System.Drawing.Point(12, 103);
+            this.groupBoxAssociationRules.Name = "groupBoxAssociationRules";
+            this.groupBoxAssociationRules.Size = new System.Drawing.Size(931, 516);
+            this.groupBoxAssociationRules.TabIndex = 10;
+            this.groupBoxAssociationRules.TabStop = false;
+            this.groupBoxAssociationRules.Text = "Association Rules:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(716, 532);
+            this.ClientSize = new System.Drawing.Size(958, 629);
+            this.Controls.Add(this.groupBoxAssociationRules);
             this.Controls.Add(this.textBoxTime);
             this.Controls.Add(this.labelTime);
             this.Controls.Add(this.textBoxTransactionCount);
             this.Controls.Add(this.labelTransactionCount);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.dataGridViewResults);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.browseButton1);
             this.Controls.Add(this.textBoxFileName);
@@ -149,6 +156,7 @@
             this.Name = "Form1";
             this.Text = "CountItemSets";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
+            this.groupBoxAssociationRules.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -162,11 +170,11 @@
         private System.Windows.Forms.Button browseButton1;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.DataGridView dataGridViewResults;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelTransactionCount;
         private System.Windows.Forms.TextBox textBoxTransactionCount;
         private System.Windows.Forms.Label labelTime;
         private System.Windows.Forms.TextBox textBoxTime;
+        private System.Windows.Forms.GroupBox groupBoxAssociationRules;
     }
 }
 

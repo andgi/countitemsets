@@ -48,6 +48,7 @@ namespace CountItemSets
         Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
         Dictionary<string, int> dictionaryLevel3 = new Dictionary<string, int>();
         Dictionary<string, int> dictionaryLevel4 = new Dictionary<string, int>();
+        Dictionary<string, int> dictionaryLevel5 = new Dictionary<string, int>();
 
         int transactionCount = 0;
 
@@ -80,6 +81,10 @@ namespace CountItemSets
                             dictionaryLevel1[eanNr]++;
                         else
                             dictionaryLevel1.Add(eanNr, 1);
+                        if (dictionaryLevel1.ContainsKey(-vgrNr))
+                            dictionaryLevel1[-vgrNr]++;
+                        else
+                            dictionaryLevel1.Add(-vgrNr, 1);
                         if (transNrLast != transNr)
                         {
                             transNrLast = transNr;
@@ -146,6 +151,60 @@ namespace CountItemSets
                             transNrLast = transNr;
                         }
                         keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 1)
+                                for (int i = 0; i < (keys.Count - 1); i++)
+                                {
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = i + 1; j < keys.Count; j++)
+                                        {
+                                            long key2 = keys[j];
+                                            if (dictionaryLevel1.ContainsKey(key2))
+                                            {
+                                                string keyName = key1 + "," + key2;
+                                                if (dictionaryLevel2.ContainsKey(keyName))
+                                                    dictionaryLevel2[keyName]++;
+                                                else
+                                                    dictionaryLevel2.Add(keyName, 1);
+                                            }
+                                        }
+                                }
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        keys.Add(-vgrNr);
                     }
                     rowCount++;
                 }
@@ -307,7 +366,94 @@ namespace CountItemSets
                 };
             }
             dictionaryLevel4 = dictionaryLevel4.Where(item => (transactionCount / item.Value) <= 8000).ToDictionary(item => item.Key, item => item.Value);
-                        
+
+            dictionaryLevel5.Clear();
+            reader.Close();
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 4)
+                            {
+                                List<string>[] keyNames = new List<string>[keys.Count - 4];
+                                Parallel.For(0, keys.Count - 4, i =>
+                                {
+                                    keyNames[i] = new List<string>();
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = i + 1; j < (keys.Count - 3); j++)
+                                        {
+                                            long key2 = keys[j];
+                                            if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
+                                                for (int k = j + 1; k < (keys.Count - 2); k++)
+                                                {
+                                                    long key3 = keys[k];
+                                                    if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3))
+                                                    {
+                                                        for (int l = j + 1; l < (keys.Count-1); l++)
+                                                        {
+                                                            long key4 = keys[l];
+                                                            if (dictionaryLevel4.ContainsKey(key1 + "," + key2 + "," + key3 + "," + key4))
+                                                            {
+                                                                for (int m = l + 1; m < (keys.Count); m++)
+                                                                {
+                                                                    long key5 = keys[m];
+                                                                    if (dictionaryLevel4.ContainsKey(key2 + "," + key3 + "," + key4 + "," + key5) && dictionaryLevel4.ContainsKey(key1 + "," + key3 + "," + key4 + "," + key5) && dictionaryLevel4.ContainsKey(key1 + "," + key2 + "," + key4 + "," + key5) && dictionaryLevel4.ContainsKey(key1 + "," + key2 + "," + key3 + "," + key5))
+                                                                    {
+                                                                        string keyName = key1 + "," + key2 + "," + key3 + "," + key4 + "," + key5;
+                                                                        keyNames[i].Add(keyName);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count - 4); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel5.ContainsKey(keyName))
+                                            dictionaryLevel5[keyName]++;
+                                        else
+                                            dictionaryLevel5.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            dictionaryLevel5 = dictionaryLevel5.Where(item => (transactionCount / item.Value) <= 8000).ToDictionary(item => item.Key, item => item.Value);
+
             stopwatch.Stop();
             textBoxTime.Text = stopwatch.Elapsed.ToString();
         }
@@ -448,10 +594,62 @@ namespace CountItemSets
                 Int64.TryParse(columns[0], out eanNr1);
                 long eanNr2 = 0;
                 Int64.TryParse(columns[1], out eanNr2);
-                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value / (double)dictionaryLevel1[eanNr1]) / ((double)dictionaryLevel1[eanNr2] / (double)transactionCount),(double)dictionaryLevel1[eanNr1]/(double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel1[eanNr1] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel1[eanNr2] / (double)transactionCount));
             }
 
-            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0));
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
+            {
+                String[] columns = pair.Key.Split(',');
+                long eanNr1 = 0;
+                Int64.TryParse(columns[0], out eanNr1);
+                long eanNr2 = 0;
+                Int64.TryParse(columns[1], out eanNr2);
+                long eanNr3 = 0;
+                Int64.TryParse(columns[2], out eanNr3);
+                results.Add(new AssociationRule(eanNr1, eanNr2, 0, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr1 + "," + eanNr2] * (double)dictionaryLevel1[eanNr3]), (double)dictionaryLevel2[eanNr1 + "," + eanNr2] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr1 + "," + eanNr3] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel2[eanNr1 + "," + eanNr3] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel2[eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel2[eanNr2 + "," + eanNr3] / (double)transactionCount));
+            }
+
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel4)
+            {
+                String[] columns = pair.Key.Split(',');
+                long eanNr1 = 0;
+                Int64.TryParse(columns[0], out eanNr1);
+                long eanNr2 = 0;
+                Int64.TryParse(columns[1], out eanNr2);
+                long eanNr3 = 0;
+                Int64.TryParse(columns[2], out eanNr3);
+                long eanNr4 = 0;
+                Int64.TryParse(columns[3], out eanNr4);
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] / (double)transactionCount));
+            }
+
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel5)
+            {
+                String[] columns = pair.Key.Split(',');
+                long eanNr1 = 0;
+                Int64.TryParse(columns[0], out eanNr1);
+                long eanNr2 = 0;
+                Int64.TryParse(columns[1], out eanNr2);
+                long eanNr3 = 0;
+                Int64.TryParse(columns[2], out eanNr3);
+                long eanNr4 = 0;
+                Int64.TryParse(columns[3], out eanNr4);
+                long eanNr5 = 0;
+                Int64.TryParse(columns[4], out eanNr5);
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, eanNr4, eanNr5, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr5]), (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, eanNr5, eanNr4, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5] * (double)dictionaryLevel1[eanNr4]), (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, eanNr5, eanNr3, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr3]), (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, eanNr5, eanNr2, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
+            }
+
+            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()));
 
             dataGridViewResults.DataSource = results;
             buttonStart.Enabled = true;
@@ -508,7 +706,7 @@ namespace CountItemSets
                 Support = support;
             }
 
-            public class TransactionItem
+            public class TransactionItem: IComparable
             {
                 public long EANCode { get; set; }
 
@@ -521,8 +719,49 @@ namespace CountItemSets
                 public override string ToString()
                 {
                     if (Text != null) return Text;
-                    return Text = TranslateEANpairs(EANCode.ToString());
+                    return Text = TranslateEANCode();
                 }
+
+                public string TranslateEANCode()
+                {
+                    if (EANCode == 0) return "";
+                    string result;
+                    if (EANCode < 0)
+                    {
+                        int vgrNr = (int) -EANCode;
+                        if (dictionaryVGR.ContainsKey(vgrNr))
+                            result = "Varugrupp " + dictionaryVGR[vgrNr] + "(" + vgrNr + ")";
+                        else
+                            result = "Varugrupp " + "(" + vgrNr + ")";
+
+                    }
+                    else if (dictionaryEAN.ContainsKey(EANCode))
+                        result = dictionaryEAN[EANCode] + " (" + EANCode + ")";
+                    else
+                    {
+                        if (dictionaryEANtoVGR.ContainsKey(EANCode))
+                        {
+                            int vgrNr = dictionaryEANtoVGR[EANCode];
+                            if (dictionaryVGR.ContainsKey(vgrNr))
+                                result = dictionaryVGR[vgrNr] + " (" + EANCode + ")";
+                            else
+                                result = "Varugrupp " + vgrNr + " (" + EANCode + ")";
+                        }
+                        else result = EANCode.ToString();
+                    }
+                    return result;
+                }
+
+                public int CompareTo(Object obj)
+                {
+                    if (obj == null) return 1;
+                    TransactionItem item = obj as TransactionItem;
+                    if (item != null) 
+                        return this.EANCode.CompareTo(item.EANCode);
+                    else 
+                        throw new ArgumentException("Object is not a TransactionItem");
+                }
+                
             }
 
         }
