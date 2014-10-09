@@ -45,11 +45,23 @@
             this.progressBarLoadingData = new System.Windows.Forms.ProgressBar();
             this.labelMaxSupport = new System.Windows.Forms.Label();
             this.labelMinSupport = new System.Windows.Forms.Label();
+            this.trackBarMaxLift = new System.Windows.Forms.TrackBar();
+            this.trackBarMaxConfidence = new System.Windows.Forms.TrackBar();
+            this.trackBarMinLift = new System.Windows.Forms.TrackBar();
+            this.trackBarMinConfidence = new System.Windows.Forms.TrackBar();
+            this.labelMaxLift = new System.Windows.Forms.Label();
+            this.labelMaxConfidence = new System.Windows.Forms.Label();
+            this.labelMinLift = new System.Windows.Forms.Label();
+            this.labelMinConfidence = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxSupport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMinSupport)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxLift)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxConfidence)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMinLift)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMinConfidence)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -150,6 +162,14 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.labelMinConfidence);
+            this.groupBox1.Controls.Add(this.labelMinLift);
+            this.groupBox1.Controls.Add(this.labelMaxConfidence);
+            this.groupBox1.Controls.Add(this.labelMaxLift);
+            this.groupBox1.Controls.Add(this.trackBarMinConfidence);
+            this.groupBox1.Controls.Add(this.trackBarMinLift);
+            this.groupBox1.Controls.Add(this.trackBarMaxConfidence);
+            this.groupBox1.Controls.Add(this.trackBarMaxLift);
             this.groupBox1.Controls.Add(this.labelMinSupport);
             this.groupBox1.Controls.Add(this.labelMaxSupport);
             this.groupBox1.Controls.Add(this.trackBarMinSupport);
@@ -194,11 +214,11 @@
             // labelMaxSupport
             // 
             this.labelMaxSupport.AutoSize = true;
-            this.labelMaxSupport.Location = new System.Drawing.Point(808, 52);
+            this.labelMaxSupport.Location = new System.Drawing.Point(808, 51);
             this.labelMaxSupport.Name = "labelMaxSupport";
-            this.labelMaxSupport.Size = new System.Drawing.Size(28, 13);
+            this.labelMaxSupport.Size = new System.Drawing.Size(40, 13);
             this.labelMaxSupport.TabIndex = 2;
-            this.labelMaxSupport.Text = "1.00";
+            this.labelMaxSupport.Text = "1.0000";
             this.labelMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelMinSupport
@@ -206,9 +226,93 @@
             this.labelMinSupport.AutoSize = true;
             this.labelMinSupport.Location = new System.Drawing.Point(808, 103);
             this.labelMinSupport.Name = "labelMinSupport";
-            this.labelMinSupport.Size = new System.Drawing.Size(28, 13);
+            this.labelMinSupport.Size = new System.Drawing.Size(40, 13);
             this.labelMinSupport.TabIndex = 3;
-            this.labelMinSupport.Text = "0.00";
+            this.labelMinSupport.Text = "0.0000";
+            // 
+            // trackBarMaxLift
+            // 
+            this.trackBarMaxLift.Location = new System.Drawing.Point(660, 19);
+            this.trackBarMaxLift.Maximum = 100;
+            this.trackBarMaxLift.Name = "trackBarMaxLift";
+            this.trackBarMaxLift.Size = new System.Drawing.Size(104, 45);
+            this.trackBarMaxLift.TabIndex = 4;
+            this.trackBarMaxLift.TickFrequency = 10;
+            this.trackBarMaxLift.Value = 100;
+            this.trackBarMaxLift.Scroll += new System.EventHandler(this.trackBarMaxLift_Scroll);
+            this.trackBarMaxLift.ValueChanged += new System.EventHandler(this.trackBarMaxLift_ValueChanged);
+            // 
+            // trackBarMaxConfidence
+            // 
+            this.trackBarMaxConfidence.Location = new System.Drawing.Point(550, 19);
+            this.trackBarMaxConfidence.Maximum = 100;
+            this.trackBarMaxConfidence.Name = "trackBarMaxConfidence";
+            this.trackBarMaxConfidence.Size = new System.Drawing.Size(104, 45);
+            this.trackBarMaxConfidence.TabIndex = 5;
+            this.trackBarMaxConfidence.TickFrequency = 10;
+            this.trackBarMaxConfidence.Value = 100;
+            this.trackBarMaxConfidence.Scroll += new System.EventHandler(this.trackBarMaxConfidence_Scroll);
+            this.trackBarMaxConfidence.ValueChanged += new System.EventHandler(this.trackBarMaxConfidence_ValueChanged);
+            // 
+            // trackBarMinLift
+            // 
+            this.trackBarMinLift.Location = new System.Drawing.Point(660, 70);
+            this.trackBarMinLift.Maximum = 100;
+            this.trackBarMinLift.Name = "trackBarMinLift";
+            this.trackBarMinLift.Size = new System.Drawing.Size(104, 45);
+            this.trackBarMinLift.TabIndex = 6;
+            this.trackBarMinLift.TickFrequency = 10;
+            this.trackBarMinLift.Scroll += new System.EventHandler(this.trackBarMinLift_Scroll);
+            this.trackBarMinLift.ValueChanged += new System.EventHandler(this.trackBarMinLift_ValueChanged);
+            // 
+            // trackBarMinConfidence
+            // 
+            this.trackBarMinConfidence.Location = new System.Drawing.Point(550, 70);
+            this.trackBarMinConfidence.Maximum = 100;
+            this.trackBarMinConfidence.Name = "trackBarMinConfidence";
+            this.trackBarMinConfidence.Size = new System.Drawing.Size(104, 45);
+            this.trackBarMinConfidence.TabIndex = 7;
+            this.trackBarMinConfidence.TickFrequency = 10;
+            this.trackBarMinConfidence.Scroll += new System.EventHandler(this.trackBarMinConfidence_Scroll);
+            this.trackBarMinConfidence.ValueChanged += new System.EventHandler(this.trackBarMinConfidence_ValueChanged);
+            // 
+            // labelMaxLift
+            // 
+            this.labelMaxLift.AutoSize = true;
+            this.labelMaxLift.Location = new System.Drawing.Point(693, 51);
+            this.labelMaxLift.Name = "labelMaxLift";
+            this.labelMaxLift.Size = new System.Drawing.Size(40, 13);
+            this.labelMaxLift.TabIndex = 8;
+            this.labelMaxLift.Text = "1.0000";
+            this.labelMaxLift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelMaxConfidence
+            // 
+            this.labelMaxConfidence.AutoSize = true;
+            this.labelMaxConfidence.Location = new System.Drawing.Point(584, 51);
+            this.labelMaxConfidence.Name = "labelMaxConfidence";
+            this.labelMaxConfidence.Size = new System.Drawing.Size(40, 13);
+            this.labelMaxConfidence.TabIndex = 9;
+            this.labelMaxConfidence.Text = "1.0000";
+            this.labelMaxConfidence.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // labelMinLift
+            // 
+            this.labelMinLift.AutoSize = true;
+            this.labelMinLift.Location = new System.Drawing.Point(693, 103);
+            this.labelMinLift.Name = "labelMinLift";
+            this.labelMinLift.Size = new System.Drawing.Size(40, 13);
+            this.labelMinLift.TabIndex = 10;
+            this.labelMinLift.Text = "0.0000";
+            // 
+            // labelMinConfidence
+            // 
+            this.labelMinConfidence.AutoSize = true;
+            this.labelMinConfidence.Location = new System.Drawing.Point(584, 103);
+            this.labelMinConfidence.Name = "labelMinConfidence";
+            this.labelMinConfidence.Size = new System.Drawing.Size(40, 13);
+            this.labelMinConfidence.TabIndex = 11;
+            this.labelMinConfidence.Text = "0.0000";
             // 
             // Form1
             // 
@@ -228,12 +332,18 @@
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "CountItemSets";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
             this.groupBoxAssociationRules.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxSupport)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMinSupport)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxLift)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxConfidence)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMinLift)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarMinConfidence)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -258,6 +368,14 @@
         private System.Windows.Forms.ProgressBar progressBarLoadingData;
         private System.Windows.Forms.Label labelMinSupport;
         private System.Windows.Forms.Label labelMaxSupport;
+        private System.Windows.Forms.Label labelMinConfidence;
+        private System.Windows.Forms.Label labelMinLift;
+        private System.Windows.Forms.Label labelMaxConfidence;
+        private System.Windows.Forms.Label labelMaxLift;
+        private System.Windows.Forms.TrackBar trackBarMinConfidence;
+        private System.Windows.Forms.TrackBar trackBarMinLift;
+        private System.Windows.Forms.TrackBar trackBarMaxConfidence;
+        private System.Windows.Forms.TrackBar trackBarMaxLift;
     }
 }
 

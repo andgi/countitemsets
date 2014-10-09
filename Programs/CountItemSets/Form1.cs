@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -17,6 +18,7 @@ namespace CountItemSets
 {
     public partial class Form1 : Form
     {
+        private Thread updateThread;
         public Form1()
         {
             InitializeComponent();
@@ -27,6 +29,31 @@ namespace CountItemSets
             }
             catch (Exception) { }
         }
+
+        public void ThreadUpdateDataGridView()
+        {
+            for (; ; )
+            {
+                WaitHandle.WaitAll(new WaitHandle[] { signalUpdateDataGridView });
+                BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(results.Where(item => item.Confidence >= filterMinConfidence && item.Confidence <= filterMaxConfidence && item.Lift >= filterMinLift && item.Lift <= filterMaxLift && item.Support >= filterMinSupport && item.Support <= filterMaxSupport).ToList());
+                Invoke((Action)(() =>
+                {
+                    dataGridViewResults.DataSource = view;
+                }));
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            updateThread.Abort();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            updateThread = new Thread(new ThreadStart(ThreadUpdateDataGridView));
+            updateThread.Start();
+        }
+
 
         private void browseButton1_Click(object sender, EventArgs e)
         {
@@ -56,6 +83,11 @@ namespace CountItemSets
         List<AssociationRule> results = new List<AssociationRule>();
         double filterMaxSupport = 1.00;
         double filterMinSupport = 0.00;
+        double filterMaxLift = 1000.0;
+        double filterMinLift = 1.0;
+        double filterMaxConfidence = 1.00;
+        double filterMinConfidence = 0.05;
+        AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         private void CountItemSets()
         {
@@ -978,8 +1010,8 @@ namespace CountItemSets
             }
 
             results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderBy(item => item.NumberOfConditions()));
-            BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(results);
-            dataGridViewResults.DataSource = view;
+            signalUpdateDataGridView.Set();
+
             buttonStart.Enabled = true;
         }
 
@@ -1104,28 +1136,74 @@ namespace CountItemSets
 
         private void trackBarMaxSupport_Scroll(object sender, EventArgs e)
         {
-            filterMaxSupport = trackBarMaxSupport.Value / 100.0;
+            filterMaxSupport = 0.0001 * Math.Pow(10, trackBarMaxSupport.Value / 25.0);
             labelMaxSupport.Text = filterMaxSupport.ToString("F4");
         }
 
         private void trackBarMaxSupport_ValueChanged(object sender, EventArgs e)
         {
-            filterMaxSupport = trackBarMaxSupport.Value / 100.0;
-            /*
-            BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(results.Where(item => item.Support < filterMaxSupport).ToList());
-            dataGridViewResults.DataSource = view;
-            */
+            filterMaxSupport = 0.0001 * Math.Pow(10, trackBarMaxSupport.Value / 25.0);
+            signalUpdateDataGridView.Set();
         }
-
+        
         private void trackBarMinSupport_Scroll(object sender, EventArgs e)
         {
-            filterMinSupport = trackBarMinSupport.Value / 100.0;
+            filterMinSupport = 0.0001 * Math.Pow(10, trackBarMinSupport.Value / 25.0);
             labelMinSupport.Text = filterMinSupport.ToString("F4");
         }
 
         private void trackBarMinSupport_ValueChanged(object sender, EventArgs e)
         {
-            filterMinSupport = trackBarMinSupport.Value / 100.0;
+            filterMinSupport = 0.0001 * Math.Pow(10, trackBarMinSupport.Value / 25.0);
+            signalUpdateDataGridView.Set();
+        }
+
+        private void trackBarMaxLift_Scroll(object sender, EventArgs e)
+        {
+            filterMaxLift = (double)trackBarMaxLift.Value;
+            labelMaxLift.Text = filterMaxLift.ToString("F");
+        }
+
+        private void trackBarMaxLift_ValueChanged(object sender, EventArgs e)
+        {
+            filterMaxLift = (double)trackBarMaxLift.Value;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void trackBarMinLift_Scroll(object sender, EventArgs e)
+        {
+            filterMinLift = (double)trackBarMinLift.Value;
+            labelMinLift.Text = filterMinLift.ToString("F");
+        }
+
+        private void trackBarMinLift_ValueChanged(object sender, EventArgs e)
+        {
+            filterMinLift = (double)trackBarMinLift.Value;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void trackBarMaxConfidence_Scroll(object sender, EventArgs e)
+        {
+            filterMaxConfidence = trackBarMaxConfidence.Value / 100.0;
+            labelMaxConfidence.Text = filterMaxConfidence.ToString("F4");
+        }
+
+        private void trackBarMaxConfidence_ValueChanged(object sender, EventArgs e)
+        {
+            filterMaxConfidence = trackBarMaxConfidence.Value / 100.0;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void trackBarMinConfidence_Scroll(object sender, EventArgs e)
+        {
+            filterMinConfidence = trackBarMinConfidence.Value / 100.0;
+            labelMinConfidence.Text = filterMinConfidence.ToString("F4");
+        }
+
+        private void trackBarMinConfidence_ValueChanged(object sender, EventArgs e)
+        {
+            filterMinConfidence = trackBarMinConfidence.Value / 100.0;
+            signalUpdateDataGridView.Set();
         }
 
     }
