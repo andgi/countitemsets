@@ -53,8 +53,13 @@ namespace CountItemSets
 
         int transactionCount = 0;
 
+        List<AssociationRule> results = new List<AssociationRule>();
+        double filterMaxSupport = 1.00;
+        double filterMinSupport = 0.00;
+
         private void CountItemSets()
         {
+            progressBarLoadingData.Value = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             StreamReader reader = new StreamReader(textBoxFileName.Text);
@@ -116,9 +121,9 @@ namespace CountItemSets
             }
             reader.Close();
             textBoxTransactionCount.Text = transactionCount.ToString();
-            dictionaryLevel1 = dictionaryLevel1.Where(item => (transactionCount / item.Value) <= 1000 && item.Key != 1 && item.Key != 2).ToDictionary(item => item.Key, item => item.Value);
+            dictionaryLevel1 = dictionaryLevel1.Where(item => (transactionCount / item.Value) <= 1000 /* && item.Key != 1 && item.Key != 2 */).ToDictionary(item => item.Key, item => item.Value);
 
-
+            progressBarLoadingData.Value = 10;
             dictionaryLevel2.Clear();
             // E1 E2
             reader = new StreamReader(textBoxFileName.Text);
@@ -202,12 +207,12 @@ namespace CountItemSets
                             vgrs = new List<long>(vgrs.Distinct());
                             keys.Sort();
                             keys = new List<long>(keys.Distinct());
-                            if (vgrs.Count > 1)
-                                for (int i = 0; i < (vgrs.Count - 1); i++)
+                            if (vgrs.Count > 0 && keys.Count > 0)
+                                for (int i = 0; i < vgrs.Count; i++)
                                 {
                                     long key1 = vgrs[i];
                                     if (dictionaryLevel1.ContainsKey(key1))
-                                        for (int j = i + 1; j < keys.Count; j++)
+                                        for (int j = 0; j < keys.Count; j++)
                                         {
                                             long key2 = keys[j];
                                             if (dictionaryLevel1.ContainsKey(key2) && dictionaryEANtoVGR[key2]!=-key1)
@@ -235,8 +240,64 @@ namespace CountItemSets
                 };
             }
             reader.Close();
+            // V1 V2
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            vgrs = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            if (vgrs.Count > 1)
+                                for (int i = 0; i < (vgrs.Count - 1); i++)
+                                {
+                                    long key1 = vgrs[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = i + 1; j < vgrs.Count; j++)
+                                        {
+                                            long key2 = vgrs[j];
+                                            if (dictionaryLevel1.ContainsKey(key2))
+                                            {
+                                                string keyName = key1 + "," + key2;
+                                                if (dictionaryLevel2.ContainsKey(keyName))
+                                                    dictionaryLevel2[keyName]++;
+                                                else
+                                                    dictionaryLevel2.Add(keyName, 1);
+                                            }
+                                        }
+                                }
+                            vgrs.Clear();
+                            transNrLast = transNr;
+                        }
+                        vgrs.Add(-vgrNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close(); 
             dictionaryLevel2 = dictionaryLevel2.Where(item => (transactionCount / item.Value) <= 2000).ToDictionary(item => item.Key, item => item.Value);
 
+            progressBarLoadingData.Value = 40;
             // E1 E2 E3
             dictionaryLevel3.Clear();
             reader = new StreamReader(textBoxFileName.Text);
@@ -384,6 +445,7 @@ namespace CountItemSets
              */
             dictionaryLevel3 = dictionaryLevel3.Where(item => (transactionCount / item.Value) <= 4000).ToDictionary(item => item.Key, item => item.Value);
 
+            progressBarLoadingData.Value = 60;
             // E1 E2 E3 E4
             dictionaryLevel4.Clear();
             reader = new StreamReader(textBoxFileName.Text);
@@ -544,6 +606,7 @@ namespace CountItemSets
             */
             dictionaryLevel4 = dictionaryLevel4.Where(item => (transactionCount / item.Value) <= 8000).ToDictionary(item => item.Key, item => item.Value);
 
+            progressBarLoadingData.Value = 80;
             // E1 E2 E3 E4 E5
             dictionaryLevel5.Clear();
             reader = new StreamReader(textBoxFileName.Text);
@@ -721,6 +784,7 @@ namespace CountItemSets
 
             stopwatch.Stop();
             textBoxTime.Text = stopwatch.Elapsed.ToString();
+            progressBarLoadingData.Value = 100;
         }
 
         private void buttonStart_Click(object sender, EventArgs e)
@@ -851,7 +915,6 @@ namespace CountItemSets
             List<KeyValuePair<string, double>> results = dictionaryRule.Where(item => item.Value >= 0.05).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value).OrderByDescending(item => item.Value).ToList();
             */
 
-            List<AssociationRule> results = new List<AssociationRule>();
             foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
             {
                 String[] columns = pair.Key.Split(',');
@@ -914,11 +977,10 @@ namespace CountItemSets
                 results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
             }
 
-            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()));
+            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderBy(item => item.NumberOfConditions()));
             BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(results);
             dataGridViewResults.DataSource = view;
             buttonStart.Enabled = true;
-
         }
 
         static private string TranslateEANpairs(string textPair)
@@ -970,10 +1032,20 @@ namespace CountItemSets
                 Lift = lift;
                 Support = support;
             }
+            public int NumberOfConditions()
+            {
+                if (Condition2.EANCode == 0)
+                    return 1;
+                if (Condition3.EANCode == 0)
+                    return 2;
+                if (Condition4.EANCode == 0)
+                    return 3;
+                return 4;
+            }
 
             public class TransactionItem: IComparable
             {
-                private long EANCode { get; set; }
+                public long EANCode { get; set; }
                 public string Text { get; set; }
                 public TransactionItem(long eanCode)
                 {
@@ -1028,6 +1100,32 @@ namespace CountItemSets
                 
             }
 
+        }
+
+        private void trackBarMaxSupport_Scroll(object sender, EventArgs e)
+        {
+            filterMaxSupport = trackBarMaxSupport.Value / 100.0;
+            labelMaxSupport.Text = filterMaxSupport.ToString("F4");
+        }
+
+        private void trackBarMaxSupport_ValueChanged(object sender, EventArgs e)
+        {
+            filterMaxSupport = trackBarMaxSupport.Value / 100.0;
+            /*
+            BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(results.Where(item => item.Support < filterMaxSupport).ToList());
+            dataGridViewResults.DataSource = view;
+            */
+        }
+
+        private void trackBarMinSupport_Scroll(object sender, EventArgs e)
+        {
+            filterMinSupport = trackBarMinSupport.Value / 100.0;
+            labelMinSupport.Text = filterMinSupport.ToString("F4");
+        }
+
+        private void trackBarMinSupport_ValueChanged(object sender, EventArgs e)
+        {
+            filterMinSupport = trackBarMinSupport.Value / 100.0;
         }
 
     }
