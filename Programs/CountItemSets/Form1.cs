@@ -35,7 +35,13 @@ namespace CountItemSets
             for (; ; )
             {
                 WaitHandle.WaitAll(new WaitHandle[] { signalUpdateDataGridView });
-                BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(results.Where(item => item.Confidence >= filterMinConfidence && item.Confidence <= filterMaxConfidence && item.Lift >= filterMinLift && item.Lift <= filterMaxLift && item.Support >= filterMinSupport && item.Support <= filterMaxSupport).ToList());
+                IEnumerable<AssociationRule> filter = results.Where(item => item.Confidence >= filterMinConfidence && item.Confidence <= filterMaxConfidence && item.Lift >= filterMinLift && item.Lift <= filterMaxLift && item.Support >= filterMinSupport && item.Support <= filterMaxSupport);
+                if (filterConditionLevel1 > 0)
+                {
+                    int vgr = filterConditionLevel1;
+                    filter = filter.Where(item => item.Then.EANCode < 0 ? vgr == -item.Then.EANCode : dictionaryEANtoVGR[item.Then.EANCode] == vgr);
+                }
+                BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
                 {
                     dataGridViewResults.DataSource = view;
@@ -87,6 +93,7 @@ namespace CountItemSets
         double filterMinLift = 1.0;
         double filterMaxConfidence = 1.00;
         double filterMinConfidence = 0.05;
+        int filterConditionLevel1 = 0;
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         private void CountItemSets()
@@ -886,6 +893,13 @@ namespace CountItemSets
                 catch (Exception) { }
             }
 
+            listBoxConditionFilterLevel1.Items.Clear();
+            foreach (KeyValuePair<int, string> item in dictionaryVGR)
+            {
+                listBoxConditionFilterLevel1.Items.Add(item);
+            }
+
+
             CountItemSets();
 
             /*
@@ -1203,6 +1217,12 @@ namespace CountItemSets
         private void trackBarMinConfidence_ValueChanged(object sender, EventArgs e)
         {
             filterMinConfidence = trackBarMinConfidence.Value / 100.0;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void listBoxConditionFilterLevel1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterConditionLevel1 = ((KeyValuePair<int, string>)listBoxConditionFilterLevel1.SelectedItem).Key;
             signalUpdateDataGridView.Set();
         }
 

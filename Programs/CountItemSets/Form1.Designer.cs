@@ -53,6 +53,7 @@
             this.labelMaxConfidence = new System.Windows.Forms.Label();
             this.labelMinLift = new System.Windows.Forms.Label();
             this.labelMinConfidence = new System.Windows.Forms.Label();
+            this.listBoxConditionFilterLevel1 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -162,6 +163,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.listBoxConditionFilterLevel1);
             this.groupBox1.Controls.Add(this.labelMinConfidence);
             this.groupBox1.Controls.Add(this.labelMinLift);
             this.groupBox1.Controls.Add(this.labelMaxConfidence);
@@ -209,6 +211,7 @@
             this.progressBarLoadingData.Location = new System.Drawing.Point(444, 12);
             this.progressBarLoadingData.Name = "progressBarLoadingData";
             this.progressBarLoadingData.Size = new System.Drawing.Size(100, 23);
+            this.progressBarLoadingData.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarLoadingData.TabIndex = 12;
             // 
             // labelMaxSupport
@@ -314,6 +317,16 @@
             this.labelMinConfidence.TabIndex = 11;
             this.labelMinConfidence.Text = "0.0000";
             // 
+            // listBoxConditionFilterLevel1
+            // 
+            this.listBoxConditionFilterLevel1.FormattingEnabled = true;
+            this.listBoxConditionFilterLevel1.Location = new System.Drawing.Point(18, 20);
+            this.listBoxConditionFilterLevel1.Name = "listBoxConditionFilterLevel1";
+            this.listBoxConditionFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxConditionFilterLevel1.Size = new System.Drawing.Size(138, 95);
+            this.listBoxConditionFilterLevel1.TabIndex = 12;
+            this.listBoxConditionFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxConditionFilterLevel1_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -376,6 +389,7 @@
         private System.Windows.Forms.TrackBar trackBarMinLift;
         private System.Windows.Forms.TrackBar trackBarMaxConfidence;
         private System.Windows.Forms.TrackBar trackBarMaxLift;
+        private System.Windows.Forms.ListBox listBoxConditionFilterLevel1;
     }
 }
 
