@@ -36,10 +36,16 @@ namespace CountItemSets
             {
                 WaitHandle.WaitAll(new WaitHandle[] { signalUpdateDataGridView });
                 IEnumerable<AssociationRule> filter = results.Where(item => item.Confidence >= filterMinConfidence && item.Confidence <= filterMaxConfidence && item.Lift >= filterMinLift && item.Lift <= filterMaxLift && item.Support >= filterMinSupport && item.Support <= filterMaxSupport);
-                if (filterConditionLevel1 > 0)
+                if (filterConditionLevel1.Count() > 0)
                 {
-                    int vgr = filterConditionLevel1;
-                    filter = filter.Where(item => item.Then.EANCode < 0 ? vgr == -item.Then.EANCode : dictionaryEANtoVGR[item.Then.EANCode] == vgr);
+                    filter = filter.Where(item => item.Condition1.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition1.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition1.EANCode]));
+                    filter = filter.Where(item => item.Condition2.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition2.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition2.EANCode]));
+                    filter = filter.Where(item => item.Condition3.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition3.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition3.EANCode]));
+                    filter = filter.Where(item => item.Condition4.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition4.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition4.EANCode]));
+                }
+                if (filterThenLevel1.Count() > 0)
+                {
+                    filter = filter.Where(item => item.Then.EANCode < 0 ? filterThenLevel1.Contains((int)-item.Then.EANCode) : filterThenLevel1.Contains(dictionaryEANtoVGR[item.Then.EANCode]));
                 }
                 BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
@@ -93,7 +99,8 @@ namespace CountItemSets
         double filterMinLift = 1.0;
         double filterMaxConfidence = 1.00;
         double filterMinConfidence = 0.05;
-        int filterConditionLevel1 = 0;
+        HashSet<int> filterConditionLevel1 = new HashSet<int>();
+        HashSet<int> filterThenLevel1 = new HashSet<int>();
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         private void CountItemSets()
@@ -898,6 +905,11 @@ namespace CountItemSets
             {
                 listBoxConditionFilterLevel1.Items.Add(item);
             }
+            listBoxThenFilterLevel1.Items.Clear();
+            foreach (KeyValuePair<int, string> item in dictionaryVGR)
+            {
+                listBoxThenFilterLevel1.Items.Add(item);
+            }
 
 
             CountItemSets();
@@ -1222,7 +1234,21 @@ namespace CountItemSets
 
         private void listBoxConditionFilterLevel1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            filterConditionLevel1 = ((KeyValuePair<int, string>)listBoxConditionFilterLevel1.SelectedItem).Key;
+            filterConditionLevel1.Clear();
+            foreach (KeyValuePair<int, string> pair in listBoxConditionFilterLevel1.SelectedItems)
+            {
+                filterConditionLevel1.Add(pair.Key);
+            }
+            signalUpdateDataGridView.Set();
+        }
+
+        private void listBoxThenFilterLevel1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterThenLevel1.Clear();
+            foreach (KeyValuePair<int, string> pair in listBoxThenFilterLevel1.SelectedItems)
+            {
+                filterThenLevel1.Add(pair.Key);
+            }
             signalUpdateDataGridView.Set();
         }
 
