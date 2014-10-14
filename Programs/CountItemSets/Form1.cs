@@ -38,10 +38,10 @@ namespace CountItemSets
                 IEnumerable<AssociationRule> filter = results.Where(item => item.Confidence >= filterMinConfidence && item.Confidence <= filterMaxConfidence && item.Lift >= filterMinLift && item.Lift <= filterMaxLift && item.Support >= filterMinSupport && item.Support <= filterMaxSupport);
                 if (filterConditionLevel1.Count() > 0)
                 {
-                    filter = filter.Where(item => item.Condition1.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition1.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition1.EANCode]));
-                    filter = filter.Where(item => item.Condition2.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition2.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition2.EANCode]));
-                    filter = filter.Where(item => item.Condition3.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition3.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition3.EANCode]));
-                    filter = filter.Where(item => item.Condition4.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition4.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition4.EANCode]));
+                    filter = filter.Where(item => (item.Condition1.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition1.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition1.EANCode])) 
+                        && (item.Condition2.EANCode == 0 || (item.Condition2.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition2.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition2.EANCode])))
+                        && (item.Condition3.EANCode == 0 || (item.Condition3.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition3.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition3.EANCode])))
+                        && (item.Condition4.EANCode == 0 || (item.Condition4.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition4.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition4.EANCode]))));
                 }
                 if (filterThenLevel1.Count() > 0)
                 {
@@ -900,78 +900,26 @@ namespace CountItemSets
                 catch (Exception) { }
             }
 
+            CountItemSets();
+
             listBoxConditionFilterLevel1.Items.Clear();
-            foreach (KeyValuePair<int, string> item in dictionaryVGR)
+            listBoxThenFilterLevel1.Items.Clear();
+            List<KeyValuePair<int, string>> groupItems = new List<KeyValuePair<int, string>>();
+            foreach (KeyValuePair<long, int> item in dictionaryLevel1)
+            {
+                if (item.Key < 0)
+                {
+                    groupItems.Add(new KeyValuePair<int, string>((int)-item.Key, dictionaryVGR[(int)-item.Key]));
+                }
+            }
+            groupItems = groupItems.OrderBy(item => item.Key).ToList();
+            foreach (KeyValuePair<int, string> item in groupItems)
             {
                 listBoxConditionFilterLevel1.Items.Add(item);
-            }
-            listBoxThenFilterLevel1.Items.Clear();
-            foreach (KeyValuePair<int, string> item in dictionaryVGR)
-            {
                 listBoxThenFilterLevel1.Items.Add(item);
             }
 
-
-            CountItemSets();
-
-            /*
-            dictionaryRule.Clear();
-            foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
-            {
-                String[] columns = pair.Key.Split(',');
-                long eanNr1 = 0;
-                Int64.TryParse(columns[0], out eanNr1);
-                long eanNr2 = 0;
-                Int64.TryParse(columns[1], out eanNr2);
-                double value = (double)pair.Value / (double)dictionaryLevel1[eanNr1];
-                dictionaryRule.Add(pair.Key, value);
-            }
-            */
-
-            /*
-            dictionaryRule.Clear();
-            foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
-            {
-                String[] columns = pair.Key.Split(',');
-                long eanNr1 = 0;
-                Int64.TryParse(columns[0], out eanNr1);
-                long eanNr2 = 0;
-                Int64.TryParse(columns[1], out eanNr2);
-                dictionaryRule.Add(eanNr1 + "," + eanNr2, ((double)pair.Value / (double)dictionaryLevel1[eanNr1]) / ((double)dictionaryLevel1[eanNr2] / (double)transactionCount));
-                dictionaryRule.Add(eanNr2 + "," + eanNr1, ((double)pair.Value / (double)dictionaryLevel1[eanNr2]) / ((double)dictionaryLevel1[eanNr1] / (double)transactionCount));
-            }
-            foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
-            {
-                String[] columns = pair.Key.Split(',');
-                long eanNr1 = 0;
-                Int64.TryParse(columns[0], out eanNr1);
-                long eanNr2 = 0;
-                Int64.TryParse(columns[1], out eanNr2);
-                long eanNr3 = 0;
-                Int64.TryParse(columns[2], out eanNr3);
-                dictionaryRule.Add(eanNr1 + "," + eanNr2 + "," + eanNr3, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr2]);
-                dictionaryRule.Add(eanNr1 + "," + eanNr3 + "," + eanNr2, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr3]);
-                dictionaryRule.Add(eanNr2 + "," + eanNr3 + "," + eanNr1, (double)pair.Value / (double)dictionaryLevel2[eanNr2 + "," + eanNr3]);
-            }
-            foreach (KeyValuePair<string, int> pair in dictionaryLevel4)
-            {
-                String[] columns = pair.Key.Split(',');
-                long eanNr1 = 0;
-                Int64.TryParse(columns[0], out eanNr1);
-                long eanNr2 = 0;
-                Int64.TryParse(columns[1], out eanNr2);
-                long eanNr3 = 0;
-                Int64.TryParse(columns[2], out eanNr3);
-                long eanNr4 = 0;
-                Int64.TryParse(columns[3], out eanNr4);
-                dictionaryRule.Add(eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3]);
-                dictionaryRule.Add(eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4]);
-                dictionaryRule.Add(eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4]);
-                dictionaryRule.Add(eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4]);
-            }
-
-            List<KeyValuePair<string, double>> results = dictionaryRule.Where(item => item.Value >= 0.05).ToDictionary(item => TranslateEANpairs(item.Key), item => item.Value).OrderByDescending(item => item.Value).ToList();
-            */
+            // Building association rules
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
             {
@@ -1250,6 +1198,16 @@ namespace CountItemSets
                 filterThenLevel1.Add(pair.Key);
             }
             signalUpdateDataGridView.Set();
+        }
+
+        private void labelMaxLift_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void labelMinLift_Click(object sender, EventArgs e)
+        {
+
         }
 
     }
