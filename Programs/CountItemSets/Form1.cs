@@ -91,6 +91,7 @@ namespace CountItemSets
         Dictionary<string, int> dictionaryLevel5 = new Dictionary<string, int>();
 
         int transactionCount = 0;
+        double pruningMinSupport = 0.0001;
 
         List<AssociationRule> results = new List<AssociationRule>();
         double filterMaxSupport = 1.00;
@@ -101,6 +102,8 @@ namespace CountItemSets
         double filterMinConfidence = 0.05;
         HashSet<int> filterConditionLevel1 = new HashSet<int>();
         HashSet<int> filterThenLevel1 = new HashSet<int>();
+        double filterConditionItemMaxSupport = 1.00;
+        double filterThenItemMaxSupport = 1.00;
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         private void CountItemSets()
@@ -167,7 +170,7 @@ namespace CountItemSets
             }
             reader.Close();
             textBoxTransactionCount.Text = transactionCount.ToString();
-            dictionaryLevel1 = dictionaryLevel1.Where(item => (transactionCount / item.Value) <= 1000 /* && item.Key != 1 && item.Key != 2 */).ToDictionary(item => item.Key, item => item.Value);
+            dictionaryLevel1 = dictionaryLevel1.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 10;
             dictionaryLevel2.Clear();
@@ -340,8 +343,8 @@ namespace CountItemSets
                     MessageBox.Show(ex.Message);
                 };
             }
-            reader.Close(); 
-            dictionaryLevel2 = dictionaryLevel2.Where(item => (transactionCount / item.Value) <= 2000).ToDictionary(item => item.Key, item => item.Value);
+            reader.Close();
+            dictionaryLevel2 = dictionaryLevel2.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 40;
             // E1 E2 E3
@@ -489,7 +492,7 @@ namespace CountItemSets
             }
             reader.Close();
              */
-            dictionaryLevel3 = dictionaryLevel3.Where(item => (transactionCount / item.Value) <= 4000).ToDictionary(item => item.Key, item => item.Value);
+            dictionaryLevel3 = dictionaryLevel3.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 60;
             // E1 E2 E3 E4
@@ -650,7 +653,7 @@ namespace CountItemSets
             }
             reader.Close();
             */
-            dictionaryLevel4 = dictionaryLevel4.Where(item => (transactionCount / item.Value) <= 8000).ToDictionary(item => item.Key, item => item.Value);
+            dictionaryLevel4 = dictionaryLevel4.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 80;
             // E1 E2 E3 E4 E5
@@ -826,7 +829,7 @@ namespace CountItemSets
             }
             reader.Close();
             */
-            dictionaryLevel5 = dictionaryLevel5.Where(item => (transactionCount / item.Value) <= 8000).ToDictionary(item => item.Key, item => item.Value);
+            dictionaryLevel5 = dictionaryLevel5.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             stopwatch.Stop();
             textBoxTime.Text = stopwatch.Elapsed.ToString();
@@ -983,7 +986,7 @@ namespace CountItemSets
                 results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
             }
 
-            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderBy(item => item.NumberOfConditions()));
+            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderByDescending(item => item.NumberOfConditions()));
             signalUpdateDataGridView.Set();
 
             buttonStart.Enabled = true;
@@ -1051,8 +1054,9 @@ namespace CountItemSets
 
             public class TransactionItem: IComparable
             {
+                private string _text = null;
                 public long EANCode { get; set; }
-                public string Text { get; set; }
+                public string Text { get { if (_text != null) return _text; else return _text = TranslateEANCode(); } set { _text = value; } }
                 public TransactionItem(long eanCode)
                 {
                     EANCode = eanCode;
@@ -1060,8 +1064,7 @@ namespace CountItemSets
 
                 public override string ToString()
                 {
-                    if (Text != null) return Text;
-                    return Text = TranslateEANCode();
+                    return Text;
                 }
 
                 public string TranslateEANCode()
@@ -1208,6 +1211,78 @@ namespace CountItemSets
         private void labelMinLift_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void trackBarPruningMinSupport_Scroll(object sender, EventArgs e)
+        {
+            pruningMinSupport = 0.0001 * Math.Pow(10, trackBarPruningMinSupport.Value / 25.0);
+            labelPruningMinSupport.Text = pruningMinSupport.ToString("F4");
+        }
+
+        private void trackBarPruningMinSupport_ValueChanged(object sender, EventArgs e)
+        {
+            pruningMinSupport = 0.0001 * Math.Pow(10, trackBarPruningMinSupport.Value / 25.0);
+        }
+
+        private void selectAllToolStripMenuSelectAll_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem != null)
+            {
+                ContextMenuStrip menuStrip = menuItem.Owner as ContextMenuStrip;
+                if (menuStrip != null)
+                {
+                    ListBox source = menuStrip.SourceControl as ListBox;
+                    if (source != null)
+                    {
+                        for (int i = 0; i < source.Items.Count; i++)
+                        {
+                            source.SetSelected(i, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void selectNoneToolStripMenuSelectNone_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem != null)
+            {
+                ContextMenuStrip menuStrip = menuItem.Owner as ContextMenuStrip;
+                if (menuStrip != null)
+                {
+                    ListBox source = menuStrip.SourceControl as ListBox;
+                    if (source != null)
+                    {
+                        source.ClearSelected();
+                    }
+                }
+            }
+        }
+
+        private void trackBarConditionItemMaxSupport_ValueChanged(object sender, EventArgs e)
+        {
+            filterConditionItemMaxSupport = 0.0001 * Math.Pow(10, trackBarConditionItemMaxSupport.Value / 25.0);
+            signalUpdateDataGridView.Set();
+        }
+
+        private void trackBarConditionItemMaxSupport_Scroll(object sender, EventArgs e)
+        {
+            filterConditionItemMaxSupport = 0.0001 * Math.Pow(10, trackBarConditionItemMaxSupport.Value / 25.0);
+            labelConditionItemMaxSupport.Text = filterConditionItemMaxSupport.ToString("F4");
+        }
+
+        private void trackBarThenItemMaxSupport_ValueChanged(object sender, EventArgs e)
+        {
+            filterThenItemMaxSupport = 0.0001 * Math.Pow(10, trackBarThenItemMaxSupport.Value / 25.0);
+            signalUpdateDataGridView.Set();
+        }
+
+        private void trackBarThenItemMaxSupport_Scroll(object sender, EventArgs e)
+        {
+            filterThenItemMaxSupport = 0.0001 * Math.Pow(10, trackBarThenItemMaxSupport.Value / 25.0);
+            labelThenItemMaxSupport.Text = filterThenItemMaxSupport.ToString("F4");
         }
 
     }
