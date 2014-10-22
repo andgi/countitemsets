@@ -42,6 +42,18 @@
             this.textBoxTime = new System.Windows.Forms.TextBox();
             this.groupBoxAssociationRules = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.labelThenItemMaxSupport = new System.Windows.Forms.Label();
+            this.trackBarThenItemMaxSupport = new System.Windows.Forms.TrackBar();
+            this.labelConditionItemMaxSupport = new System.Windows.Forms.Label();
+            this.trackBarConditionItemMaxSupport = new System.Windows.Forms.TrackBar();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.listBoxThenFilterLevel1 = new System.Windows.Forms.ListBox();
+            this.contextMenuStripFilterLevel1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.selectAllToolStripMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectNoneToolStripMenuSelectNone = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.listBoxConditionFilterLevel1 = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.labelMaxSupport = new System.Windows.Forms.Label();
             this.labelMinSupport = new System.Windows.Forms.Label();
@@ -57,8 +69,6 @@
             this.labelMinConfidence = new System.Windows.Forms.Label();
             this.trackBarMaxConfidence = new System.Windows.Forms.TrackBar();
             this.trackBarMinConfidence = new System.Windows.Forms.TrackBar();
-            this.listBoxThenFilterLevel1 = new System.Windows.Forms.ListBox();
-            this.listBoxConditionFilterLevel1 = new System.Windows.Forms.ListBox();
             this.progressBarLoadingData = new System.Windows.Forms.ProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,19 +107,21 @@
             this.labelPruningMinSupport = new System.Windows.Forms.Label();
             this.trackBarPruningMinSupport = new System.Windows.Forms.TrackBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.contextMenuStripFilterLevel1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.selectAllToolStripMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectNoneToolStripMenuSelectNone = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.trackBarConditionItemMaxSupport = new System.Windows.Forms.TrackBar();
-            this.labelConditionItemMaxSupport = new System.Windows.Forms.Label();
-            this.trackBarThenItemMaxSupport = new System.Windows.Forms.TrackBar();
-            this.labelThenItemMaxSupport = new System.Windows.Forms.Label();
+            this.textBoxFilterCondition = new System.Windows.Forms.TextBox();
+            this.textBoxFilterThen = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).BeginInit();
+            this.groupBox8.SuspendLayout();
+            this.contextMenuStripFilterLevel1.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMinSupport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxSupport)).BeginInit();
@@ -126,12 +138,7 @@
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPruningMinSupport)).BeginInit();
             this.tabPage2.SuspendLayout();
-            this.contextMenuStripFilterLevel1.SuspendLayout();
-            this.groupBox7.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).BeginInit();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -187,6 +194,7 @@
             this.dataGridViewResults.ShowCellErrors = false;
             this.dataGridViewResults.Size = new System.Drawing.Size(885, 451);
             this.dataGridViewResults.TabIndex = 4;
+            this.dataGridViewResults.SelectionChanged += new System.EventHandler(this.dataGridViewResults_SelectionChanged);
             // 
             // labelTransactionCount
             // 
@@ -223,7 +231,7 @@
             // groupBoxAssociationRules
             // 
             this.groupBoxAssociationRules.Controls.Add(this.dataGridViewResults);
-            this.groupBoxAssociationRules.Location = new System.Drawing.Point(3, 182);
+            this.groupBoxAssociationRules.Location = new System.Drawing.Point(3, 154);
             this.groupBoxAssociationRules.Name = "groupBoxAssociationRules";
             this.groupBoxAssociationRules.Size = new System.Drawing.Size(899, 481);
             this.groupBoxAssociationRules.TabIndex = 10;
@@ -244,6 +252,133 @@
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Presentation Filters";
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.labelThenItemMaxSupport);
+            this.groupBox9.Controls.Add(this.trackBarThenItemMaxSupport);
+            this.groupBox9.Controls.Add(this.labelConditionItemMaxSupport);
+            this.groupBox9.Controls.Add(this.trackBarConditionItemMaxSupport);
+            this.groupBox9.Location = new System.Drawing.Point(206, 13);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(115, 122);
+            this.groupBox9.TabIndex = 19;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Item Max Support";
+            // 
+            // labelThenItemMaxSupport
+            // 
+            this.labelThenItemMaxSupport.AutoSize = true;
+            this.labelThenItemMaxSupport.Location = new System.Drawing.Point(35, 93);
+            this.labelThenItemMaxSupport.Name = "labelThenItemMaxSupport";
+            this.labelThenItemMaxSupport.Size = new System.Drawing.Size(40, 13);
+            this.labelThenItemMaxSupport.TabIndex = 5;
+            this.labelThenItemMaxSupport.Text = "1.0000";
+            this.labelThenItemMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // trackBarThenItemMaxSupport
+            // 
+            this.trackBarThenItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.trackBarThenItemMaxSupport.Location = new System.Drawing.Point(6, 61);
+            this.trackBarThenItemMaxSupport.Maximum = 100;
+            this.trackBarThenItemMaxSupport.Name = "trackBarThenItemMaxSupport";
+            this.trackBarThenItemMaxSupport.Size = new System.Drawing.Size(104, 45);
+            this.trackBarThenItemMaxSupport.TabIndex = 4;
+            this.trackBarThenItemMaxSupport.TickFrequency = 10;
+            this.trackBarThenItemMaxSupport.Value = 100;
+            this.trackBarThenItemMaxSupport.Scroll += new System.EventHandler(this.trackBarThenItemMaxSupport_Scroll);
+            this.trackBarThenItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarThenItemMaxSupport_ValueChanged);
+            // 
+            // labelConditionItemMaxSupport
+            // 
+            this.labelConditionItemMaxSupport.AutoSize = true;
+            this.labelConditionItemMaxSupport.Location = new System.Drawing.Point(35, 45);
+            this.labelConditionItemMaxSupport.Name = "labelConditionItemMaxSupport";
+            this.labelConditionItemMaxSupport.Size = new System.Drawing.Size(40, 13);
+            this.labelConditionItemMaxSupport.TabIndex = 3;
+            this.labelConditionItemMaxSupport.Text = "1.0000";
+            this.labelConditionItemMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // trackBarConditionItemMaxSupport
+            // 
+            this.trackBarConditionItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.trackBarConditionItemMaxSupport.Location = new System.Drawing.Point(6, 14);
+            this.trackBarConditionItemMaxSupport.Maximum = 100;
+            this.trackBarConditionItemMaxSupport.Name = "trackBarConditionItemMaxSupport";
+            this.trackBarConditionItemMaxSupport.Size = new System.Drawing.Size(104, 45);
+            this.trackBarConditionItemMaxSupport.TabIndex = 1;
+            this.trackBarConditionItemMaxSupport.TickFrequency = 10;
+            this.trackBarConditionItemMaxSupport.Value = 100;
+            this.trackBarConditionItemMaxSupport.Scroll += new System.EventHandler(this.trackBarConditionItemMaxSupport_Scroll);
+            this.trackBarConditionItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarConditionItemMaxSupport_ValueChanged);
+            // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.label3);
+            this.groupBox8.Controls.Add(this.textBoxFilterThen);
+            this.groupBox8.Controls.Add(this.listBoxThenFilterLevel1);
+            this.groupBox8.Location = new System.Drawing.Point(354, 14);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(168, 122);
+            this.groupBox8.TabIndex = 18;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Then - Groups";
+            // 
+            // listBoxThenFilterLevel1
+            // 
+            this.listBoxThenFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
+            this.listBoxThenFilterLevel1.FormattingEnabled = true;
+            this.listBoxThenFilterLevel1.Location = new System.Drawing.Point(6, 14);
+            this.listBoxThenFilterLevel1.Name = "listBoxThenFilterLevel1";
+            this.listBoxThenFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxThenFilterLevel1.Size = new System.Drawing.Size(156, 82);
+            this.listBoxThenFilterLevel1.TabIndex = 13;
+            this.listBoxThenFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxThenFilterLevel1_SelectedIndexChanged);
+            // 
+            // contextMenuStripFilterLevel1
+            // 
+            this.contextMenuStripFilterLevel1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAllToolStripMenuSelectAll,
+            this.selectNoneToolStripMenuSelectNone});
+            this.contextMenuStripFilterLevel1.Name = "contextMenuStripFilterLevel1";
+            this.contextMenuStripFilterLevel1.Size = new System.Drawing.Size(138, 48);
+            // 
+            // selectAllToolStripMenuSelectAll
+            // 
+            this.selectAllToolStripMenuSelectAll.Name = "selectAllToolStripMenuSelectAll";
+            this.selectAllToolStripMenuSelectAll.Size = new System.Drawing.Size(137, 22);
+            this.selectAllToolStripMenuSelectAll.Text = "Select All";
+            this.selectAllToolStripMenuSelectAll.Click += new System.EventHandler(this.selectAllToolStripMenuSelectAll_Click);
+            // 
+            // selectNoneToolStripMenuSelectNone
+            // 
+            this.selectNoneToolStripMenuSelectNone.Name = "selectNoneToolStripMenuSelectNone";
+            this.selectNoneToolStripMenuSelectNone.Size = new System.Drawing.Size(137, 22);
+            this.selectNoneToolStripMenuSelectNone.Text = "Select None";
+            this.selectNoneToolStripMenuSelectNone.Click += new System.EventHandler(this.selectNoneToolStripMenuSelectNone_Click);
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.label2);
+            this.groupBox7.Controls.Add(this.textBoxFilterCondition);
+            this.groupBox7.Controls.Add(this.listBoxConditionFilterLevel1);
+            this.groupBox7.Location = new System.Drawing.Point(7, 14);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(167, 122);
+            this.groupBox7.TabIndex = 17;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Condition - Groups";
+            // 
+            // listBoxConditionFilterLevel1
+            // 
+            this.listBoxConditionFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
+            this.listBoxConditionFilterLevel1.FormattingEnabled = true;
+            this.listBoxConditionFilterLevel1.Location = new System.Drawing.Point(6, 14);
+            this.listBoxConditionFilterLevel1.Name = "listBoxConditionFilterLevel1";
+            this.listBoxConditionFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBoxConditionFilterLevel1.Size = new System.Drawing.Size(155, 82);
+            this.listBoxConditionFilterLevel1.TabIndex = 12;
+            this.listBoxConditionFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxConditionFilterLevel1_SelectedIndexChanged);
             // 
             // groupBox4
             // 
@@ -417,28 +552,6 @@
             this.trackBarMinConfidence.TickFrequency = 10;
             this.trackBarMinConfidence.Scroll += new System.EventHandler(this.trackBarMinConfidence_Scroll);
             this.trackBarMinConfidence.ValueChanged += new System.EventHandler(this.trackBarMinConfidence_ValueChanged);
-            // 
-            // listBoxThenFilterLevel1
-            // 
-            this.listBoxThenFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
-            this.listBoxThenFilterLevel1.FormattingEnabled = true;
-            this.listBoxThenFilterLevel1.Location = new System.Drawing.Point(6, 14);
-            this.listBoxThenFilterLevel1.Name = "listBoxThenFilterLevel1";
-            this.listBoxThenFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxThenFilterLevel1.Size = new System.Drawing.Size(156, 95);
-            this.listBoxThenFilterLevel1.TabIndex = 13;
-            this.listBoxThenFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxThenFilterLevel1_SelectedIndexChanged);
-            // 
-            // listBoxConditionFilterLevel1
-            // 
-            this.listBoxConditionFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
-            this.listBoxConditionFilterLevel1.FormattingEnabled = true;
-            this.listBoxConditionFilterLevel1.Location = new System.Drawing.Point(6, 14);
-            this.listBoxConditionFilterLevel1.Name = "listBoxConditionFilterLevel1";
-            this.listBoxConditionFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxConditionFilterLevel1.Size = new System.Drawing.Size(155, 95);
-            this.listBoxConditionFilterLevel1.TabIndex = 12;
-            this.listBoxConditionFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxConditionFilterLevel1_SelectedIndexChanged);
             // 
             // progressBarLoadingData
             // 
@@ -690,7 +803,7 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(976, 692);
+            this.tabControl1.Size = new System.Drawing.Size(976, 759);
             this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
@@ -757,122 +870,74 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox10);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.groupBoxAssociationRules);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(968, 666);
+            this.tabPage2.Size = new System.Drawing.Size(968, 733);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Association Rules Browser";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // contextMenuStripFilterLevel1
+            // textBoxFilterCondition
             // 
-            this.contextMenuStripFilterLevel1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.selectAllToolStripMenuSelectAll,
-            this.selectNoneToolStripMenuSelectNone});
-            this.contextMenuStripFilterLevel1.Name = "contextMenuStripFilterLevel1";
-            this.contextMenuStripFilterLevel1.Size = new System.Drawing.Size(138, 48);
+            this.textBoxFilterCondition.Location = new System.Drawing.Point(61, 96);
+            this.textBoxFilterCondition.Name = "textBoxFilterCondition";
+            this.textBoxFilterCondition.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFilterCondition.TabIndex = 13;
+            this.textBoxFilterCondition.TextChanged += new System.EventHandler(this.textBoxFilterCondition_TextChanged);
             // 
-            // selectAllToolStripMenuSelectAll
+            // textBoxFilterThen
             // 
-            this.selectAllToolStripMenuSelectAll.Name = "selectAllToolStripMenuSelectAll";
-            this.selectAllToolStripMenuSelectAll.Size = new System.Drawing.Size(137, 22);
-            this.selectAllToolStripMenuSelectAll.Text = "Select All";
-            this.selectAllToolStripMenuSelectAll.Click += new System.EventHandler(this.selectAllToolStripMenuSelectAll_Click);
+            this.textBoxFilterThen.Location = new System.Drawing.Point(62, 96);
+            this.textBoxFilterThen.Name = "textBoxFilterThen";
+            this.textBoxFilterThen.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFilterThen.TabIndex = 14;
+            this.textBoxFilterThen.TextChanged += new System.EventHandler(this.textBoxFilterThen_TextChanged);
             // 
-            // selectNoneToolStripMenuSelectNone
+            // label2
             // 
-            this.selectNoneToolStripMenuSelectNone.Name = "selectNoneToolStripMenuSelectNone";
-            this.selectNoneToolStripMenuSelectNone.Size = new System.Drawing.Size(137, 22);
-            this.selectNoneToolStripMenuSelectNone.Text = "Select None";
-            this.selectNoneToolStripMenuSelectNone.Click += new System.EventHandler(this.selectNoneToolStripMenuSelectNone_Click);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 99);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Contains:";
             // 
-            // groupBox7
+            // label3
             // 
-            this.groupBox7.Controls.Add(this.listBoxConditionFilterLevel1);
-            this.groupBox7.Location = new System.Drawing.Point(7, 14);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(167, 122);
-            this.groupBox7.TabIndex = 17;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Condition - Groups";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Contains:";
             // 
-            // groupBox8
+            // groupBox10
             // 
-            this.groupBox8.Controls.Add(this.listBoxThenFilterLevel1);
-            this.groupBox8.Location = new System.Drawing.Point(354, 14);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(168, 122);
-            this.groupBox8.TabIndex = 18;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Then - Groups";
+            this.groupBox10.Controls.Add(this.richTextBoxSelectedRule);
+            this.groupBox10.Location = new System.Drawing.Point(4, 642);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(898, 88);
+            this.groupBox10.TabIndex = 12;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Rule";
             // 
-            // groupBox9
+            // richTextBoxSelectedRule
             // 
-            this.groupBox9.Controls.Add(this.labelThenItemMaxSupport);
-            this.groupBox9.Controls.Add(this.trackBarThenItemMaxSupport);
-            this.groupBox9.Controls.Add(this.labelConditionItemMaxSupport);
-            this.groupBox9.Controls.Add(this.trackBarConditionItemMaxSupport);
-            this.groupBox9.Location = new System.Drawing.Point(206, 13);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(115, 122);
-            this.groupBox9.TabIndex = 19;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Item Max Support";
-            // 
-            // trackBarConditionItemMaxSupport
-            // 
-            this.trackBarConditionItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarConditionItemMaxSupport.Location = new System.Drawing.Point(6, 14);
-            this.trackBarConditionItemMaxSupport.Maximum = 100;
-            this.trackBarConditionItemMaxSupport.Name = "trackBarConditionItemMaxSupport";
-            this.trackBarConditionItemMaxSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarConditionItemMaxSupport.TabIndex = 1;
-            this.trackBarConditionItemMaxSupport.TickFrequency = 10;
-            this.trackBarConditionItemMaxSupport.Value = 100;
-            this.trackBarConditionItemMaxSupport.Scroll += new System.EventHandler(this.trackBarConditionItemMaxSupport_Scroll);
-            this.trackBarConditionItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarConditionItemMaxSupport_ValueChanged);
-            // 
-            // labelConditionItemMaxSupport
-            // 
-            this.labelConditionItemMaxSupport.AutoSize = true;
-            this.labelConditionItemMaxSupport.Location = new System.Drawing.Point(35, 45);
-            this.labelConditionItemMaxSupport.Name = "labelConditionItemMaxSupport";
-            this.labelConditionItemMaxSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelConditionItemMaxSupport.TabIndex = 3;
-            this.labelConditionItemMaxSupport.Text = "1.0000";
-            this.labelConditionItemMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // trackBarThenItemMaxSupport
-            // 
-            this.trackBarThenItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarThenItemMaxSupport.Location = new System.Drawing.Point(6, 61);
-            this.trackBarThenItemMaxSupport.Maximum = 100;
-            this.trackBarThenItemMaxSupport.Name = "trackBarThenItemMaxSupport";
-            this.trackBarThenItemMaxSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarThenItemMaxSupport.TabIndex = 4;
-            this.trackBarThenItemMaxSupport.TickFrequency = 10;
-            this.trackBarThenItemMaxSupport.Value = 100;
-            this.trackBarThenItemMaxSupport.Scroll += new System.EventHandler(this.trackBarThenItemMaxSupport_Scroll);
-            this.trackBarThenItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarThenItemMaxSupport_ValueChanged);
-            // 
-            // labelThenItemMaxSupport
-            // 
-            this.labelThenItemMaxSupport.AutoSize = true;
-            this.labelThenItemMaxSupport.Location = new System.Drawing.Point(35, 93);
-            this.labelThenItemMaxSupport.Name = "labelThenItemMaxSupport";
-            this.labelThenItemMaxSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelThenItemMaxSupport.TabIndex = 5;
-            this.labelThenItemMaxSupport.Text = "1.0000";
-            this.labelThenItemMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.richTextBoxSelectedRule.Location = new System.Drawing.Point(4, 19);
+            this.richTextBoxSelectedRule.Name = "richTextBoxSelectedRule";
+            this.richTextBoxSelectedRule.Size = new System.Drawing.Size(886, 59);
+            this.richTextBoxSelectedRule.TabIndex = 0;
+            this.richTextBoxSelectedRule.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 715);
+            this.ClientSize = new System.Drawing.Size(976, 781);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -883,6 +948,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
             this.groupBoxAssociationRules.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).EndInit();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.contextMenuStripFilterLevel1.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMinSupport)).EndInit();
@@ -905,13 +979,7 @@
             this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPruningMinSupport)).EndInit();
             this.tabPage2.ResumeLayout(false);
-            this.contextMenuStripFilterLevel1.ResumeLayout(false);
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).EndInit();
+            this.groupBox10.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -996,6 +1064,12 @@
         private System.Windows.Forms.TrackBar trackBarConditionItemMaxSupport;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBoxFilterThen;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBoxFilterCondition;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.RichTextBox richTextBoxSelectedRule;
     }
 }
 

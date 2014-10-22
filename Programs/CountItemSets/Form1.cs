@@ -41,11 +41,37 @@ namespace CountItemSets
                     filter = filter.Where(item => (item.Condition1.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition1.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition1.EANCode])) 
                         && (item.Condition2.EANCode == 0 || (item.Condition2.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition2.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition2.EANCode])))
                         && (item.Condition3.EANCode == 0 || (item.Condition3.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition3.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition3.EANCode])))
-                        && (item.Condition4.EANCode == 0 || (item.Condition4.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition4.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition4.EANCode]))));
+                        && (item.Condition4.EANCode == 0 || (item.Condition4.EANCode < 0 ? filterConditionLevel1.Contains((int)-item.Condition4.EANCode) : filterConditionLevel1.Contains(dictionaryEANtoVGR[item.Condition4.EANCode])))
+                        );
                 }
                 if (filterThenLevel1.Count() > 0)
                 {
                     filter = filter.Where(item => item.Then.EANCode < 0 ? filterThenLevel1.Contains((int)-item.Then.EANCode) : filterThenLevel1.Contains(dictionaryEANtoVGR[item.Then.EANCode]));
+                }
+                if (filterConditionItemMaxSupport != 1.0)
+                {
+                    filter = filter.Where(item => ((double)transactionCount / dictionaryLevel1[item.Condition1.EANCode]) <= filterConditionItemMaxSupport
+                    && (item.Condition2.EANCode == 0 || (((double)transactionCount / dictionaryLevel1[item.Condition2.EANCode]) <= filterConditionItemMaxSupport))
+                    && (item.Condition3.EANCode == 0 || (((double)transactionCount / dictionaryLevel1[item.Condition3.EANCode]) <= filterConditionItemMaxSupport))
+                    && (item.Condition4.EANCode == 0 || (((double)transactionCount / dictionaryLevel1[item.Condition4.EANCode]) <= filterConditionItemMaxSupport))
+                    );
+                }
+                if (filterThenItemMaxSupport != 1.0)
+                {
+                    filter = filter.Where(item => ((double)transactionCount / dictionaryLevel1[item.Then.EANCode]) <= filterThenItemMaxSupport);
+                }
+                string textMatch;
+                if ((textMatch = filterConditionTextMatch) != null)
+                {
+                    filter = filter.Where(item => item.Condition1.Text.Contains(textMatch)
+                        && (item.Condition2.EANCode == 0 || (item.Condition2.Text.Contains(textMatch)))
+                        && (item.Condition3.EANCode == 0 || (item.Condition3.Text.Contains(textMatch)))
+                        && (item.Condition4.EANCode == 0 || (item.Condition4.Text.Contains(textMatch)))
+                        );
+                }
+                if ((textMatch = filterThenTextMatch) != null)
+                {
+                    filter = filter.Where(item => item.Then.Text.Contains(textMatch));
                 }
                 BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
@@ -104,6 +130,8 @@ namespace CountItemSets
         HashSet<int> filterThenLevel1 = new HashSet<int>();
         double filterConditionItemMaxSupport = 1.00;
         double filterThenItemMaxSupport = 1.00;
+        string filterConditionTextMatch = null;
+        string filterThenTextMatch = null;
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         private void CountItemSets()
@@ -1283,6 +1311,31 @@ namespace CountItemSets
         {
             filterThenItemMaxSupport = 0.0001 * Math.Pow(10, trackBarThenItemMaxSupport.Value / 25.0);
             labelThenItemMaxSupport.Text = filterThenItemMaxSupport.ToString("F4");
+        }
+
+        private void textBoxFilterCondition_TextChanged(object sender, EventArgs e)
+        {
+            string text = textBoxFilterCondition.Text;
+            if (text.Length == 0)
+                filterConditionTextMatch = null;
+            else
+                filterConditionTextMatch = text;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void textBoxFilterThen_TextChanged(object sender, EventArgs e)
+        {
+            string text = textBoxFilterThen.Text;
+            if (text.Length == 0)
+                filterThenTextMatch = null;
+            else
+                filterThenTextMatch = text;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void dataGridViewResults_SelectionChanged(object sender, EventArgs e)
+        {
+            richTextBoxSelectedRule.Text = dataGridViewResults.SelectedRows[0].DataBoundItem.ToString();
         }
 
     }
