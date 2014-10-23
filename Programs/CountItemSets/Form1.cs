@@ -26,6 +26,8 @@ namespace CountItemSets
             try
             {
                 textBoxFileName.Text = ConfigurationManager.AppSettings["TransactionFileName"];
+                textBoxFileNameItemsets.Text = ConfigurationManager.AppSettings["ItemsetsFileName"];
+                fileNameItemsets = textBoxFileNameItemsets.Text;
             }
             catch (Exception) { }
         }
@@ -130,9 +132,11 @@ namespace CountItemSets
         HashSet<int> filterThenLevel1 = new HashSet<int>();
         double filterConditionItemMaxSupport = 1.00;
         double filterThenItemMaxSupport = 1.00;
-        string filterConditionTextMatch = null;
-        string filterThenTextMatch = null;
+        volatile string filterConditionTextMatch = null;
+        volatile string filterThenTextMatch = null;
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
+
+        string fileNameItemsets = "";
 
         private void CountItemSets()
         {
@@ -1335,7 +1339,41 @@ namespace CountItemSets
 
         private void dataGridViewResults_SelectionChanged(object sender, EventArgs e)
         {
-            richTextBoxSelectedRule.Text = dataGridViewResults.SelectedRows[0].DataBoundItem.ToString();
+            if (dataGridViewResults.SelectedRows.Count > 0)
+            {
+                dynamic item = dataGridViewResults.SelectedRows[0].DataBoundItem;
+                AssociationRule rule = item.Object as AssociationRule;
+                if (rule != null)
+                {
+                    String text = @"{\rtf\ansi"; 
+                    text += @"{\b IF\b0} " + rule.Condition1;
+                    if (rule.Condition2.EANCode != 0)
+                        text += @" {\b AND\b0} " + rule.Condition2;
+                    if (rule.Condition3.EANCode != 0)
+                        text += @" {\b AND\b0} " + rule.Condition3;
+                    if (rule.Condition4.EANCode != 0)
+                        text += @" {\b AND\b0} " + rule.Condition4;
+                    text += @" {\b THEN\b0} " + rule.Then;
+                    text += @"}";
+                    try
+                    {
+                        richTextBoxSelectedRule.Rtf = text;
+                    } catch(Exception) {};
+                }
+            }
+        }
+
+        private void buttonBrowseFileNameItemset_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            textBoxFileNameItemsets.Text = openFileDialog1.FileName;
+            fileNameItemsets = textBoxFileNameItemsets.Text;
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            if (config.AppSettings.Settings["ItemsetsFileName"] != null)
+                config.AppSettings.Settings.Remove("ItemsetsFileName");
+            config.AppSettings.Settings.Add("ItemsetsFileName", openFileDialog1.FileName);
+            config.Save(ConfigurationSaveMode.Modified);
         }
 
     }

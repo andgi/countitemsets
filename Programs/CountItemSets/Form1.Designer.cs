@@ -48,11 +48,15 @@
             this.labelConditionItemMaxSupport = new System.Windows.Forms.Label();
             this.trackBarConditionItemMaxSupport = new System.Windows.Forms.TrackBar();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxFilterThen = new System.Windows.Forms.TextBox();
             this.listBoxThenFilterLevel1 = new System.Windows.Forms.ListBox();
             this.contextMenuStripFilterLevel1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAllToolStripMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.selectNoneToolStripMenuSelectNone = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBoxFilterCondition = new System.Windows.Forms.TextBox();
             this.listBoxConditionFilterLevel1 = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.labelMaxSupport = new System.Windows.Forms.Label();
@@ -107,12 +111,16 @@
             this.labelPruningMinSupport = new System.Windows.Forms.Label();
             this.trackBarPruningMinSupport = new System.Windows.Forms.TrackBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBoxFilterCondition = new System.Windows.Forms.TextBox();
-            this.textBoxFilterThen = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBoxFileNameItemsets = new System.Windows.Forms.TextBox();
+            this.buttonBrowseFileNameItemset = new System.Windows.Forms.Button();
+            this.buttonLoadItemsets = new System.Windows.Forms.Button();
+            this.buttonSaveItemsets = new System.Windows.Forms.Button();
+            this.groupBox12 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -139,12 +147,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPruningMinSupport)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox10.SuspendLayout();
+            this.groupBox11.SuspendLayout();
+            this.groupBox12.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 40);
+            this.label1.Location = new System.Drawing.Point(6, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 0;
@@ -152,7 +162,7 @@
             // 
             // textBoxFileName
             // 
-            this.textBoxFileName.Location = new System.Drawing.Point(64, 37);
+            this.textBoxFileName.Location = new System.Drawing.Point(65, 19);
             this.textBoxFileName.Name = "textBoxFileName";
             this.textBoxFileName.Size = new System.Drawing.Size(207, 20);
             this.textBoxFileName.TabIndex = 1;
@@ -163,7 +173,7 @@
             // 
             // browseButton1
             // 
-            this.browseButton1.Location = new System.Drawing.Point(277, 35);
+            this.browseButton1.Location = new System.Drawing.Point(278, 17);
             this.browseButton1.Name = "browseButton1";
             this.browseButton1.Size = new System.Drawing.Size(75, 23);
             this.browseButton1.TabIndex = 2;
@@ -173,7 +183,7 @@
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(358, 35);
+            this.buttonStart.Location = new System.Drawing.Point(359, 17);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(75, 23);
             this.buttonStart.TabIndex = 3;
@@ -199,7 +209,7 @@
             // labelTransactionCount
             // 
             this.labelTransactionCount.AutoSize = true;
-            this.labelTransactionCount.Location = new System.Drawing.Point(545, 40);
+            this.labelTransactionCount.Location = new System.Drawing.Point(8, 25);
             this.labelTransactionCount.Name = "labelTransactionCount";
             this.labelTransactionCount.Size = new System.Drawing.Size(93, 13);
             this.labelTransactionCount.TabIndex = 6;
@@ -207,7 +217,7 @@
             // 
             // textBoxTransactionCount
             // 
-            this.textBoxTransactionCount.Location = new System.Drawing.Point(644, 37);
+            this.textBoxTransactionCount.Location = new System.Drawing.Point(108, 22);
             this.textBoxTransactionCount.Name = "textBoxTransactionCount";
             this.textBoxTransactionCount.Size = new System.Drawing.Size(100, 20);
             this.textBoxTransactionCount.TabIndex = 7;
@@ -215,7 +225,7 @@
             // labelTime
             // 
             this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(750, 40);
+            this.labelTime.Location = new System.Drawing.Point(182, 50);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(33, 13);
             this.labelTime.TabIndex = 8;
@@ -223,7 +233,7 @@
             // 
             // textBoxTime
             // 
-            this.textBoxTime.Location = new System.Drawing.Point(789, 37);
+            this.textBoxTime.Location = new System.Drawing.Point(221, 47);
             this.textBoxTime.Name = "textBoxTime";
             this.textBoxTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxTime.TabIndex = 9;
@@ -324,6 +334,23 @@
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Then - Groups";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 99);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Contains:";
+            // 
+            // textBoxFilterThen
+            // 
+            this.textBoxFilterThen.Location = new System.Drawing.Point(62, 96);
+            this.textBoxFilterThen.Name = "textBoxFilterThen";
+            this.textBoxFilterThen.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFilterThen.TabIndex = 14;
+            this.textBoxFilterThen.TextChanged += new System.EventHandler(this.textBoxFilterThen_TextChanged);
+            // 
             // listBoxThenFilterLevel1
             // 
             this.listBoxThenFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
@@ -368,6 +395,23 @@
             this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Condition - Groups";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 99);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Contains:";
+            // 
+            // textBoxFilterCondition
+            // 
+            this.textBoxFilterCondition.Location = new System.Drawing.Point(61, 96);
+            this.textBoxFilterCondition.Name = "textBoxFilterCondition";
+            this.textBoxFilterCondition.Size = new System.Drawing.Size(100, 20);
+            this.textBoxFilterCondition.TabIndex = 13;
+            this.textBoxFilterCondition.TextChanged += new System.EventHandler(this.textBoxFilterCondition_TextChanged);
             // 
             // listBoxConditionFilterLevel1
             // 
@@ -555,7 +599,7 @@
             // 
             // progressBarLoadingData
             // 
-            this.progressBarLoadingData.Location = new System.Drawing.Point(439, 35);
+            this.progressBarLoadingData.Location = new System.Drawing.Point(65, 45);
             this.progressBarLoadingData.Name = "progressBarLoadingData";
             this.progressBarLoadingData.Size = new System.Drawing.Size(100, 23);
             this.progressBarLoadingData.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -808,41 +852,42 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox12);
+            this.tabPage1.Controls.Add(this.groupBox11);
             this.tabPage1.Controls.Add(this.groupBox5);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.textBoxTime);
-            this.tabPage1.Controls.Add(this.progressBarLoadingData);
-            this.tabPage1.Controls.Add(this.labelTime);
-            this.tabPage1.Controls.Add(this.textBoxFileName);
-            this.tabPage1.Controls.Add(this.textBoxTransactionCount);
-            this.tabPage1.Controls.Add(this.browseButton1);
-            this.tabPage1.Controls.Add(this.labelTransactionCount);
-            this.tabPage1.Controls.Add(this.buttonStart);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(968, 666);
+            this.tabPage1.Size = new System.Drawing.Size(968, 733);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Market Data";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label4);
+            this.groupBox5.Controls.Add(this.textBoxTime);
             this.groupBox5.Controls.Add(this.groupBox6);
-            this.groupBox5.Location = new System.Drawing.Point(26, 145);
+            this.groupBox5.Controls.Add(this.labelTime);
+            this.groupBox5.Controls.Add(this.label1);
+            this.groupBox5.Controls.Add(this.progressBarLoadingData);
+            this.groupBox5.Controls.Add(this.textBoxFileName);
+            this.groupBox5.Controls.Add(this.browseButton1);
+            this.groupBox5.Controls.Add(this.buttonStart);
+            this.groupBox5.Location = new System.Drawing.Point(8, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(863, 116);
+            this.groupBox5.Size = new System.Drawing.Size(863, 96);
             this.groupBox5.TabIndex = 15;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Pruning";
+            this.groupBox5.Text = "Raw Basket Data Analysis";
             // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.labelPruningMinSupport);
             this.groupBox6.Controls.Add(this.trackBarPruningMinSupport);
-            this.groupBox6.Location = new System.Drawing.Point(6, 16);
+            this.groupBox6.Location = new System.Drawing.Point(744, 17);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(200, 94);
+            this.groupBox6.Size = new System.Drawing.Size(111, 71);
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Min Support";
@@ -854,7 +899,7 @@
             this.labelPruningMinSupport.Name = "labelPruningMinSupport";
             this.labelPruningMinSupport.Size = new System.Drawing.Size(40, 13);
             this.labelPruningMinSupport.TabIndex = 14;
-            this.labelPruningMinSupport.Text = "0.0000";
+            this.labelPruningMinSupport.Text = "0.0001";
             // 
             // trackBarPruningMinSupport
             // 
@@ -881,40 +926,6 @@
             this.tabPage2.Text = "Association Rules Browser";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // textBoxFilterCondition
-            // 
-            this.textBoxFilterCondition.Location = new System.Drawing.Point(61, 96);
-            this.textBoxFilterCondition.Name = "textBoxFilterCondition";
-            this.textBoxFilterCondition.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFilterCondition.TabIndex = 13;
-            this.textBoxFilterCondition.TextChanged += new System.EventHandler(this.textBoxFilterCondition_TextChanged);
-            // 
-            // textBoxFilterThen
-            // 
-            this.textBoxFilterThen.Location = new System.Drawing.Point(62, 96);
-            this.textBoxFilterThen.Name = "textBoxFilterThen";
-            this.textBoxFilterThen.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFilterThen.TabIndex = 14;
-            this.textBoxFilterThen.TextChanged += new System.EventHandler(this.textBoxFilterThen_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 99);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Contains:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 99);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Contains:";
-            // 
             // groupBox10
             // 
             this.groupBox10.Controls.Add(this.richTextBoxSelectedRule);
@@ -932,6 +943,84 @@
             this.richTextBoxSelectedRule.Size = new System.Drawing.Size(886, 59);
             this.richTextBoxSelectedRule.TabIndex = 0;
             this.richTextBoxSelectedRule.Text = "";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(7, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(51, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Progress:";
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.buttonSaveItemsets);
+            this.groupBox11.Controls.Add(this.buttonLoadItemsets);
+            this.groupBox11.Controls.Add(this.label5);
+            this.groupBox11.Controls.Add(this.textBoxFileNameItemsets);
+            this.groupBox11.Controls.Add(this.buttonBrowseFileNameItemset);
+            this.groupBox11.Location = new System.Drawing.Point(8, 108);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(863, 100);
+            this.groupBox11.TabIndex = 16;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Frequent Itemsets";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 19);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Filename:";
+            // 
+            // textBoxFileNameItemsets
+            // 
+            this.textBoxFileNameItemsets.Location = new System.Drawing.Point(66, 16);
+            this.textBoxFileNameItemsets.Name = "textBoxFileNameItemsets";
+            this.textBoxFileNameItemsets.Size = new System.Drawing.Size(207, 20);
+            this.textBoxFileNameItemsets.TabIndex = 4;
+            // 
+            // buttonBrowseFileNameItemset
+            // 
+            this.buttonBrowseFileNameItemset.Location = new System.Drawing.Point(279, 14);
+            this.buttonBrowseFileNameItemset.Name = "buttonBrowseFileNameItemset";
+            this.buttonBrowseFileNameItemset.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowseFileNameItemset.TabIndex = 5;
+            this.buttonBrowseFileNameItemset.Text = "Browse...";
+            this.buttonBrowseFileNameItemset.UseVisualStyleBackColor = true;
+            this.buttonBrowseFileNameItemset.Click += new System.EventHandler(this.buttonBrowseFileNameItemset_Click);
+            // 
+            // buttonLoadItemsets
+            // 
+            this.buttonLoadItemsets.Location = new System.Drawing.Point(360, 14);
+            this.buttonLoadItemsets.Name = "buttonLoadItemsets";
+            this.buttonLoadItemsets.Size = new System.Drawing.Size(75, 23);
+            this.buttonLoadItemsets.TabIndex = 6;
+            this.buttonLoadItemsets.Text = "Load";
+            this.buttonLoadItemsets.UseVisualStyleBackColor = true;
+            // 
+            // buttonSaveItemsets
+            // 
+            this.buttonSaveItemsets.Location = new System.Drawing.Point(441, 14);
+            this.buttonSaveItemsets.Name = "buttonSaveItemsets";
+            this.buttonSaveItemsets.Size = new System.Drawing.Size(75, 23);
+            this.buttonSaveItemsets.TabIndex = 7;
+            this.buttonSaveItemsets.Text = "Save As...";
+            this.buttonSaveItemsets.UseVisualStyleBackColor = true;
+            // 
+            // groupBox12
+            // 
+            this.groupBox12.Controls.Add(this.labelTransactionCount);
+            this.groupBox12.Controls.Add(this.textBoxTransactionCount);
+            this.groupBox12.Location = new System.Drawing.Point(8, 214);
+            this.groupBox12.Name = "groupBox12";
+            this.groupBox12.Size = new System.Drawing.Size(863, 116);
+            this.groupBox12.TabIndex = 17;
+            this.groupBox12.TabStop = false;
+            this.groupBox12.Text = "Metadata";
             // 
             // Form1
             // 
@@ -973,13 +1062,17 @@
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPruningMinSupport)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1070,6 +1163,14 @@
         private System.Windows.Forms.TextBox textBoxFilterCondition;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.RichTextBox richTextBoxSelectedRule;
+        private System.Windows.Forms.GroupBox groupBox12;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Button buttonSaveItemsets;
+        private System.Windows.Forms.Button buttonLoadItemsets;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBoxFileNameItemsets;
+        private System.Windows.Forms.Button buttonBrowseFileNameItemset;
+        private System.Windows.Forms.Label label4;
     }
 }
 
