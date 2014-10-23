@@ -1376,5 +1376,16 @@ namespace CountItemSets
             config.Save(ConfigurationSaveMode.Modified);
         }
 
+        private void buttonSaveItemsets_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+            string fileName = saveFileDialog1.FileName;
+        }
+
+        private void buttonLoadItemsets_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

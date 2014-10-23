@@ -121,6 +121,7 @@
             this.buttonLoadItemsets = new System.Windows.Forms.Button();
             this.buttonSaveItemsets = new System.Windows.Forms.Button();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -1001,6 +1002,7 @@
             this.buttonLoadItemsets.TabIndex = 6;
             this.buttonLoadItemsets.Text = "Load";
             this.buttonLoadItemsets.UseVisualStyleBackColor = true;
+            this.buttonLoadItemsets.Click += new System.EventHandler(this.buttonLoadItemsets_Click);
             // 
             // buttonSaveItemsets
             // 
@@ -1010,6 +1012,7 @@
             this.buttonSaveItemsets.TabIndex = 7;
             this.buttonSaveItemsets.Text = "Save As...";
             this.buttonSaveItemsets.UseVisualStyleBackColor = true;
+            this.buttonSaveItemsets.Click += new System.EventHandler(this.buttonSaveItemsets_Click);
             // 
             // groupBox12
             // 
@@ -1171,6 +1174,7 @@
         private System.Windows.Forms.TextBox textBoxFileNameItemsets;
         private System.Windows.Forms.Button buttonBrowseFileNameItemset;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
