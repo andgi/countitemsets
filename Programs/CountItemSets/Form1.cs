@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml;
 using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
 using System.Diagnostics;
@@ -112,13 +113,13 @@ namespace CountItemSets
         static Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>();
         static Dictionary<string, double> dictionaryRule = new Dictionary<string, double>();
 
-        Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
+        static Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
         Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
         Dictionary<string, int> dictionaryLevel3 = new Dictionary<string, int>();
         Dictionary<string, int> dictionaryLevel4 = new Dictionary<string, int>();
         Dictionary<string, int> dictionaryLevel5 = new Dictionary<string, int>();
 
-        int transactionCount = 0;
+        static int transactionCount = 0;
         double pruningMinSupport = 0.0001;
 
         List<AssociationRule> results = new List<AssociationRule>();
@@ -872,6 +873,19 @@ namespace CountItemSets
         {
             buttonStart.Enabled = false;
 
+            InitStaticTables();
+
+            CountItemSets();
+
+            InitFilters();
+
+            GenerateRules();
+
+            buttonStart.Enabled = true;
+        }
+
+        void InitStaticTables()
+        {
             String eanPath = "EAN.csv";
             try
             {
@@ -885,7 +899,7 @@ namespace CountItemSets
                 dialog.ShowDialog();
                 eanPath = dialog.FileName;
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                config.AppSettings.Settings.Add("EANTable",eanPath);
+                config.AppSettings.Settings.Add("EANTable", eanPath);
                 config.Save(ConfigurationSaveMode.Modified);
             }
             TextFieldParser parser = new TextFieldParser(eanPath);
@@ -919,7 +933,7 @@ namespace CountItemSets
                 Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
                 config.AppSettings.Settings.Add("VGRTable", vgrPath);
                 config.Save(ConfigurationSaveMode.Modified);
-            }          
+            }
             parser = new TextFieldParser(vgrPath);
             parser.SetDelimiters(";");
             parser.ReadLine();
@@ -934,9 +948,10 @@ namespace CountItemSets
                 }
                 catch (Exception) { }
             }
+        }
 
-            CountItemSets();
-
+        void InitFilters()
+        {
             listBoxConditionFilterLevel1.Items.Clear();
             listBoxThenFilterLevel1.Items.Clear();
             List<KeyValuePair<int, string>> groupItems = new List<KeyValuePair<int, string>>();
@@ -953,7 +968,10 @@ namespace CountItemSets
                 listBoxConditionFilterLevel1.Items.Add(item);
                 listBoxThenFilterLevel1.Items.Add(item);
             }
+        }
 
+        void GenerateRules()
+        {
             // Building association rules
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
@@ -1018,10 +1036,8 @@ namespace CountItemSets
                 results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
             }
 
-            results = new List<AssociationRule>(results.Where(item => item.Confidence >= 0.05 && item.Lift >= 1.0).OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderByDescending(item => item.NumberOfConditions()));
+            results = new List<AssociationRule>(results.OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderByDescending(item => item.NumberOfConditions()));
             signalUpdateDataGridView.Set();
-
-            buttonStart.Enabled = true;
         }
 
         static private string TranslateEANpairs(string textPair)
@@ -1087,8 +1103,17 @@ namespace CountItemSets
             public class TransactionItem: IComparable
             {
                 private string _text = null;
+
+                private string _name = null;
                 public long EANCode { get; set; }
-                public string Text { get { if (_text != null) return _text; else return _text = TranslateEANCode(); } set { _text = value; } }
+                public string Text { get { if (_text != null) return _text; else return _text = TranslateEANCodeFull(); } set { _text = value; } }
+                public string Name { get { if (_name != null) return _name; else return _name = TranslateEANCodeShort(); } set { _name = value; } }
+                public int GroupID { get { if (IsEmpty) return 0; else if (IsGroup) return (int)-EANCode; else return dictionaryEANtoVGR[EANCode]; } }
+                public string GroupName { get { if (IsGroup || IsItem) return dictionaryVGR[GroupID]; else return ""; } }
+                public bool IsGroup { get { return EANCode < 0; } }
+                public bool IsItem { get { return EANCode > 0; } }
+                public bool IsEmpty { get { return EANCode == 0; } }
+                public double Support { get { if (IsGroup || IsItem) return (double)dictionaryLevel1[EANCode] / transactionCount; else return 0.0; } }
                 public TransactionItem(long eanCode)
                 {
                     EANCode = eanCode;
@@ -1099,13 +1124,42 @@ namespace CountItemSets
                     return Text;
                 }
 
-                public string TranslateEANCode()
+                public string TranslateEANCodeShort()
                 {
                     if (EANCode == 0) return "";
                     string result;
                     if (EANCode < 0)
                     {
                         int vgrNr = (int) -EANCode;
+                        if (dictionaryVGR.ContainsKey(vgrNr))
+                            result = dictionaryVGR[vgrNr];
+                        else
+                            result = vgrNr.ToString();
+
+                    }
+                    else if (dictionaryEAN.ContainsKey(EANCode))
+                        result = dictionaryEAN[EANCode];
+                    else
+                    {
+                        if (dictionaryEANtoVGR.ContainsKey(EANCode))
+                        {
+                            int vgrNr = dictionaryEANtoVGR[EANCode];
+                            if (dictionaryVGR.ContainsKey(vgrNr))
+                                result = dictionaryVGR[vgrNr];
+                            else
+                                result = vgrNr.ToString();
+                        }
+                        else result = EANCode.ToString();
+                    }
+                    return result;
+                }
+                public string TranslateEANCodeFull()
+                {
+                    if (EANCode == 0) return "";
+                    string result;
+                    if (EANCode < 0)
+                    {
+                        int vgrNr = (int)-EANCode;
                         if (dictionaryVGR.ContainsKey(vgrNr))
                             result = "Varugrupp " + dictionaryVGR[vgrNr] + "(" + vgrNr + ")";
                         else
@@ -1128,6 +1182,7 @@ namespace CountItemSets
                     }
                     return result;
                 }
+
 
                 public int CompareTo(Object obj)
                 {
@@ -1345,26 +1400,45 @@ namespace CountItemSets
                 AssociationRule rule = item.Object as AssociationRule;
                 if (rule != null)
                 {
-                    String text = @"{\rtf\ansi"; 
-                    text += @"{\b IF\b0} " + rule.Condition1;
+                    String text = @"{\rtf\ansi\b0"; 
+                    text += @"{\b IF\b0} " + rule.Condition1.Name;
                     if (rule.Condition2.EANCode != 0)
-                        text += @" {\b AND\b0} " + rule.Condition2;
+                        text += @" {\b AND\b0} " + rule.Condition2.Name;
                     if (rule.Condition3.EANCode != 0)
-                        text += @" {\b AND\b0} " + rule.Condition3;
+                        text += @" {\b AND\b0} " + rule.Condition3.Name;
                     if (rule.Condition4.EANCode != 0)
-                        text += @" {\b AND\b0} " + rule.Condition4;
-                    text += @" {\b THEN\b0} " + rule.Then;
+                        text += @" {\b AND\b0} " + rule.Condition4.Name;
+                    text += @" {\b THEN\b0} " + rule.Then.Name;
                     text += @"}";
                     try
                     {
                         richTextBoxSelectedRule.Rtf = text;
                     } catch(Exception) {};
+
+                    textBoxRuleEANCondition1.Text = rule.Condition1.IsGroup ? "" : rule.Condition1.EANCode.ToString();
+                    textBoxRuleEANCondition2.Text = rule.Condition2.IsItem ? rule.Condition2.EANCode.ToString() : "";
+                    textBoxRuleEANCondition3.Text = rule.Condition3.IsItem ? rule.Condition3.EANCode.ToString() : "";
+                    textBoxRuleEANCondition4.Text = rule.Condition4.IsItem ? rule.Condition4.EANCode.ToString() : "";
+                    textBoxRuleEANThen.Text = rule.Then.IsGroup ? "" : rule.Then.EANCode.ToString();
+
+                    textBoxRuleGroupCondition1.Text = rule.Condition1.GroupName;
+                    textBoxRuleGroupCondition2.Text = rule.Condition2.GroupName;
+                    textBoxRuleGroupCondition3.Text = rule.Condition3.GroupName;
+                    textBoxRuleGroupCondition4.Text = rule.Condition4.GroupName;
+                    textBoxRuleGroupThen.Text = rule.Then.GroupName;
+
+                    textBoxRuleSupportCondition1.Text = rule.Condition1.Support.ToString();
+                    textBoxRuleSupportCondition2.Text = rule.Condition2.IsEmpty ? "" : rule.Condition2.Support.ToString();
+                    textBoxRuleSupportCondition3.Text = rule.Condition3.IsEmpty ? "" : rule.Condition3.Support.ToString();
+                    textBoxRuleSupportCondition4.Text = rule.Condition4.IsEmpty ? "" : rule.Condition4.Support.ToString();
+                    textBoxRuleSupportThen.Text = rule.Then.Support.ToString();
                 }
             }
         }
 
         private void buttonBrowseFileNameItemset_Click(object sender, EventArgs e)
         {
+            openFileDialog1.Filter = "Xml files (*.xml)|*.xml";
             openFileDialog1.ShowDialog();
             textBoxFileNameItemsets.Text = openFileDialog1.FileName;
             fileNameItemsets = textBoxFileNameItemsets.Text;
@@ -1378,14 +1452,197 @@ namespace CountItemSets
 
         private void buttonSaveItemsets_Click(object sender, EventArgs e)
         {
+            saveFileDialog1.Filter = "Xml files (*.xml)|*.xml";
             saveFileDialog1.ShowDialog();
             string fileName = saveFileDialog1.FileName;
+            XmlWriter writer = XmlWriter.Create(fileName);
+            writer.WriteStartElement("Dictionaries");
+            writer.WriteElementString("TransactionCount", transactionCount.ToString());
+            writer.WriteStartElement("dictionaryEANtoVGR");
+            foreach (KeyValuePair<long, int> pair in dictionaryEANtoVGR)
+            {
+                writer.WriteStartElement("Pair");
+                writer.WriteElementString("Key", pair.Key.ToString());
+                writer.WriteElementString("Value", pair.Value.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteStartElement("dictionaryLevel1");
+            foreach (KeyValuePair<long, int> pair in dictionaryLevel1)
+            {
+                writer.WriteStartElement("Pair");
+                writer.WriteElementString("Key", pair.Key.ToString());
+                writer.WriteElementString("Value", pair.Value.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteStartElement("dictionaryLevel2");
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
+            {
+                writer.WriteStartElement("Pair");
+                writer.WriteElementString("Key", pair.Key.ToString());
+                writer.WriteElementString("Value", pair.Value.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteStartElement("dictionaryLevel3");
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
+            {
+                writer.WriteStartElement("Pair");
+                writer.WriteElementString("Key", pair.Key.ToString());
+                writer.WriteElementString("Value", pair.Value.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteStartElement("dictionaryLevel4");
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel4)
+            {
+                writer.WriteStartElement("Pair");
+                writer.WriteElementString("Key", pair.Key.ToString());
+                writer.WriteElementString("Value", pair.Value.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteStartElement("dictionaryLevel5");
+            foreach (KeyValuePair<string, int> pair in dictionaryLevel5)
+            {
+                writer.WriteStartElement("Pair");
+                writer.WriteElementString("Key", pair.Key.ToString());
+                writer.WriteElementString("Value", pair.Value.ToString());
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.Close();
         }
 
         private void buttonLoadItemsets_Click(object sender, EventArgs e)
         {
+            InitStaticTables();
 
+            XmlDocument document = new XmlDocument();
+            document.Load(fileNameItemsets);
+            XmlNode nodeDictionary = document.FirstChild.NextSibling.ChildNodes[0];
+            transactionCount = int.Parse(nodeDictionary.InnerText);
+            textBoxTransactionCount.Text = transactionCount.ToString();
+            nodeDictionary = nodeDictionary.NextSibling;
+            dictionaryEANtoVGR = new Dictionary<long, int>();
+            foreach (XmlNode node in nodeDictionary.ChildNodes)
+            {
+                long key = long.Parse(node.ChildNodes[0].InnerText);
+                int value = int.Parse(node.ChildNodes[1].InnerText);
+                dictionaryEANtoVGR.Add(key, value);
+            }
+            nodeDictionary = nodeDictionary.NextSibling;
+            dictionaryLevel1 = new Dictionary<long, int>();
+            foreach (XmlNode node in nodeDictionary.ChildNodes)
+            {
+                long key = long.Parse(node.ChildNodes[0].InnerText);
+                int value = int.Parse(node.ChildNodes[1].InnerText);
+                dictionaryLevel1.Add(key, value);
+            }
+            nodeDictionary = nodeDictionary.NextSibling;
+            dictionaryLevel2 = new Dictionary<string, int>();
+            foreach (XmlNode node in nodeDictionary.ChildNodes)
+            {
+                string key = node.ChildNodes[0].InnerText;
+                int value = int.Parse(node.ChildNodes[1].InnerText);
+                dictionaryLevel2.Add(key, value);
+            }
+            nodeDictionary = nodeDictionary.NextSibling;
+            dictionaryLevel3 = new Dictionary<string, int>();
+            foreach (XmlNode node in nodeDictionary.ChildNodes)
+            {
+                string key = node.ChildNodes[0].InnerText;
+                int value = int.Parse(node.ChildNodes[1].InnerText);
+                dictionaryLevel3.Add(key, value);
+            }
+            nodeDictionary = nodeDictionary.NextSibling;
+            dictionaryLevel4 = new Dictionary<string, int>();
+            foreach (XmlNode node in nodeDictionary.ChildNodes)
+            {
+                string key = node.ChildNodes[0].InnerText;
+                int value = int.Parse(node.ChildNodes[1].InnerText);
+                dictionaryLevel4.Add(key, value);
+            }
+            nodeDictionary = nodeDictionary.NextSibling;
+            dictionaryLevel5 = new Dictionary<string, int>();
+            foreach (XmlNode node in nodeDictionary.ChildNodes)
+            {
+                string key = node.ChildNodes[0].InnerText;
+                int value = int.Parse(node.ChildNodes[1].InnerText);
+                dictionaryLevel5.Add(key, value);
+            }
+
+            InitFilters();
+
+            GenerateRules();
         }
 
+        private void buttonRuleExcludeGroup_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewResults.SelectedRows.Count > 0)
+            {
+                dynamic item = dataGridViewResults.SelectedRows[0].DataBoundItem;
+                AssociationRule rule = item.Object as AssociationRule;
+                if (rule != null)
+                {
+                    Button button = sender as Button;
+                    if(button == buttonRuleExcludeGroupCondition1) {
+                        ExcludeGroupFilterCondition(rule.Condition1.GroupID);
+                    }
+                    else if (button == buttonRuleExcludeGroupCondition2)
+                    {
+                        ExcludeGroupFilterCondition(rule.Condition2.GroupID);
+                    }
+                    else if (button == buttonRuleExcludeGroupCondition3)
+                    {
+                        ExcludeGroupFilterCondition(rule.Condition3.GroupID);
+                    }
+                    else if (button == buttonRuleExcludeGroupCondition4)
+                    {
+                        ExcludeGroupFilterCondition(rule.Condition4.GroupID);
+                    }
+                    else if (button == buttonRuleExcludeGroupThen)
+                    {
+                        ExcludeGroupFilterThen(rule.Then.GroupID);
+                    }
+                }
+            }
+        
+        }
+
+        private void ExcludeGroupFilterCondition(int groupID)
+        {
+            if (listBoxConditionFilterLevel1.SelectedItems.Count == 0) {
+                for (int i = 0; i < listBoxConditionFilterLevel1.Items.Count; i++)
+                {
+                    listBoxConditionFilterLevel1.SetSelected(i, true);
+                }
+            }
+            for (int i = 0; i < listBoxConditionFilterLevel1.Items.Count; i++)
+            {
+                KeyValuePair<int, string> pair = (KeyValuePair<int,string>)listBoxConditionFilterLevel1.Items[i];
+                if(pair.Key == groupID)
+                    listBoxConditionFilterLevel1.SetSelected(i, false);
+            }
+        }
+
+        private void ExcludeGroupFilterThen(int groupID)
+        {
+            if (listBoxThenFilterLevel1.SelectedItems.Count == 0)
+            {
+                for (int i = 0; i < listBoxThenFilterLevel1.Items.Count; i++)
+                {
+                    listBoxThenFilterLevel1.SetSelected(i, true);
+                }
+            }
+            for (int i = 0; i < listBoxThenFilterLevel1.Items.Count; i++)
+            {
+                KeyValuePair<int, string> pair = (KeyValuePair<int, string>)listBoxThenFilterLevel1.Items[i];
+                if (pair.Key == groupID)
+                    listBoxThenFilterLevel1.SetSelected(i, false);
+            }
+        }
     }
 }
