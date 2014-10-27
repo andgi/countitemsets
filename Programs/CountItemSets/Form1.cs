@@ -66,15 +66,17 @@ namespace CountItemSets
                 string textMatch;
                 if ((textMatch = filterConditionTextMatch) != null)
                 {
-                    filter = filter.Where(item => item.Condition1.Text.Contains(textMatch)
-                        && (item.Condition2.EANCode == 0 || (item.Condition2.Text.Contains(textMatch)))
-                        && (item.Condition3.EANCode == 0 || (item.Condition3.Text.Contains(textMatch)))
-                        && (item.Condition4.EANCode == 0 || (item.Condition4.Text.Contains(textMatch)))
+                    textMatch = textMatch.ToLower();
+                    filter = filter.Where(item => item.Condition1.Text.ToLower().Contains(textMatch)
+                        && (item.Condition2.EANCode == 0 || (item.Condition2.Text.ToLower().Contains(textMatch)))
+                        && (item.Condition3.EANCode == 0 || (item.Condition3.Text.ToLower().Contains(textMatch)))
+                        && (item.Condition4.EANCode == 0 || (item.Condition4.Text.ToLower().Contains(textMatch)))
                         );
                 }
                 if ((textMatch = filterThenTextMatch) != null)
                 {
-                    filter = filter.Where(item => item.Then.Text.Contains(textMatch));
+                    textMatch = textMatch.ToLower();
+                    filter = filter.Where(item => item.Then.Text.ToLower().Contains(textMatch));
                 }
                 BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
