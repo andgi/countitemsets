@@ -146,6 +146,10 @@
             this.textBoxRuleEANCondition1 = new System.Windows.Forms.TextBox();
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.textBoxNrFrequentItemsets = new System.Windows.Forms.TextBox();
+            this.textBoxNrAssociationRules = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -221,6 +225,10 @@
             this.dataGridViewResults.AllowUserToAddRows = false;
             this.dataGridViewResults.AllowUserToDeleteRows = false;
             this.dataGridViewResults.AllowUserToResizeRows = false;
+            this.dataGridViewResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewResults.Location = new System.Drawing.Point(6, 19);
             this.dataGridViewResults.Name = "dataGridViewResults";
@@ -229,6 +237,7 @@
             this.dataGridViewResults.ShowCellErrors = false;
             this.dataGridViewResults.Size = new System.Drawing.Size(885, 424);
             this.dataGridViewResults.TabIndex = 4;
+            this.dataGridViewResults.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewResults_CellFormatting);
             this.dataGridViewResults.SelectionChanged += new System.EventHandler(this.dataGridViewResults_SelectionChanged);
             // 
             // labelTransactionCount
@@ -265,6 +274,8 @@
             // 
             // groupBoxAssociationRules
             // 
+            this.groupBoxAssociationRules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBoxAssociationRules.Controls.Add(this.dataGridViewResults);
             this.groupBoxAssociationRules.Location = new System.Drawing.Point(3, 154);
             this.groupBoxAssociationRules.Name = "groupBoxAssociationRules";
@@ -754,20 +765,20 @@
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.undoToolStripMenuItem.Text = "&Undo";
             // 
             // redoToolStripMenuItem
             // 
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.redoToolStripMenuItem.Text = "&Redo";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
             // cutToolStripMenuItem
             // 
@@ -775,7 +786,7 @@
             this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
             this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.cutToolStripMenuItem.Text = "Cu&t";
             // 
             // copyToolStripMenuItem
@@ -784,8 +795,9 @@
             this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.copyToolStripMenuItem.Text = "&Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
@@ -793,18 +805,18 @@
             this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.pasteToolStripMenuItem.Text = "&Paste";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.selectAllToolStripMenuItem.Text = "Select &All";
             // 
             // toolsToolStripMenuItem
@@ -871,6 +883,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(0, 27);
@@ -894,6 +909,10 @@
             // 
             // groupBox12
             // 
+            this.groupBox12.Controls.Add(this.label11);
+            this.groupBox12.Controls.Add(this.label10);
+            this.groupBox12.Controls.Add(this.textBoxNrAssociationRules);
+            this.groupBox12.Controls.Add(this.textBoxNrFrequentItemsets);
             this.groupBox12.Controls.Add(this.labelTransactionCount);
             this.groupBox12.Controls.Add(this.textBoxTransactionCount);
             this.groupBox12.Location = new System.Drawing.Point(8, 214);
@@ -1037,6 +1056,7 @@
             // 
             // groupBox10
             // 
+            this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox10.Controls.Add(this.buttonRuleExcludeGroupThen);
             this.groupBox10.Controls.Add(this.buttonRuleExcludeGroupCondition4);
             this.groupBox10.Controls.Add(this.buttonRuleExcludeGroupCondition3);
@@ -1284,6 +1304,38 @@
             this.richTextBoxSelectedRule.TabIndex = 0;
             this.richTextBoxSelectedRule.Text = "";
             // 
+            // textBoxNrFrequentItemsets
+            // 
+            this.textBoxNrFrequentItemsets.Location = new System.Drawing.Point(360, 22);
+            this.textBoxNrFrequentItemsets.Name = "textBoxNrFrequentItemsets";
+            this.textBoxNrFrequentItemsets.Size = new System.Drawing.Size(100, 20);
+            this.textBoxNrFrequentItemsets.TabIndex = 8;
+            // 
+            // textBoxNrAssociationRules
+            // 
+            this.textBoxNrAssociationRules.Location = new System.Drawing.Point(666, 22);
+            this.textBoxNrAssociationRules.Name = "textBoxNrAssociationRules";
+            this.textBoxNrAssociationRules.Size = new System.Drawing.Size(100, 20);
+            this.textBoxNrAssociationRules.TabIndex = 9;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(237, 25);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(116, 13);
+            this.label10.TabIndex = 10;
+            this.label10.Text = "Nr of frequent itemsets:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(548, 25);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(112, 13);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "Nr of assocation rules:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1459,6 +1511,10 @@
         private System.Windows.Forms.Button buttonRuleExcludeGroupCondition4;
         private System.Windows.Forms.Button buttonRuleExcludeGroupCondition3;
         private System.Windows.Forms.Button buttonRuleExcludeGroupCondition2;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox textBoxNrAssociationRules;
+        private System.Windows.Forms.TextBox textBoxNrFrequentItemsets;
     }
 }
 

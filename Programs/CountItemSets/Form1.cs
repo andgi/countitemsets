@@ -53,15 +53,15 @@ namespace CountItemSets
                 }
                 if (filterConditionItemMaxSupport != 1.0)
                 {
-                    filter = filter.Where(item => ((double)transactionCount / dictionaryLevel1[item.Condition1.EANCode]) <= filterConditionItemMaxSupport
-                    && (item.Condition2.EANCode == 0 || (((double)transactionCount / dictionaryLevel1[item.Condition2.EANCode]) <= filterConditionItemMaxSupport))
-                    && (item.Condition3.EANCode == 0 || (((double)transactionCount / dictionaryLevel1[item.Condition3.EANCode]) <= filterConditionItemMaxSupport))
-                    && (item.Condition4.EANCode == 0 || (((double)transactionCount / dictionaryLevel1[item.Condition4.EANCode]) <= filterConditionItemMaxSupport))
+                    filter = filter.Where(item => ((double)dictionaryLevel1[item.Condition1.EANCode] / transactionCount) <= filterConditionItemMaxSupport
+                    && (item.Condition2.EANCode == 0 || (((double)dictionaryLevel1[item.Condition2.EANCode] / transactionCount) <= filterConditionItemMaxSupport))
+                    && (item.Condition3.EANCode == 0 || (((double)dictionaryLevel1[item.Condition3.EANCode] / transactionCount) <= filterConditionItemMaxSupport))
+                    && (item.Condition4.EANCode == 0 || (((double)dictionaryLevel1[item.Condition4.EANCode] / transactionCount) <= filterConditionItemMaxSupport))
                     );
                 }
                 if (filterThenItemMaxSupport != 1.0)
                 {
-                    filter = filter.Where(item => ((double)transactionCount / dictionaryLevel1[item.Then.EANCode]) <= filterThenItemMaxSupport);
+                    filter = filter.Where(item => ((double)dictionaryLevel1[item.Then.EANCode] / transactionCount) <= filterThenItemMaxSupport);
                 }
                 string textMatch;
                 if ((textMatch = filterConditionTextMatch) != null)
@@ -1042,6 +1042,13 @@ namespace CountItemSets
             signalUpdateDataGridView.Set();
         }
 
+        private void UpdateMetaData()
+        {
+            textBoxTransactionCount.Text = transactionCount.ToString();
+            textBoxNrFrequentItemsets.Text = (dictionaryLevel2.Count + dictionaryLevel3.Count + dictionaryLevel4.Count + dictionaryLevel5.Count).ToString();
+            textBoxNrAssociationRules.Text = (dictionaryLevel2.Count * 2 + dictionaryLevel3.Count * 3 + dictionaryLevel4.Count * 4 + dictionaryLevel5.Count * 5).ToString();
+        }
+
         static private string TranslateEANpairs(string textPair)
         {
             String[] columns = textPair.Split(',');
@@ -1163,9 +1170,9 @@ namespace CountItemSets
                     {
                         int vgrNr = (int)-EANCode;
                         if (dictionaryVGR.ContainsKey(vgrNr))
-                            result = "Varugrupp " + dictionaryVGR[vgrNr] + "(" + vgrNr + ")";
+                            result = "[" + dictionaryVGR[vgrNr] + "(" + vgrNr + ")" + "]";
                         else
-                            result = "Varugrupp " + "(" + vgrNr + ")";
+                            result = "[" + "(" + vgrNr + ")" + "]";
 
                     }
                     else if (dictionaryEAN.ContainsKey(EANCode))
@@ -1178,7 +1185,7 @@ namespace CountItemSets
                             if (dictionaryVGR.ContainsKey(vgrNr))
                                 result = dictionaryVGR[vgrNr] + " (" + EANCode + ")";
                             else
-                                result = "Varugrupp " + vgrNr + " (" + EANCode + ")";
+                                result = vgrNr + " (" + EANCode + ")";
                         }
                         else result = EANCode.ToString();
                     }
@@ -1579,6 +1586,8 @@ namespace CountItemSets
             InitFilters();
 
             GenerateRules();
+
+            UpdateMetaData();
         }
 
         private void buttonRuleExcludeGroup_Click(object sender, EventArgs e)
@@ -1646,5 +1655,46 @@ namespace CountItemSets
                     listBoxThenFilterLevel1.SetSelected(i, false);
             }
         }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+                try
+                {
+                    if (ActiveControl is DataGridView)
+                        Clipboard.SetDataObject((ActiveControl as DataGridView).GetClipboardContent());
+                    else if (ActiveControl is RichTextBox)
+                    {
+                        DataObject dataObject = new DataObject();
+                        dataObject.SetData((ActiveControl as RichTextBox).SelectedText);
+                        dataObject.SetData(DataFormats.Rtf,(ActiveControl as RichTextBox).SelectedRtf);
+                        Clipboard.SetDataObject(dataObject);
+                    }
+                    
+                }
+                catch (System.Runtime.InteropServices.ExternalException)
+                {
+                }
+        }
+
+        private void dataGridViewResults_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            dynamic item = dataGridViewResults.Rows[e.RowIndex].DataBoundItem;
+            AssociationRule rule = item.Object as AssociationRule;
+            if (rule != null)
+            {
+                if (e.ColumnIndex <= 4)
+                {
+                    if ((e.ColumnIndex == 0 && rule.Condition1.IsGroup)
+                        || (e.ColumnIndex == 1 && rule.Condition2.IsGroup)
+                        || (e.ColumnIndex == 2 && rule.Condition3.IsGroup)
+                        || (e.ColumnIndex == 3 && rule.Condition4.IsGroup)
+                        || (e.ColumnIndex == 4 && rule.Then.IsGroup))
+                    {
+                        e.CellStyle.ForeColor = Color.DarkBlue;
+                    }
+                }
+            }
+        }
     }
+
 }
