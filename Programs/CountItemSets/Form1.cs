@@ -82,6 +82,7 @@ namespace CountItemSets
                 Invoke((Action)(() =>
                 {
                     dataGridViewResults.DataSource = view;
+                    groupBoxAssociationRules.Text = "Association Rules: " + view.Count + " of " + results.Count;
                 }));
             }
         }
@@ -125,8 +126,8 @@ namespace CountItemSets
         double pruningMinSupport = 0.0001;
 
         List<AssociationRule> results = new List<AssociationRule>();
-        double filterMaxSupport = 1.00;
-        double filterMinSupport = 0.00;
+        double filterMaxSupport = 1.0000;
+        double filterMinSupport = 0.0010;
         double filterMaxLift = 1000.0;
         double filterMinLift = 1.0;
         double filterMaxConfidence = 1.00;
@@ -264,7 +265,7 @@ namespace CountItemSets
                 };
             }
             reader.Close();
-            // V1 E1
+            // E1 V1
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
             rowCount = 0;
@@ -292,14 +293,14 @@ namespace CountItemSets
                             keys.Sort();
                             keys = new List<long>(keys.Distinct());
                             if (vgrs.Count > 0 && keys.Count > 0)
-                                for (int i = 0; i < vgrs.Count; i++)
+                                for (int i = 0; i < keys.Count; i++)
                                 {
-                                    long key1 = vgrs[i];
+                                    long key1 = keys[i];
                                     if (dictionaryLevel1.ContainsKey(key1))
-                                        for (int j = 0; j < keys.Count; j++)
+                                        for (int j = 0; j < vgrs.Count; j++)
                                         {
-                                            long key2 = keys[j];
-                                            if (dictionaryLevel1.ContainsKey(key2) && dictionaryEANtoVGR[key2]!=-key1)
+                                            long key2 = vgrs[j];
+                                            if (dictionaryLevel1.ContainsKey(key2) && dictionaryEANtoVGR[key1]!=-key2)
                                             {
                                                 string keyName = key1 + "," + key2;
                                                 if (dictionaryLevel2.ContainsKey(keyName))
@@ -454,8 +455,85 @@ namespace CountItemSets
                 };
             }
             reader.Close();
-            // V1 V2 V3
-            /*
+            // E1 E2 V1
+            dictionaryLevel3.Clear();
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            vgrs = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 1 && vgrs.Count > 0)
+                            {
+                                List<string>[] keyNames = new List<string>[keys.Count - 2];
+                                Parallel.For(0, keys.Count - 2, i =>
+                                {
+                                    keyNames[i] = new List<string>();
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = i + 1; j < (keys.Count - 1); j++)
+                                        {
+                                            long key2 = keys[j];
+                                            if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
+                                                for (int k = 0; k < vgrs.Count; k++)
+                                                {
+                                                    long key3 = vgrs[k];
+                                                    if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3)
+                                                        && dictionaryEANtoVGR[key1] != -key3 && dictionaryEANtoVGR[key2] != -key3)
+                                                    {
+                                                        string keyName = key1 + "," + key2 + "," + key3;
+                                                        keyNames[i].Add(keyName);
+                                                    }
+                                                }
+                                        }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count - 2); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel3.ContainsKey(keyName))
+                                            dictionaryLevel3[keyName]++;
+                                        else
+                                            dictionaryLevel3.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            vgrs.Clear();
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        vgrs.Add(-vgrNr);
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
+            // V1 V2 V3            
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
             rowCount = 0;
@@ -526,7 +604,7 @@ namespace CountItemSets
                 };
             }
             reader.Close();
-             */
+             
             dictionaryLevel3 = dictionaryLevel3.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 60;
@@ -882,6 +960,8 @@ namespace CountItemSets
             InitFilters();
 
             GenerateRules();
+
+            UpdateMetaData();
 
             buttonStart.Enabled = true;
         }

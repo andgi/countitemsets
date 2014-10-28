@@ -490,7 +490,7 @@
             this.labelMinSupport.Name = "labelMinSupport";
             this.labelMinSupport.Size = new System.Drawing.Size(40, 13);
             this.labelMinSupport.TabIndex = 3;
-            this.labelMinSupport.Text = "0.0001";
+            this.labelMinSupport.Text = "0.0010";
             // 
             // trackBarMinSupport
             // 
@@ -501,6 +501,7 @@
             this.trackBarMinSupport.Size = new System.Drawing.Size(104, 45);
             this.trackBarMinSupport.TabIndex = 1;
             this.trackBarMinSupport.TickFrequency = 10;
+            this.trackBarMinSupport.Value = 25;
             this.trackBarMinSupport.Scroll += new System.EventHandler(this.trackBarMinSupport_Scroll);
             this.trackBarMinSupport.ValueChanged += new System.EventHandler(this.trackBarMinSupport_ValueChanged);
             // 
