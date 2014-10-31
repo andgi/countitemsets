@@ -456,7 +456,6 @@ namespace CountItemSets
             }
             reader.Close();
             // E1 E2 V1
-            dictionaryLevel3.Clear();
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
             rowCount = 0;
@@ -485,13 +484,13 @@ namespace CountItemSets
                             keys = new List<long>(keys.Distinct());
                             if (keys.Count > 1 && vgrs.Count > 0)
                             {
-                                List<string>[] keyNames = new List<string>[keys.Count - 2];
-                                Parallel.For(0, keys.Count - 2, i =>
+                                List<string>[] keyNames = new List<string>[keys.Count - 1];
+                                Parallel.For(0, keys.Count - 1, i =>
                                 {
                                     keyNames[i] = new List<string>();
                                     long key1 = keys[i];
                                     if (dictionaryLevel1.ContainsKey(key1))
-                                        for (int j = i + 1; j < (keys.Count - 1); j++)
+                                        for (int j = i + 1; j < (keys.Count - 0); j++)
                                         {
                                             long key2 = keys[j];
                                             if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
@@ -507,7 +506,7 @@ namespace CountItemSets
                                                 }
                                         }
                                 }); //Parallel.For
-                                for (int i = 0; i < (keys.Count - 2); i++)
+                                for (int i = 0; i < (keys.Count - 1); i++)
                                 {
                                     foreach (string keyName in keyNames[i])
                                     {
