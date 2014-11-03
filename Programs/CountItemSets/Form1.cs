@@ -15,17 +15,21 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using Equin.ApplicationFramework;
+using System.Resources;
 
 namespace CountItemSets
 {
     public partial class Form1 : Form
     {
         private Thread updateThread;
+        private ResourceManager localResourceManager;
         public Form1()
         {
             Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             InitializeComponent();
+
+            localResourceManager = new ResourceManager("CountItemSets.Form1", typeof(Form1).Assembly);
 
             try
             {
@@ -69,23 +73,24 @@ namespace CountItemSets
                 string textMatch;
                 if ((textMatch = filterConditionTextMatch) != null)
                 {
-                    textMatch = textMatch.ToLower();
-                    filter = filter.Where(item => item.Condition1.Text.ToLower().Contains(textMatch)
-                        && (item.Condition2.EANCode == 0 || (item.Condition2.Text.ToLower().Contains(textMatch)))
-                        && (item.Condition3.EANCode == 0 || (item.Condition3.Text.ToLower().Contains(textMatch)))
-                        && (item.Condition4.EANCode == 0 || (item.Condition4.Text.ToLower().Contains(textMatch)))
+                    string text = textMatch.ToLower();
+                    filter = filter.Where(item => item.Condition1.Text.ToLower().Contains(text)
+                        && (item.Condition2.EANCode == 0 || (item.Condition2.Text.ToLower().Contains(text)))
+                        && (item.Condition3.EANCode == 0 || (item.Condition3.Text.ToLower().Contains(text)))
+                        && (item.Condition4.EANCode == 0 || (item.Condition4.Text.ToLower().Contains(text)))
                         );
                 }
                 if ((textMatch = filterThenTextMatch) != null)
                 {
-                    textMatch = textMatch.ToLower();
-                    filter = filter.Where(item => item.Then.Text.ToLower().Contains(textMatch));
+                    string text = textMatch.ToLower();
+                    filter = filter.Where(item => item.Then.Text.ToLower().Contains(text));
                 }
                 BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
                 {
                     dataGridViewResults.DataSource = view;
-                    groupBoxAssociationRules.Text = "Association Rules: " + view.Count + " of " + results.Count;
+                    groupBoxAssociationRules.Text = localResourceManager.GetString("groupBoxAssociationRules.Text") + " " + view.Count + " of " + results.Count;
+                    Cursor = Cursors.Default;
                 }));
             }
         }
@@ -954,6 +959,7 @@ namespace CountItemSets
         private void buttonStart_Click(object sender, EventArgs e)
         {
             buttonStart.Enabled = false;
+            Cursor = Cursors.WaitCursor;
 
             InitStaticTables();
 
@@ -1298,6 +1304,7 @@ namespace CountItemSets
         private void trackBarMaxSupport_ValueChanged(object sender, EventArgs e)
         {
             filterMaxSupport = 0.0001 * Math.Pow(10, trackBarMaxSupport.Value / 25.0);
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
         
@@ -1310,6 +1317,7 @@ namespace CountItemSets
         private void trackBarMinSupport_ValueChanged(object sender, EventArgs e)
         {
             filterMinSupport = 0.0001 * Math.Pow(10, trackBarMinSupport.Value / 25.0);
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1322,6 +1330,7 @@ namespace CountItemSets
         private void trackBarMaxLift_ValueChanged(object sender, EventArgs e)
         {
             filterMaxLift = (double)trackBarMaxLift.Value;
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1334,6 +1343,7 @@ namespace CountItemSets
         private void trackBarMinLift_ValueChanged(object sender, EventArgs e)
         {
             filterMinLift = (double)trackBarMinLift.Value;
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1346,6 +1356,7 @@ namespace CountItemSets
         private void trackBarMaxConfidence_ValueChanged(object sender, EventArgs e)
         {
             filterMaxConfidence = trackBarMaxConfidence.Value / 100.0;
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1358,6 +1369,7 @@ namespace CountItemSets
         private void trackBarMinConfidence_ValueChanged(object sender, EventArgs e)
         {
             filterMinConfidence = trackBarMinConfidence.Value / 100.0;
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1368,6 +1380,7 @@ namespace CountItemSets
             {
                 filterConditionLevel1.Add(pair.Key);
             }
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1378,6 +1391,7 @@ namespace CountItemSets
             {
                 filterThenLevel1.Add(pair.Key);
             }
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1442,6 +1456,7 @@ namespace CountItemSets
         private void trackBarConditionItemMaxSupport_ValueChanged(object sender, EventArgs e)
         {
             filterConditionItemMaxSupport = 0.0001 * Math.Pow(10, trackBarConditionItemMaxSupport.Value / 25.0);
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1454,6 +1469,7 @@ namespace CountItemSets
         private void trackBarThenItemMaxSupport_ValueChanged(object sender, EventArgs e)
         {
             filterThenItemMaxSupport = 0.0001 * Math.Pow(10, trackBarThenItemMaxSupport.Value / 25.0);
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1470,6 +1486,7 @@ namespace CountItemSets
                 filterConditionTextMatch = null;
             else
                 filterConditionTextMatch = text;
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1480,6 +1497,7 @@ namespace CountItemSets
                 filterThenTextMatch = null;
             else
                 filterThenTextMatch = text;
+            Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1609,6 +1627,8 @@ namespace CountItemSets
 
         private void buttonLoadItemsets_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
+
             InitStaticTables();
 
             XmlDocument document = new XmlDocument();
@@ -1758,6 +1778,7 @@ namespace CountItemSets
                 }
         }
 
+        DataGridViewCellStyle groupCellStyle = null;
         private void dataGridViewResults_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             dynamic item = dataGridViewResults.Rows[e.RowIndex].DataBoundItem;
@@ -1772,7 +1793,12 @@ namespace CountItemSets
                         || (e.ColumnIndex == 3 && rule.Condition4.IsGroup)
                         || (e.ColumnIndex == 4 && rule.Then.IsGroup))
                     {
-                        e.CellStyle.ForeColor = Color.DarkBlue;
+                        if (groupCellStyle == null)
+                        {
+                            e.CellStyle.ForeColor = Color.DarkBlue;
+                            groupCellStyle = e.CellStyle.Clone();
+                        }
+                        else e.CellStyle = groupCellStyle;
                     }
                 }
             }
@@ -1781,6 +1807,24 @@ namespace CountItemSets
         private void label7_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void dataGridViewResults_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dataGridViewResults.Columns["Confidence"].DefaultCellStyle.Format = "P";
+            dataGridViewResults.Columns["Lift"].DefaultCellStyle.Format = "F";
+            dataGridViewResults.Columns["Support"].DefaultCellStyle.Format = "P";
+            dataGridViewResults.Columns["Confidence"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewResults.Columns["Lift"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewResults.Columns["Support"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewResults.Columns["Lift"].DefaultCellStyle.Format = "F";
+            dataGridViewResults.Columns["Support"].DefaultCellStyle.Format = "P";
+            dataGridViewResults.Columns["Confidence"].FillWeight = 50;
+            dataGridViewResults.Columns["Lift"].FillWeight = 50;
+            dataGridViewResults.Columns["Support"].FillWeight = 50;
+            //dataGridViewResults.Columns["Confidence"].HeaderText = "Förtroende";
+            //dataGridViewResults.Columns["Lift"].HeaderText = "Lyft";
+            //dataGridViewResults.Columns["Support"].HeaderText = "Stöd";
         }
     }
 

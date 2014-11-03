@@ -221,6 +221,7 @@
             this.dataGridViewResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewResults.ShowCellErrors = false;
             this.dataGridViewResults.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewResults_CellFormatting);
+            this.dataGridViewResults.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewResults_DataBindingComplete);
             this.dataGridViewResults.SelectionChanged += new System.EventHandler(this.dataGridViewResults_SelectionChanged);
             // 
             // labelTransactionCount
