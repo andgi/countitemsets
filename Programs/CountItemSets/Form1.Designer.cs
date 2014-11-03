@@ -107,6 +107,10 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.textBoxNrAssociationRules = new System.Windows.Forms.TextBox();
+            this.textBoxNrFrequentItemsets = new System.Windows.Forms.TextBox();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.buttonSaveItemsets = new System.Windows.Forms.Button();
             this.buttonLoadItemsets = new System.Windows.Forms.Button();
@@ -146,10 +150,6 @@
             this.textBoxRuleEANCondition1 = new System.Windows.Forms.TextBox();
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.textBoxNrFrequentItemsets = new System.Windows.Forms.TextBox();
-            this.textBoxNrAssociationRules = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -182,19 +182,13 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 22);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Filename:";
             // 
             // textBoxFileName
             // 
-            this.textBoxFileName.Location = new System.Drawing.Point(65, 19);
+            resources.ApplyResources(this.textBoxFileName, "textBoxFileName");
             this.textBoxFileName.Name = "textBoxFileName";
-            this.textBoxFileName.Size = new System.Drawing.Size(207, 20);
-            this.textBoxFileName.TabIndex = 1;
             // 
             // openFileDialog1
             // 
@@ -202,21 +196,15 @@
             // 
             // browseButton1
             // 
-            this.browseButton1.Location = new System.Drawing.Point(278, 17);
+            resources.ApplyResources(this.browseButton1, "browseButton1");
             this.browseButton1.Name = "browseButton1";
-            this.browseButton1.Size = new System.Drawing.Size(75, 23);
-            this.browseButton1.TabIndex = 2;
-            this.browseButton1.Text = "Browse...";
             this.browseButton1.UseVisualStyleBackColor = true;
             this.browseButton1.Click += new System.EventHandler(this.browseButton1_Click);
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(359, 17);
+            resources.ApplyResources(this.buttonStart, "buttonStart");
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(75, 23);
-            this.buttonStart.TabIndex = 3;
-            this.buttonStart.Text = "START";
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
@@ -225,64 +213,42 @@
             this.dataGridViewResults.AllowUserToAddRows = false;
             this.dataGridViewResults.AllowUserToDeleteRows = false;
             this.dataGridViewResults.AllowUserToResizeRows = false;
-            this.dataGridViewResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.dataGridViewResults, "dataGridViewResults");
             this.dataGridViewResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewResults.Location = new System.Drawing.Point(6, 19);
             this.dataGridViewResults.Name = "dataGridViewResults";
             this.dataGridViewResults.ReadOnly = true;
             this.dataGridViewResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewResults.ShowCellErrors = false;
-            this.dataGridViewResults.Size = new System.Drawing.Size(885, 424);
-            this.dataGridViewResults.TabIndex = 4;
             this.dataGridViewResults.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewResults_CellFormatting);
             this.dataGridViewResults.SelectionChanged += new System.EventHandler(this.dataGridViewResults_SelectionChanged);
             // 
             // labelTransactionCount
             // 
-            this.labelTransactionCount.AutoSize = true;
-            this.labelTransactionCount.Location = new System.Drawing.Point(8, 25);
+            resources.ApplyResources(this.labelTransactionCount, "labelTransactionCount");
             this.labelTransactionCount.Name = "labelTransactionCount";
-            this.labelTransactionCount.Size = new System.Drawing.Size(93, 13);
-            this.labelTransactionCount.TabIndex = 6;
-            this.labelTransactionCount.Text = "Nr of transactions:";
             // 
             // textBoxTransactionCount
             // 
-            this.textBoxTransactionCount.Location = new System.Drawing.Point(108, 22);
+            resources.ApplyResources(this.textBoxTransactionCount, "textBoxTransactionCount");
             this.textBoxTransactionCount.Name = "textBoxTransactionCount";
-            this.textBoxTransactionCount.Size = new System.Drawing.Size(100, 20);
-            this.textBoxTransactionCount.TabIndex = 7;
             // 
             // labelTime
             // 
-            this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(182, 50);
+            resources.ApplyResources(this.labelTime, "labelTime");
             this.labelTime.Name = "labelTime";
-            this.labelTime.Size = new System.Drawing.Size(33, 13);
-            this.labelTime.TabIndex = 8;
-            this.labelTime.Text = "Time:";
             // 
             // textBoxTime
             // 
-            this.textBoxTime.Location = new System.Drawing.Point(221, 47);
+            resources.ApplyResources(this.textBoxTime, "textBoxTime");
             this.textBoxTime.Name = "textBoxTime";
-            this.textBoxTime.Size = new System.Drawing.Size(100, 20);
-            this.textBoxTime.TabIndex = 9;
             // 
             // groupBoxAssociationRules
             // 
-            this.groupBoxAssociationRules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            resources.ApplyResources(this.groupBoxAssociationRules, "groupBoxAssociationRules");
             this.groupBoxAssociationRules.Controls.Add(this.dataGridViewResults);
-            this.groupBoxAssociationRules.Location = new System.Drawing.Point(3, 154);
             this.groupBoxAssociationRules.Name = "groupBoxAssociationRules";
-            this.groupBoxAssociationRules.Size = new System.Drawing.Size(899, 449);
-            this.groupBoxAssociationRules.TabIndex = 10;
             this.groupBoxAssociationRules.TabStop = false;
-            this.groupBoxAssociationRules.Text = "Association Rules:";
             // 
             // groupBox1
             // 
@@ -292,12 +258,9 @@
             this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(896, 142);
-            this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Presentation Filters";
             // 
             // groupBox9
             // 
@@ -305,31 +268,21 @@
             this.groupBox9.Controls.Add(this.trackBarThenItemMaxSupport);
             this.groupBox9.Controls.Add(this.labelConditionItemMaxSupport);
             this.groupBox9.Controls.Add(this.trackBarConditionItemMaxSupport);
-            this.groupBox9.Location = new System.Drawing.Point(206, 13);
+            resources.ApplyResources(this.groupBox9, "groupBox9");
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(115, 122);
-            this.groupBox9.TabIndex = 19;
             this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Item Max Support";
             // 
             // labelThenItemMaxSupport
             // 
-            this.labelThenItemMaxSupport.AutoSize = true;
-            this.labelThenItemMaxSupport.Location = new System.Drawing.Point(35, 93);
+            resources.ApplyResources(this.labelThenItemMaxSupport, "labelThenItemMaxSupport");
             this.labelThenItemMaxSupport.Name = "labelThenItemMaxSupport";
-            this.labelThenItemMaxSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelThenItemMaxSupport.TabIndex = 5;
-            this.labelThenItemMaxSupport.Text = "1.0000";
-            this.labelThenItemMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // trackBarThenItemMaxSupport
             // 
             this.trackBarThenItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarThenItemMaxSupport.Location = new System.Drawing.Point(6, 61);
+            resources.ApplyResources(this.trackBarThenItemMaxSupport, "trackBarThenItemMaxSupport");
             this.trackBarThenItemMaxSupport.Maximum = 100;
             this.trackBarThenItemMaxSupport.Name = "trackBarThenItemMaxSupport";
-            this.trackBarThenItemMaxSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarThenItemMaxSupport.TabIndex = 4;
             this.trackBarThenItemMaxSupport.TickFrequency = 10;
             this.trackBarThenItemMaxSupport.Value = 100;
             this.trackBarThenItemMaxSupport.Scroll += new System.EventHandler(this.trackBarThenItemMaxSupport_Scroll);
@@ -337,22 +290,15 @@
             // 
             // labelConditionItemMaxSupport
             // 
-            this.labelConditionItemMaxSupport.AutoSize = true;
-            this.labelConditionItemMaxSupport.Location = new System.Drawing.Point(35, 45);
+            resources.ApplyResources(this.labelConditionItemMaxSupport, "labelConditionItemMaxSupport");
             this.labelConditionItemMaxSupport.Name = "labelConditionItemMaxSupport";
-            this.labelConditionItemMaxSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelConditionItemMaxSupport.TabIndex = 3;
-            this.labelConditionItemMaxSupport.Text = "1.0000";
-            this.labelConditionItemMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // trackBarConditionItemMaxSupport
             // 
             this.trackBarConditionItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarConditionItemMaxSupport.Location = new System.Drawing.Point(6, 14);
+            resources.ApplyResources(this.trackBarConditionItemMaxSupport, "trackBarConditionItemMaxSupport");
             this.trackBarConditionItemMaxSupport.Maximum = 100;
             this.trackBarConditionItemMaxSupport.Name = "trackBarConditionItemMaxSupport";
-            this.trackBarConditionItemMaxSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarConditionItemMaxSupport.TabIndex = 1;
             this.trackBarConditionItemMaxSupport.TickFrequency = 10;
             this.trackBarConditionItemMaxSupport.Value = 100;
             this.trackBarConditionItemMaxSupport.Scroll += new System.EventHandler(this.trackBarConditionItemMaxSupport_Scroll);
@@ -363,39 +309,28 @@
             this.groupBox8.Controls.Add(this.label3);
             this.groupBox8.Controls.Add(this.textBoxFilterThen);
             this.groupBox8.Controls.Add(this.listBoxThenFilterLevel1);
-            this.groupBox8.Location = new System.Drawing.Point(354, 14);
+            resources.ApplyResources(this.groupBox8, "groupBox8");
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(168, 122);
-            this.groupBox8.TabIndex = 18;
             this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Then - Groups";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 99);
+            resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Contains:";
             // 
             // textBoxFilterThen
             // 
-            this.textBoxFilterThen.Location = new System.Drawing.Point(62, 96);
+            resources.ApplyResources(this.textBoxFilterThen, "textBoxFilterThen");
             this.textBoxFilterThen.Name = "textBoxFilterThen";
-            this.textBoxFilterThen.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFilterThen.TabIndex = 14;
             this.textBoxFilterThen.TextChanged += new System.EventHandler(this.textBoxFilterThen_TextChanged);
             // 
             // listBoxThenFilterLevel1
             // 
             this.listBoxThenFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
             this.listBoxThenFilterLevel1.FormattingEnabled = true;
-            this.listBoxThenFilterLevel1.Location = new System.Drawing.Point(6, 14);
+            resources.ApplyResources(this.listBoxThenFilterLevel1, "listBoxThenFilterLevel1");
             this.listBoxThenFilterLevel1.Name = "listBoxThenFilterLevel1";
             this.listBoxThenFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxThenFilterLevel1.Size = new System.Drawing.Size(156, 82);
-            this.listBoxThenFilterLevel1.TabIndex = 13;
             this.listBoxThenFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxThenFilterLevel1_SelectedIndexChanged);
             // 
             // contextMenuStripFilterLevel1
@@ -404,20 +339,18 @@
             this.selectAllToolStripMenuSelectAll,
             this.selectNoneToolStripMenuSelectNone});
             this.contextMenuStripFilterLevel1.Name = "contextMenuStripFilterLevel1";
-            this.contextMenuStripFilterLevel1.Size = new System.Drawing.Size(138, 48);
+            resources.ApplyResources(this.contextMenuStripFilterLevel1, "contextMenuStripFilterLevel1");
             // 
             // selectAllToolStripMenuSelectAll
             // 
             this.selectAllToolStripMenuSelectAll.Name = "selectAllToolStripMenuSelectAll";
-            this.selectAllToolStripMenuSelectAll.Size = new System.Drawing.Size(137, 22);
-            this.selectAllToolStripMenuSelectAll.Text = "Select All";
+            resources.ApplyResources(this.selectAllToolStripMenuSelectAll, "selectAllToolStripMenuSelectAll");
             this.selectAllToolStripMenuSelectAll.Click += new System.EventHandler(this.selectAllToolStripMenuSelectAll_Click);
             // 
             // selectNoneToolStripMenuSelectNone
             // 
             this.selectNoneToolStripMenuSelectNone.Name = "selectNoneToolStripMenuSelectNone";
-            this.selectNoneToolStripMenuSelectNone.Size = new System.Drawing.Size(137, 22);
-            this.selectNoneToolStripMenuSelectNone.Text = "Select None";
+            resources.ApplyResources(this.selectNoneToolStripMenuSelectNone, "selectNoneToolStripMenuSelectNone");
             this.selectNoneToolStripMenuSelectNone.Click += new System.EventHandler(this.selectNoneToolStripMenuSelectNone_Click);
             // 
             // groupBox7
@@ -425,39 +358,28 @@
             this.groupBox7.Controls.Add(this.label2);
             this.groupBox7.Controls.Add(this.textBoxFilterCondition);
             this.groupBox7.Controls.Add(this.listBoxConditionFilterLevel1);
-            this.groupBox7.Location = new System.Drawing.Point(7, 14);
+            resources.ApplyResources(this.groupBox7, "groupBox7");
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(167, 122);
-            this.groupBox7.TabIndex = 17;
             this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Condition - Groups";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 99);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Contains:";
             // 
             // textBoxFilterCondition
             // 
-            this.textBoxFilterCondition.Location = new System.Drawing.Point(61, 96);
+            resources.ApplyResources(this.textBoxFilterCondition, "textBoxFilterCondition");
             this.textBoxFilterCondition.Name = "textBoxFilterCondition";
-            this.textBoxFilterCondition.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFilterCondition.TabIndex = 13;
             this.textBoxFilterCondition.TextChanged += new System.EventHandler(this.textBoxFilterCondition_TextChanged);
             // 
             // listBoxConditionFilterLevel1
             // 
             this.listBoxConditionFilterLevel1.ContextMenuStrip = this.contextMenuStripFilterLevel1;
             this.listBoxConditionFilterLevel1.FormattingEnabled = true;
-            this.listBoxConditionFilterLevel1.Location = new System.Drawing.Point(6, 14);
+            resources.ApplyResources(this.listBoxConditionFilterLevel1, "listBoxConditionFilterLevel1");
             this.listBoxConditionFilterLevel1.Name = "listBoxConditionFilterLevel1";
             this.listBoxConditionFilterLevel1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxConditionFilterLevel1.Size = new System.Drawing.Size(155, 82);
-            this.listBoxConditionFilterLevel1.TabIndex = 12;
             this.listBoxConditionFilterLevel1.SelectedIndexChanged += new System.EventHandler(this.listBoxConditionFilterLevel1_SelectedIndexChanged);
             // 
             // groupBox4
@@ -466,40 +388,26 @@
             this.groupBox4.Controls.Add(this.labelMinSupport);
             this.groupBox4.Controls.Add(this.trackBarMinSupport);
             this.groupBox4.Controls.Add(this.trackBarMaxSupport);
-            this.groupBox4.Location = new System.Drawing.Point(776, 14);
+            resources.ApplyResources(this.groupBox4, "groupBox4");
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(114, 121);
-            this.groupBox4.TabIndex = 16;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Support";
             // 
             // labelMaxSupport
             // 
-            this.labelMaxSupport.AutoSize = true;
-            this.labelMaxSupport.Location = new System.Drawing.Point(42, 45);
+            resources.ApplyResources(this.labelMaxSupport, "labelMaxSupport");
             this.labelMaxSupport.Name = "labelMaxSupport";
-            this.labelMaxSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelMaxSupport.TabIndex = 2;
-            this.labelMaxSupport.Text = "1.0000";
-            this.labelMaxSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelMinSupport
             // 
-            this.labelMinSupport.AutoSize = true;
-            this.labelMinSupport.Location = new System.Drawing.Point(42, 93);
+            resources.ApplyResources(this.labelMinSupport, "labelMinSupport");
             this.labelMinSupport.Name = "labelMinSupport";
-            this.labelMinSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelMinSupport.TabIndex = 3;
-            this.labelMinSupport.Text = "0.0010";
             // 
             // trackBarMinSupport
             // 
             this.trackBarMinSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarMinSupport.Location = new System.Drawing.Point(6, 61);
+            resources.ApplyResources(this.trackBarMinSupport, "trackBarMinSupport");
             this.trackBarMinSupport.Maximum = 100;
             this.trackBarMinSupport.Name = "trackBarMinSupport";
-            this.trackBarMinSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarMinSupport.TabIndex = 1;
             this.trackBarMinSupport.TickFrequency = 10;
             this.trackBarMinSupport.Value = 25;
             this.trackBarMinSupport.Scroll += new System.EventHandler(this.trackBarMinSupport_Scroll);
@@ -508,11 +416,9 @@
             // trackBarMaxSupport
             // 
             this.trackBarMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarMaxSupport.Location = new System.Drawing.Point(4, 14);
+            resources.ApplyResources(this.trackBarMaxSupport, "trackBarMaxSupport");
             this.trackBarMaxSupport.Maximum = 100;
             this.trackBarMaxSupport.Name = "trackBarMaxSupport";
-            this.trackBarMaxSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarMaxSupport.TabIndex = 0;
             this.trackBarMaxSupport.TickFrequency = 10;
             this.trackBarMaxSupport.Value = 100;
             this.trackBarMaxSupport.Scroll += new System.EventHandler(this.trackBarMaxSupport_Scroll);
@@ -524,43 +430,28 @@
             this.groupBox3.Controls.Add(this.labelMaxLift);
             this.groupBox3.Controls.Add(this.trackBarMinLift);
             this.groupBox3.Controls.Add(this.trackBarMaxLift);
-            this.groupBox3.Location = new System.Drawing.Point(656, 14);
+            resources.ApplyResources(this.groupBox3, "groupBox3");
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(114, 121);
-            this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Lift";
             // 
             // labelMinLift
             // 
-            this.labelMinLift.AutoSize = true;
-            this.labelMinLift.Location = new System.Drawing.Point(37, 93);
+            resources.ApplyResources(this.labelMinLift, "labelMinLift");
             this.labelMinLift.Name = "labelMinLift";
-            this.labelMinLift.Size = new System.Drawing.Size(28, 13);
-            this.labelMinLift.TabIndex = 10;
-            this.labelMinLift.Text = "1.00";
-            this.labelMinLift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelMinLift.Click += new System.EventHandler(this.labelMinLift_Click);
             // 
             // labelMaxLift
             // 
-            this.labelMaxLift.AutoSize = true;
-            this.labelMaxLift.Location = new System.Drawing.Point(37, 46);
+            resources.ApplyResources(this.labelMaxLift, "labelMaxLift");
             this.labelMaxLift.Name = "labelMaxLift";
-            this.labelMaxLift.Size = new System.Drawing.Size(40, 13);
-            this.labelMaxLift.TabIndex = 8;
-            this.labelMaxLift.Text = "100.00";
-            this.labelMaxLift.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelMaxLift.Click += new System.EventHandler(this.labelMaxLift_Click);
             // 
             // trackBarMinLift
             // 
             this.trackBarMinLift.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarMinLift.Location = new System.Drawing.Point(6, 61);
+            resources.ApplyResources(this.trackBarMinLift, "trackBarMinLift");
             this.trackBarMinLift.Maximum = 100;
             this.trackBarMinLift.Name = "trackBarMinLift";
-            this.trackBarMinLift.Size = new System.Drawing.Size(104, 45);
-            this.trackBarMinLift.TabIndex = 6;
             this.trackBarMinLift.TickFrequency = 10;
             this.trackBarMinLift.Value = 1;
             this.trackBarMinLift.Scroll += new System.EventHandler(this.trackBarMinLift_Scroll);
@@ -569,11 +460,9 @@
             // trackBarMaxLift
             // 
             this.trackBarMaxLift.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarMaxLift.Location = new System.Drawing.Point(6, 13);
+            resources.ApplyResources(this.trackBarMaxLift, "trackBarMaxLift");
             this.trackBarMaxLift.Maximum = 100;
             this.trackBarMaxLift.Name = "trackBarMaxLift";
-            this.trackBarMaxLift.Size = new System.Drawing.Size(104, 45);
-            this.trackBarMaxLift.TabIndex = 4;
             this.trackBarMaxLift.TickFrequency = 10;
             this.trackBarMaxLift.Value = 100;
             this.trackBarMaxLift.Scroll += new System.EventHandler(this.trackBarMaxLift_Scroll);
@@ -585,41 +474,26 @@
             this.groupBox2.Controls.Add(this.labelMinConfidence);
             this.groupBox2.Controls.Add(this.trackBarMaxConfidence);
             this.groupBox2.Controls.Add(this.trackBarMinConfidence);
-            this.groupBox2.Location = new System.Drawing.Point(536, 14);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(114, 121);
-            this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Confidence";
             // 
             // labelMaxConfidence
             // 
-            this.labelMaxConfidence.AutoSize = true;
-            this.labelMaxConfidence.Location = new System.Drawing.Point(40, 45);
+            resources.ApplyResources(this.labelMaxConfidence, "labelMaxConfidence");
             this.labelMaxConfidence.Name = "labelMaxConfidence";
-            this.labelMaxConfidence.Size = new System.Drawing.Size(40, 13);
-            this.labelMaxConfidence.TabIndex = 9;
-            this.labelMaxConfidence.Text = "1.0000";
-            this.labelMaxConfidence.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelMinConfidence
             // 
-            this.labelMinConfidence.AutoSize = true;
-            this.labelMinConfidence.Location = new System.Drawing.Point(40, 93);
+            resources.ApplyResources(this.labelMinConfidence, "labelMinConfidence");
             this.labelMinConfidence.Name = "labelMinConfidence";
-            this.labelMinConfidence.Size = new System.Drawing.Size(40, 13);
-            this.labelMinConfidence.TabIndex = 11;
-            this.labelMinConfidence.Text = "0.0500";
-            this.labelMinConfidence.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // trackBarMaxConfidence
             // 
             this.trackBarMaxConfidence.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarMaxConfidence.Location = new System.Drawing.Point(4, 14);
+            resources.ApplyResources(this.trackBarMaxConfidence, "trackBarMaxConfidence");
             this.trackBarMaxConfidence.Maximum = 100;
             this.trackBarMaxConfidence.Name = "trackBarMaxConfidence";
-            this.trackBarMaxConfidence.Size = new System.Drawing.Size(104, 45);
-            this.trackBarMaxConfidence.TabIndex = 5;
             this.trackBarMaxConfidence.TickFrequency = 10;
             this.trackBarMaxConfidence.Value = 100;
             this.trackBarMaxConfidence.Scroll += new System.EventHandler(this.trackBarMaxConfidence_Scroll);
@@ -628,11 +502,9 @@
             // trackBarMinConfidence
             // 
             this.trackBarMinConfidence.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarMinConfidence.Location = new System.Drawing.Point(4, 61);
+            resources.ApplyResources(this.trackBarMinConfidence, "trackBarMinConfidence");
             this.trackBarMinConfidence.Maximum = 100;
             this.trackBarMinConfidence.Name = "trackBarMinConfidence";
-            this.trackBarMinConfidence.Size = new System.Drawing.Size(104, 45);
-            this.trackBarMinConfidence.TabIndex = 7;
             this.trackBarMinConfidence.TickFrequency = 10;
             this.trackBarMinConfidence.Value = 5;
             this.trackBarMinConfidence.Scroll += new System.EventHandler(this.trackBarMinConfidence_Scroll);
@@ -640,11 +512,9 @@
             // 
             // progressBarLoadingData
             // 
-            this.progressBarLoadingData.Location = new System.Drawing.Point(65, 45);
+            resources.ApplyResources(this.progressBarLoadingData, "progressBarLoadingData");
             this.progressBarLoadingData.Name = "progressBarLoadingData";
-            this.progressBarLoadingData.Size = new System.Drawing.Size(100, 23);
             this.progressBarLoadingData.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBarLoadingData.TabIndex = 12;
             // 
             // menuStrip1
             // 
@@ -653,11 +523,8 @@
             this.editToolStripMenuItem,
             this.toolsToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.menuStrip1, "menuStrip1");
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(920, 24);
-            this.menuStrip1.TabIndex = 13;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
@@ -673,79 +540,57 @@
             this.toolStripSeparator2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "&File";
+            resources.ApplyResources(this.fileToolStripMenuItem, "fileToolStripMenuItem");
             // 
             // newToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
-            this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.newToolStripMenuItem, "newToolStripMenuItem");
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.newToolStripMenuItem.Text = "&New";
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
-            this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.openToolStripMenuItem, "openToolStripMenuItem");
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.openToolStripMenuItem.Text = "&Open";
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(143, 6);
+            resources.ApplyResources(this.toolStripSeparator, "toolStripSeparator");
             // 
             // saveToolStripMenuItem
             // 
-            this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
-            this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.saveToolStripMenuItem, "saveToolStripMenuItem");
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.saveToolStripMenuItem.Text = "&Save";
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.saveAsToolStripMenuItem.Text = "Save &As";
+            resources.ApplyResources(this.saveAsToolStripMenuItem, "saveAsToolStripMenuItem");
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // printToolStripMenuItem
             // 
-            this.printToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripMenuItem.Image")));
-            this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.printToolStripMenuItem, "printToolStripMenuItem");
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.printToolStripMenuItem.Text = "&Print";
             // 
             // printPreviewToolStripMenuItem
             // 
-            this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
-            this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.printPreviewToolStripMenuItem, "printPreviewToolStripMenuItem");
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.exitToolStripMenuItem.Text = "E&xit";
+            resources.ApplyResources(this.exitToolStripMenuItem, "exitToolStripMenuItem");
             // 
             // editToolStripMenuItem
             // 
@@ -759,66 +604,48 @@
             this.toolStripSeparator4,
             this.selectAllToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "&Edit";
+            resources.ApplyResources(this.editToolStripMenuItem, "editToolStripMenuItem");
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.undoToolStripMenuItem.Text = "&Undo";
+            resources.ApplyResources(this.undoToolStripMenuItem, "undoToolStripMenuItem");
             // 
             // redoToolStripMenuItem
             // 
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-            this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.redoToolStripMenuItem.Text = "&Redo";
+            resources.ApplyResources(this.redoToolStripMenuItem, "redoToolStripMenuItem");
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
             // cutToolStripMenuItem
             // 
-            this.cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripMenuItem.Image")));
-            this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.cutToolStripMenuItem, "cutToolStripMenuItem");
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.cutToolStripMenuItem.Text = "Cu&t";
             // 
             // copyToolStripMenuItem
             // 
-            this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
-            this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.copyToolStripMenuItem, "copyToolStripMenuItem");
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.copyToolStripMenuItem.Text = "&Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
-            this.pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripMenuItem.Image")));
-            this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            resources.ApplyResources(this.pasteToolStripMenuItem, "pasteToolStripMenuItem");
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.pasteToolStripMenuItem.Text = "&Paste";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             // 
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.selectAllToolStripMenuItem.Text = "Select &All";
+            resources.ApplyResources(this.selectAllToolStripMenuItem, "selectAllToolStripMenuItem");
             // 
             // toolsToolStripMenuItem
             // 
@@ -826,20 +653,17 @@
             this.customizeToolStripMenuItem,
             this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-            this.toolsToolStripMenuItem.Text = "&Tools";
+            resources.ApplyResources(this.toolsToolStripMenuItem, "toolsToolStripMenuItem");
             // 
             // customizeToolStripMenuItem
             // 
             this.customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
-            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            this.customizeToolStripMenuItem.Text = "&Customize";
+            resources.ApplyResources(this.customizeToolStripMenuItem, "customizeToolStripMenuItem");
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
-            this.optionsToolStripMenuItem.Text = "&Options";
+            resources.ApplyResources(this.optionsToolStripMenuItem, "optionsToolStripMenuItem");
             // 
             // helpToolStripMenuItem
             // 
@@ -850,62 +674,48 @@
             this.toolStripSeparator5,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "&Help";
+            resources.ApplyResources(this.helpToolStripMenuItem, "helpToolStripMenuItem");
             // 
             // contentsToolStripMenuItem
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.contentsToolStripMenuItem.Text = "&Contents";
+            resources.ApplyResources(this.contentsToolStripMenuItem, "contentsToolStripMenuItem");
             // 
             // indexToolStripMenuItem
             // 
             this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            this.indexToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.indexToolStripMenuItem.Text = "&Index";
+            resources.ApplyResources(this.indexToolStripMenuItem, "indexToolStripMenuItem");
             // 
             // searchToolStripMenuItem
             // 
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.searchToolStripMenuItem.Text = "&Search";
+            resources.ApplyResources(this.searchToolStripMenuItem, "searchToolStripMenuItem");
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(119, 6);
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
-            this.aboutToolStripMenuItem.Text = "&About...";
+            resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.tabControl1, "tabControl1");
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(0, 27);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(919, 759);
-            this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBox12);
             this.tabPage1.Controls.Add(this.groupBox11);
             this.tabPage1.Controls.Add(this.groupBox5);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(911, 733);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Market Data";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // groupBox12
@@ -916,12 +726,29 @@
             this.groupBox12.Controls.Add(this.textBoxNrFrequentItemsets);
             this.groupBox12.Controls.Add(this.labelTransactionCount);
             this.groupBox12.Controls.Add(this.textBoxTransactionCount);
-            this.groupBox12.Location = new System.Drawing.Point(8, 214);
+            resources.ApplyResources(this.groupBox12, "groupBox12");
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(863, 116);
-            this.groupBox12.TabIndex = 17;
             this.groupBox12.TabStop = false;
-            this.groupBox12.Text = "Metadata";
+            // 
+            // label11
+            // 
+            resources.ApplyResources(this.label11, "label11");
+            this.label11.Name = "label11";
+            // 
+            // label10
+            // 
+            resources.ApplyResources(this.label10, "label10");
+            this.label10.Name = "label10";
+            // 
+            // textBoxNrAssociationRules
+            // 
+            resources.ApplyResources(this.textBoxNrAssociationRules, "textBoxNrAssociationRules");
+            this.textBoxNrAssociationRules.Name = "textBoxNrAssociationRules";
+            // 
+            // textBoxNrFrequentItemsets
+            // 
+            resources.ApplyResources(this.textBoxNrFrequentItemsets, "textBoxNrFrequentItemsets");
+            this.textBoxNrFrequentItemsets.Name = "textBoxNrFrequentItemsets";
             // 
             // groupBox11
             // 
@@ -930,56 +757,38 @@
             this.groupBox11.Controls.Add(this.label5);
             this.groupBox11.Controls.Add(this.textBoxFileNameItemsets);
             this.groupBox11.Controls.Add(this.buttonBrowseFileNameItemset);
-            this.groupBox11.Location = new System.Drawing.Point(8, 108);
+            resources.ApplyResources(this.groupBox11, "groupBox11");
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(863, 100);
-            this.groupBox11.TabIndex = 16;
             this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Frequent Itemsets";
             // 
             // buttonSaveItemsets
             // 
-            this.buttonSaveItemsets.Location = new System.Drawing.Point(441, 14);
+            resources.ApplyResources(this.buttonSaveItemsets, "buttonSaveItemsets");
             this.buttonSaveItemsets.Name = "buttonSaveItemsets";
-            this.buttonSaveItemsets.Size = new System.Drawing.Size(75, 23);
-            this.buttonSaveItemsets.TabIndex = 7;
-            this.buttonSaveItemsets.Text = "Save As...";
             this.buttonSaveItemsets.UseVisualStyleBackColor = true;
             this.buttonSaveItemsets.Click += new System.EventHandler(this.buttonSaveItemsets_Click);
             // 
             // buttonLoadItemsets
             // 
-            this.buttonLoadItemsets.Location = new System.Drawing.Point(360, 14);
+            resources.ApplyResources(this.buttonLoadItemsets, "buttonLoadItemsets");
             this.buttonLoadItemsets.Name = "buttonLoadItemsets";
-            this.buttonLoadItemsets.Size = new System.Drawing.Size(75, 23);
-            this.buttonLoadItemsets.TabIndex = 6;
-            this.buttonLoadItemsets.Text = "Load";
             this.buttonLoadItemsets.UseVisualStyleBackColor = true;
             this.buttonLoadItemsets.Click += new System.EventHandler(this.buttonLoadItemsets_Click);
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 19);
+            resources.ApplyResources(this.label5, "label5");
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Filename:";
             // 
             // textBoxFileNameItemsets
             // 
-            this.textBoxFileNameItemsets.Location = new System.Drawing.Point(66, 16);
+            resources.ApplyResources(this.textBoxFileNameItemsets, "textBoxFileNameItemsets");
             this.textBoxFileNameItemsets.Name = "textBoxFileNameItemsets";
-            this.textBoxFileNameItemsets.Size = new System.Drawing.Size(207, 20);
-            this.textBoxFileNameItemsets.TabIndex = 4;
             // 
             // buttonBrowseFileNameItemset
             // 
-            this.buttonBrowseFileNameItemset.Location = new System.Drawing.Point(279, 14);
+            resources.ApplyResources(this.buttonBrowseFileNameItemset, "buttonBrowseFileNameItemset");
             this.buttonBrowseFileNameItemset.Name = "buttonBrowseFileNameItemset";
-            this.buttonBrowseFileNameItemset.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowseFileNameItemset.TabIndex = 5;
-            this.buttonBrowseFileNameItemset.Text = "Browse...";
             this.buttonBrowseFileNameItemset.UseVisualStyleBackColor = true;
             this.buttonBrowseFileNameItemset.Click += new System.EventHandler(this.buttonBrowseFileNameItemset_Click);
             // 
@@ -994,50 +803,34 @@
             this.groupBox5.Controls.Add(this.textBoxFileName);
             this.groupBox5.Controls.Add(this.browseButton1);
             this.groupBox5.Controls.Add(this.buttonStart);
-            this.groupBox5.Location = new System.Drawing.Point(8, 6);
+            resources.ApplyResources(this.groupBox5, "groupBox5");
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(863, 96);
-            this.groupBox5.TabIndex = 15;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Raw Basket Data Analysis";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 50);
+            resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(51, 13);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Progress:";
             // 
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.labelPruningMinSupport);
             this.groupBox6.Controls.Add(this.trackBarPruningMinSupport);
-            this.groupBox6.Location = new System.Drawing.Point(744, 17);
+            resources.ApplyResources(this.groupBox6, "groupBox6");
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(111, 71);
-            this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Min Support";
             // 
             // labelPruningMinSupport
             // 
-            this.labelPruningMinSupport.AutoSize = true;
-            this.labelPruningMinSupport.Location = new System.Drawing.Point(39, 51);
+            resources.ApplyResources(this.labelPruningMinSupport, "labelPruningMinSupport");
             this.labelPruningMinSupport.Name = "labelPruningMinSupport";
-            this.labelPruningMinSupport.Size = new System.Drawing.Size(40, 13);
-            this.labelPruningMinSupport.TabIndex = 14;
-            this.labelPruningMinSupport.Text = "0.0001";
             // 
             // trackBarPruningMinSupport
             // 
             this.trackBarPruningMinSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.trackBarPruningMinSupport.Location = new System.Drawing.Point(6, 19);
+            resources.ApplyResources(this.trackBarPruningMinSupport, "trackBarPruningMinSupport");
             this.trackBarPruningMinSupport.Maximum = 100;
             this.trackBarPruningMinSupport.Name = "trackBarPruningMinSupport";
-            this.trackBarPruningMinSupport.Size = new System.Drawing.Size(104, 45);
-            this.trackBarPruningMinSupport.TabIndex = 13;
             this.trackBarPruningMinSupport.TickFrequency = 10;
             this.trackBarPruningMinSupport.Scroll += new System.EventHandler(this.trackBarPruningMinSupport_Scroll);
             this.trackBarPruningMinSupport.ValueChanged += new System.EventHandler(this.trackBarPruningMinSupport_ValueChanged);
@@ -1047,17 +840,13 @@
             this.tabPage2.Controls.Add(this.groupBox10);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.groupBoxAssociationRules);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            resources.ApplyResources(this.tabPage2, "tabPage2");
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(911, 733);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Association Rules Browser";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // groupBox10
             // 
-            this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            resources.ApplyResources(this.groupBox10, "groupBox10");
             this.groupBox10.Controls.Add(this.buttonRuleExcludeGroupThen);
             this.groupBox10.Controls.Add(this.buttonRuleExcludeGroupCondition4);
             this.groupBox10.Controls.Add(this.buttonRuleExcludeGroupCondition3);
@@ -1083,270 +872,169 @@
             this.groupBox10.Controls.Add(this.textBoxRuleEANCondition2);
             this.groupBox10.Controls.Add(this.textBoxRuleEANCondition1);
             this.groupBox10.Controls.Add(this.richTextBoxSelectedRule);
-            this.groupBox10.Location = new System.Drawing.Point(3, 611);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(898, 116);
-            this.groupBox10.TabIndex = 12;
             this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Rule";
             // 
             // buttonRuleExcludeGroupThen
             // 
-            this.buttonRuleExcludeGroupThen.Location = new System.Drawing.Point(712, 64);
+            resources.ApplyResources(this.buttonRuleExcludeGroupThen, "buttonRuleExcludeGroupThen");
             this.buttonRuleExcludeGroupThen.Name = "buttonRuleExcludeGroupThen";
-            this.buttonRuleExcludeGroupThen.Size = new System.Drawing.Size(18, 22);
-            this.buttonRuleExcludeGroupThen.TabIndex = 24;
-            this.buttonRuleExcludeGroupThen.Text = "-";
             this.buttonRuleExcludeGroupThen.UseVisualStyleBackColor = true;
             this.buttonRuleExcludeGroupThen.Click += new System.EventHandler(this.buttonRuleExcludeGroup_Click);
             // 
             // buttonRuleExcludeGroupCondition4
             // 
-            this.buttonRuleExcludeGroupCondition4.Location = new System.Drawing.Point(563, 64);
+            resources.ApplyResources(this.buttonRuleExcludeGroupCondition4, "buttonRuleExcludeGroupCondition4");
             this.buttonRuleExcludeGroupCondition4.Name = "buttonRuleExcludeGroupCondition4";
-            this.buttonRuleExcludeGroupCondition4.Size = new System.Drawing.Size(18, 22);
-            this.buttonRuleExcludeGroupCondition4.TabIndex = 23;
-            this.buttonRuleExcludeGroupCondition4.Text = "-";
             this.buttonRuleExcludeGroupCondition4.UseVisualStyleBackColor = true;
             this.buttonRuleExcludeGroupCondition4.Click += new System.EventHandler(this.buttonRuleExcludeGroup_Click);
             // 
             // buttonRuleExcludeGroupCondition3
             // 
-            this.buttonRuleExcludeGroupCondition3.Location = new System.Drawing.Point(438, 64);
+            resources.ApplyResources(this.buttonRuleExcludeGroupCondition3, "buttonRuleExcludeGroupCondition3");
             this.buttonRuleExcludeGroupCondition3.Name = "buttonRuleExcludeGroupCondition3";
-            this.buttonRuleExcludeGroupCondition3.Size = new System.Drawing.Size(18, 22);
-            this.buttonRuleExcludeGroupCondition3.TabIndex = 22;
-            this.buttonRuleExcludeGroupCondition3.Text = "-";
             this.buttonRuleExcludeGroupCondition3.UseVisualStyleBackColor = true;
             this.buttonRuleExcludeGroupCondition3.Click += new System.EventHandler(this.buttonRuleExcludeGroup_Click);
             // 
             // buttonRuleExcludeGroupCondition2
             // 
-            this.buttonRuleExcludeGroupCondition2.Location = new System.Drawing.Point(314, 64);
+            resources.ApplyResources(this.buttonRuleExcludeGroupCondition2, "buttonRuleExcludeGroupCondition2");
             this.buttonRuleExcludeGroupCondition2.Name = "buttonRuleExcludeGroupCondition2";
-            this.buttonRuleExcludeGroupCondition2.Size = new System.Drawing.Size(18, 22);
-            this.buttonRuleExcludeGroupCondition2.TabIndex = 21;
-            this.buttonRuleExcludeGroupCondition2.Text = "-";
             this.buttonRuleExcludeGroupCondition2.UseVisualStyleBackColor = true;
             this.buttonRuleExcludeGroupCondition2.Click += new System.EventHandler(this.buttonRuleExcludeGroup_Click);
             // 
             // buttonRuleExcludeGroupCondition1
             // 
-            this.buttonRuleExcludeGroupCondition1.Location = new System.Drawing.Point(191, 64);
+            resources.ApplyResources(this.buttonRuleExcludeGroupCondition1, "buttonRuleExcludeGroupCondition1");
             this.buttonRuleExcludeGroupCondition1.Name = "buttonRuleExcludeGroupCondition1";
-            this.buttonRuleExcludeGroupCondition1.Size = new System.Drawing.Size(18, 22);
-            this.buttonRuleExcludeGroupCondition1.TabIndex = 20;
-            this.buttonRuleExcludeGroupCondition1.Text = "-";
             this.buttonRuleExcludeGroupCondition1.UseVisualStyleBackColor = true;
             this.buttonRuleExcludeGroupCondition1.Click += new System.EventHandler(this.buttonRuleExcludeGroup_Click);
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(39, 94);
+            resources.ApplyResources(this.label9, "label9");
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(47, 13);
-            this.label9.TabIndex = 19;
-            this.label9.Text = "Support:";
             // 
             // label8
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(42, 68);
+            resources.ApplyResources(this.label8, "label8");
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(44, 13);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Groups:";
             // 
             // label7
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(11, 42);
+            resources.ApplyResources(this.label7, "label7");
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 13);
-            this.label7.TabIndex = 17;
-            this.label7.Text = "EAN numbers:";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(44, 13);
+            resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 13);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "Syntax:";
             // 
             // textBoxRuleSupportThen
             // 
-            this.textBoxRuleSupportThen.Location = new System.Drawing.Point(613, 91);
+            resources.ApplyResources(this.textBoxRuleSupportThen, "textBoxRuleSupportThen");
             this.textBoxRuleSupportThen.Name = "textBoxRuleSupportThen";
             this.textBoxRuleSupportThen.ReadOnly = true;
-            this.textBoxRuleSupportThen.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleSupportThen.TabIndex = 15;
             // 
             // textBoxRuleSupportCondition4
             // 
-            this.textBoxRuleSupportCondition4.Location = new System.Drawing.Point(464, 91);
+            resources.ApplyResources(this.textBoxRuleSupportCondition4, "textBoxRuleSupportCondition4");
             this.textBoxRuleSupportCondition4.Name = "textBoxRuleSupportCondition4";
             this.textBoxRuleSupportCondition4.ReadOnly = true;
-            this.textBoxRuleSupportCondition4.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleSupportCondition4.TabIndex = 14;
             // 
             // textBoxRuleSupportCondition3
             // 
-            this.textBoxRuleSupportCondition3.Location = new System.Drawing.Point(339, 91);
+            resources.ApplyResources(this.textBoxRuleSupportCondition3, "textBoxRuleSupportCondition3");
             this.textBoxRuleSupportCondition3.Name = "textBoxRuleSupportCondition3";
             this.textBoxRuleSupportCondition3.ReadOnly = true;
-            this.textBoxRuleSupportCondition3.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleSupportCondition3.TabIndex = 13;
             // 
             // textBoxRuleSupportCondition2
             // 
-            this.textBoxRuleSupportCondition2.Location = new System.Drawing.Point(215, 91);
+            resources.ApplyResources(this.textBoxRuleSupportCondition2, "textBoxRuleSupportCondition2");
             this.textBoxRuleSupportCondition2.Name = "textBoxRuleSupportCondition2";
             this.textBoxRuleSupportCondition2.ReadOnly = true;
-            this.textBoxRuleSupportCondition2.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleSupportCondition2.TabIndex = 12;
             // 
             // textBoxRuleSupportCondition1
             // 
-            this.textBoxRuleSupportCondition1.Location = new System.Drawing.Point(92, 91);
+            resources.ApplyResources(this.textBoxRuleSupportCondition1, "textBoxRuleSupportCondition1");
             this.textBoxRuleSupportCondition1.Name = "textBoxRuleSupportCondition1";
             this.textBoxRuleSupportCondition1.ReadOnly = true;
-            this.textBoxRuleSupportCondition1.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleSupportCondition1.TabIndex = 11;
             // 
             // textBoxRuleGroupThen
             // 
-            this.textBoxRuleGroupThen.Location = new System.Drawing.Point(613, 65);
+            resources.ApplyResources(this.textBoxRuleGroupThen, "textBoxRuleGroupThen");
             this.textBoxRuleGroupThen.Name = "textBoxRuleGroupThen";
             this.textBoxRuleGroupThen.ReadOnly = true;
-            this.textBoxRuleGroupThen.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleGroupThen.TabIndex = 10;
             // 
             // textBoxRuleGroupCondition4
             // 
-            this.textBoxRuleGroupCondition4.Location = new System.Drawing.Point(464, 65);
+            resources.ApplyResources(this.textBoxRuleGroupCondition4, "textBoxRuleGroupCondition4");
             this.textBoxRuleGroupCondition4.Name = "textBoxRuleGroupCondition4";
             this.textBoxRuleGroupCondition4.ReadOnly = true;
-            this.textBoxRuleGroupCondition4.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleGroupCondition4.TabIndex = 9;
             // 
             // textBoxRuleGroupCondition3
             // 
-            this.textBoxRuleGroupCondition3.Location = new System.Drawing.Point(339, 65);
+            resources.ApplyResources(this.textBoxRuleGroupCondition3, "textBoxRuleGroupCondition3");
             this.textBoxRuleGroupCondition3.Name = "textBoxRuleGroupCondition3";
             this.textBoxRuleGroupCondition3.ReadOnly = true;
-            this.textBoxRuleGroupCondition3.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleGroupCondition3.TabIndex = 8;
             // 
             // textBoxRuleGroupCondition2
             // 
-            this.textBoxRuleGroupCondition2.Location = new System.Drawing.Point(215, 65);
+            resources.ApplyResources(this.textBoxRuleGroupCondition2, "textBoxRuleGroupCondition2");
             this.textBoxRuleGroupCondition2.Name = "textBoxRuleGroupCondition2";
             this.textBoxRuleGroupCondition2.ReadOnly = true;
-            this.textBoxRuleGroupCondition2.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleGroupCondition2.TabIndex = 7;
             // 
             // textBoxRuleGroupCondition1
             // 
-            this.textBoxRuleGroupCondition1.Location = new System.Drawing.Point(92, 65);
+            resources.ApplyResources(this.textBoxRuleGroupCondition1, "textBoxRuleGroupCondition1");
             this.textBoxRuleGroupCondition1.Name = "textBoxRuleGroupCondition1";
             this.textBoxRuleGroupCondition1.ReadOnly = true;
-            this.textBoxRuleGroupCondition1.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleGroupCondition1.TabIndex = 6;
             // 
             // textBoxRuleEANThen
             // 
-            this.textBoxRuleEANThen.Location = new System.Drawing.Point(613, 39);
+            resources.ApplyResources(this.textBoxRuleEANThen, "textBoxRuleEANThen");
             this.textBoxRuleEANThen.Name = "textBoxRuleEANThen";
             this.textBoxRuleEANThen.ReadOnly = true;
-            this.textBoxRuleEANThen.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleEANThen.TabIndex = 5;
             // 
             // textBoxRuleEANCondition4
             // 
-            this.textBoxRuleEANCondition4.Location = new System.Drawing.Point(464, 39);
+            resources.ApplyResources(this.textBoxRuleEANCondition4, "textBoxRuleEANCondition4");
             this.textBoxRuleEANCondition4.Name = "textBoxRuleEANCondition4";
             this.textBoxRuleEANCondition4.ReadOnly = true;
-            this.textBoxRuleEANCondition4.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleEANCondition4.TabIndex = 4;
             // 
             // textBoxRuleEANCondition3
             // 
-            this.textBoxRuleEANCondition3.Location = new System.Drawing.Point(339, 39);
+            resources.ApplyResources(this.textBoxRuleEANCondition3, "textBoxRuleEANCondition3");
             this.textBoxRuleEANCondition3.Name = "textBoxRuleEANCondition3";
             this.textBoxRuleEANCondition3.ReadOnly = true;
-            this.textBoxRuleEANCondition3.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleEANCondition3.TabIndex = 3;
             // 
             // textBoxRuleEANCondition2
             // 
-            this.textBoxRuleEANCondition2.Location = new System.Drawing.Point(215, 39);
+            resources.ApplyResources(this.textBoxRuleEANCondition2, "textBoxRuleEANCondition2");
             this.textBoxRuleEANCondition2.Name = "textBoxRuleEANCondition2";
             this.textBoxRuleEANCondition2.ReadOnly = true;
-            this.textBoxRuleEANCondition2.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleEANCondition2.TabIndex = 2;
             // 
             // textBoxRuleEANCondition1
             // 
-            this.textBoxRuleEANCondition1.Location = new System.Drawing.Point(92, 39);
+            resources.ApplyResources(this.textBoxRuleEANCondition1, "textBoxRuleEANCondition1");
             this.textBoxRuleEANCondition1.Name = "textBoxRuleEANCondition1";
             this.textBoxRuleEANCondition1.ReadOnly = true;
-            this.textBoxRuleEANCondition1.Size = new System.Drawing.Size(100, 20);
-            this.textBoxRuleEANCondition1.TabIndex = 1;
             // 
             // richTextBoxSelectedRule
             // 
-            this.richTextBoxSelectedRule.Location = new System.Drawing.Point(92, 10);
+            resources.ApplyResources(this.richTextBoxSelectedRule, "richTextBoxSelectedRule");
             this.richTextBoxSelectedRule.Name = "richTextBoxSelectedRule";
             this.richTextBoxSelectedRule.ReadOnly = true;
-            this.richTextBoxSelectedRule.Size = new System.Drawing.Size(800, 22);
-            this.richTextBoxSelectedRule.TabIndex = 0;
-            this.richTextBoxSelectedRule.Text = "";
-            // 
-            // textBoxNrFrequentItemsets
-            // 
-            this.textBoxNrFrequentItemsets.Location = new System.Drawing.Point(360, 22);
-            this.textBoxNrFrequentItemsets.Name = "textBoxNrFrequentItemsets";
-            this.textBoxNrFrequentItemsets.Size = new System.Drawing.Size(100, 20);
-            this.textBoxNrFrequentItemsets.TabIndex = 8;
-            // 
-            // textBoxNrAssociationRules
-            // 
-            this.textBoxNrAssociationRules.Location = new System.Drawing.Point(666, 22);
-            this.textBoxNrAssociationRules.Name = "textBoxNrAssociationRules";
-            this.textBoxNrAssociationRules.Size = new System.Drawing.Size(100, 20);
-            this.textBoxNrAssociationRules.TabIndex = 9;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(237, 25);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(116, 13);
-            this.label10.TabIndex = 10;
-            this.label10.Text = "Nr of frequent itemsets:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(548, 25);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(112, 13);
-            this.label11.TabIndex = 11;
-            this.label11.Text = "Nr of assocation rules:";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(920, 781);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Market Basket Analyzer";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();

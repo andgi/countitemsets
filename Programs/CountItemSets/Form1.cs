@@ -13,6 +13,7 @@ using System.Xml;
 using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using Equin.ApplicationFramework;
 
 namespace CountItemSets
@@ -22,6 +23,8 @@ namespace CountItemSets
         private Thread updateThread;
         public Form1()
         {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
             InitializeComponent();
 
             try
@@ -1773,6 +1776,11 @@ namespace CountItemSets
                     }
                 }
             }
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
