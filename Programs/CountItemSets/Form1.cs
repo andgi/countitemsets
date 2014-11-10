@@ -1479,28 +1479,6 @@ namespace CountItemSets
             labelThenItemMaxSupport.Text = filterThenItemMaxSupport.ToString("F4");
         }
 
-        private void textBoxFilterCondition_TextChanged(object sender, EventArgs e)
-        {
-            string text = textBoxFilterCondition.Text;
-            if (text.Length == 0)
-                filterConditionTextMatch = null;
-            else
-                filterConditionTextMatch = text;
-            Cursor = Cursors.WaitCursor;
-            signalUpdateDataGridView.Set();
-        }
-
-        private void textBoxFilterThen_TextChanged(object sender, EventArgs e)
-        {
-            string text = textBoxFilterThen.Text;
-            if (text.Length == 0)
-                filterThenTextMatch = null;
-            else
-                filterThenTextMatch = text;
-            Cursor = Cursors.WaitCursor;
-            signalUpdateDataGridView.Set();
-        }
-
         private void dataGridViewResults_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridViewResults.SelectedRows.Count > 0)
@@ -1825,6 +1803,28 @@ namespace CountItemSets
             //dataGridViewResults.Columns["Confidence"].HeaderText = "Förtroende";
             //dataGridViewResults.Columns["Lift"].HeaderText = "Lyft";
             //dataGridViewResults.Columns["Support"].HeaderText = "Stöd";
+        }
+
+        private void comboBoxFilterThen_TextUpdate(object sender, EventArgs e)
+        {
+            string text = comboBoxFilterThen.Text;
+            if (text.Length == 0)
+                filterThenTextMatch = null;
+            else
+                filterThenTextMatch = text;
+            Cursor = Cursors.WaitCursor;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void comboBoxFilterCondition_TextUpdate(object sender, EventArgs e)
+        {
+            string text = comboBoxFilterCondition.Text;
+            if (text.Length == 0)
+                filterConditionTextMatch = null;
+            else
+                filterConditionTextMatch = text;
+            Cursor = Cursors.WaitCursor;
+            signalUpdateDataGridView.Set();
         }
     }
 

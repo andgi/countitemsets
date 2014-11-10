@@ -49,14 +49,12 @@
             this.trackBarConditionItemMaxSupport = new System.Windows.Forms.TrackBar();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBoxFilterThen = new System.Windows.Forms.TextBox();
             this.listBoxThenFilterLevel1 = new System.Windows.Forms.ListBox();
             this.contextMenuStripFilterLevel1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAllToolStripMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.selectNoneToolStripMenuSelectNone = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxFilterCondition = new System.Windows.Forms.TextBox();
             this.listBoxConditionFilterLevel1 = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.labelMaxSupport = new System.Windows.Forms.Label();
@@ -150,6 +148,8 @@
             this.textBoxRuleEANCondition1 = new System.Windows.Forms.TextBox();
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.comboBoxFilterThen = new System.Windows.Forms.ComboBox();
+            this.comboBoxFilterCondition = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -307,8 +307,8 @@
             // 
             // groupBox8
             // 
+            this.groupBox8.Controls.Add(this.comboBoxFilterThen);
             this.groupBox8.Controls.Add(this.label3);
-            this.groupBox8.Controls.Add(this.textBoxFilterThen);
             this.groupBox8.Controls.Add(this.listBoxThenFilterLevel1);
             resources.ApplyResources(this.groupBox8, "groupBox8");
             this.groupBox8.Name = "groupBox8";
@@ -318,12 +318,6 @@
             // 
             resources.ApplyResources(this.label3, "label3");
             this.label3.Name = "label3";
-            // 
-            // textBoxFilterThen
-            // 
-            resources.ApplyResources(this.textBoxFilterThen, "textBoxFilterThen");
-            this.textBoxFilterThen.Name = "textBoxFilterThen";
-            this.textBoxFilterThen.TextChanged += new System.EventHandler(this.textBoxFilterThen_TextChanged);
             // 
             // listBoxThenFilterLevel1
             // 
@@ -356,8 +350,8 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.comboBoxFilterCondition);
             this.groupBox7.Controls.Add(this.label2);
-            this.groupBox7.Controls.Add(this.textBoxFilterCondition);
             this.groupBox7.Controls.Add(this.listBoxConditionFilterLevel1);
             resources.ApplyResources(this.groupBox7, "groupBox7");
             this.groupBox7.Name = "groupBox7";
@@ -367,12 +361,6 @@
             // 
             resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            // 
-            // textBoxFilterCondition
-            // 
-            resources.ApplyResources(this.textBoxFilterCondition, "textBoxFilterCondition");
-            this.textBoxFilterCondition.Name = "textBoxFilterCondition";
-            this.textBoxFilterCondition.TextChanged += new System.EventHandler(this.textBoxFilterCondition_TextChanged);
             // 
             // listBoxConditionFilterLevel1
             // 
@@ -1028,6 +1016,20 @@
             this.richTextBoxSelectedRule.Name = "richTextBoxSelectedRule";
             this.richTextBoxSelectedRule.ReadOnly = true;
             // 
+            // comboBoxFilterThen
+            // 
+            resources.ApplyResources(this.comboBoxFilterThen, "comboBoxFilterThen");
+            this.comboBoxFilterThen.FormattingEnabled = true;
+            this.comboBoxFilterThen.Name = "comboBoxFilterThen";
+            this.comboBoxFilterThen.TextUpdate += new System.EventHandler(this.comboBoxFilterThen_TextUpdate);
+            // 
+            // comboBoxFilterCondition
+            // 
+            resources.ApplyResources(this.comboBoxFilterCondition, "comboBoxFilterCondition");
+            this.comboBoxFilterCondition.FormattingEnabled = true;
+            this.comboBoxFilterCondition.Name = "comboBoxFilterCondition";
+            this.comboBoxFilterCondition.TextUpdate += new System.EventHandler(this.comboBoxFilterCondition_TextUpdate);
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -1163,9 +1165,7 @@
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxFilterThen;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBoxFilterCondition;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.RichTextBox richTextBoxSelectedRule;
         private System.Windows.Forms.GroupBox groupBox12;
@@ -1205,6 +1205,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBoxNrAssociationRules;
         private System.Windows.Forms.TextBox textBoxNrFrequentItemsets;
+        private System.Windows.Forms.ComboBox comboBoxFilterThen;
+        private System.Windows.Forms.ComboBox comboBoxFilterCondition;
     }
 }
 
