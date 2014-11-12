@@ -36,6 +36,8 @@ namespace CountItemSets
                 textBoxFileName.Text = ConfigurationManager.AppSettings["TransactionFileName"];
                 textBoxFileNameItemsets.Text = ConfigurationManager.AppSettings["ItemsetsFileName"];
                 fileNameItemsets = textBoxFileNameItemsets.Text;
+                textBoxFileNameExcludeItems.Text = ConfigurationManager.AppSettings["ExcludeItemsFileName"];
+                fileNameExcludeItems = textBoxFileNameExcludeItems.Text;
             }
             catch (Exception) { }
         }
@@ -124,6 +126,7 @@ namespace CountItemSets
 
         private void browseButton1_Click(object sender, EventArgs e)
         {
+            openFileDialog1.Filter = "Csv files (*.csv)|*.csv";
             openFileDialog1.ShowDialog();
             textBoxFileName.Text = openFileDialog1.FileName;
 
@@ -166,6 +169,7 @@ namespace CountItemSets
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         string fileNameItemsets = "";
+        string fileNameExcludeItems = "";
 
         private void CountItemSets()
         {
@@ -1884,6 +1888,23 @@ namespace CountItemSets
             }
             Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
+        }
+
+        private void buttonBrowseFileNameExcludeItems_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Csv files (*.csv)|*.csv";
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                textBoxFileNameExcludeItems.Text = openFileDialog1.FileName;
+                fileNameExcludeItems = textBoxFileNameExcludeItems.Text;
+
+                Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                if (config.AppSettings.Settings["ExcludeItemsFileName"] != null)
+                    config.AppSettings.Settings.Remove("ExcludeItemsFileName");
+                config.AppSettings.Settings.Add("ExcludeItemsFileName", openFileDialog1.FileName);
+                config.Save(ConfigurationSaveMode.Modified);
+            }
         }
     }
 
