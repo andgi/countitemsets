@@ -25,7 +25,7 @@ namespace CountItemSets
         private ResourceManager localResourceManager;
         public Form1()
         {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+            //Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
 
             InitializeComponent();
 
@@ -75,9 +75,9 @@ namespace CountItemSets
                 {
                     string text = textMatch.ToLower();
                     filter = filter.Where(item => item.Condition1.Text.ToLower().Contains(text)
-                        && (item.Condition2.EANCode == 0 || (item.Condition2.Text.ToLower().Contains(text)))
-                        && (item.Condition3.EANCode == 0 || (item.Condition3.Text.ToLower().Contains(text)))
-                        && (item.Condition4.EANCode == 0 || (item.Condition4.Text.ToLower().Contains(text)))
+                        || (item.Condition2.EANCode != 0 && (item.Condition2.Text.ToLower().Contains(text)))
+                        || (item.Condition3.EANCode != 0 && (item.Condition3.Text.ToLower().Contains(text)))
+                        || (item.Condition4.EANCode != 0 && (item.Condition4.Text.ToLower().Contains(text)))
                         );
                 }
                 if ((textMatch = filterThenTextMatch) != null)
@@ -85,12 +85,27 @@ namespace CountItemSets
                     string text = textMatch.ToLower();
                     filter = filter.Where(item => item.Then.Text.ToLower().Contains(text));
                 }
+                if (filterConditionEANMatch != 0)
+                {
+                    long ean = filterConditionEANMatch;
+                    filter = filter.Where(item => item.Condition1.EANCode == ean
+                        || (item.Condition2.EANCode != 0 && (item.Condition2.EANCode == ean))
+                        || (item.Condition3.EANCode != 0 && (item.Condition3.EANCode == ean))
+                        || (item.Condition4.EANCode != 0 && (item.Condition4.EANCode == ean))
+                        );
+                }
+                if (filterThenEANMatch != 0)
+                {
+                    long ean = filterThenEANMatch;
+                    filter = filter.Where(item => item.Then.EANCode == ean);
+                }
                 BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
                 {
                     dataGridViewResults.DataSource = view;
                     groupBoxAssociationRules.Text = localResourceManager.GetString("groupBoxAssociationRules.Text") + " " + view.Count + " of " + results.Count;
                     Cursor = Cursors.Default;
+                    dataGridViewResults.Cursor = Cursors.Default;
                 }));
             }
         }
@@ -146,6 +161,8 @@ namespace CountItemSets
         double filterThenItemMaxSupport = 1.00;
         volatile string filterConditionTextMatch = null;
         volatile string filterThenTextMatch = null;
+        long filterConditionEANMatch = 0;
+        long filterThenEANMatch = 0;
         AutoResetEvent signalUpdateDataGridView = new AutoResetEvent(false);
 
         string fileNameItemsets = "";
@@ -1058,6 +1075,23 @@ namespace CountItemSets
                 listBoxConditionFilterLevel1.Items.Add(item);
                 listBoxThenFilterLevel1.Items.Add(item);
             }
+
+            comboBoxFilterCondition.Items.Clear();
+            comboBoxFilterThen.Items.Clear();
+            List<KeyValuePair<long, string>> items = new List<KeyValuePair<long, string>>();
+            foreach (KeyValuePair<long, int> item in dictionaryLevel1)
+            {
+                if (item.Key > 0)
+                {
+                    items.Add(new KeyValuePair<long, string>(item.Key, dictionaryEAN.ContainsKey(item.Key) ? dictionaryEAN[item.Key] : "Unknown"));
+                }
+            }
+            items = items.OrderBy(item => item.Key).ToList();
+            foreach (KeyValuePair<long, string> item in items)
+            {
+                comboBoxFilterCondition.Items.Add(item);
+                comboBoxFilterThen.Items.Add(item);
+            }
         }
 
         void GenerateRules()
@@ -1807,6 +1841,7 @@ namespace CountItemSets
 
         private void comboBoxFilterThen_TextUpdate(object sender, EventArgs e)
         {
+            filterThenEANMatch = 0;
             string text = comboBoxFilterThen.Text;
             if (text.Length == 0)
                 filterThenTextMatch = null;
@@ -1818,11 +1853,35 @@ namespace CountItemSets
 
         private void comboBoxFilterCondition_TextUpdate(object sender, EventArgs e)
         {
+            filterConditionEANMatch = 0;
             string text = comboBoxFilterCondition.Text;
             if (text.Length == 0)
                 filterConditionTextMatch = null;
             else
                 filterConditionTextMatch = text;
+            Cursor = Cursors.WaitCursor;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void comboBoxFilterCondition_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterConditionTextMatch = null;
+            if (comboBoxFilterCondition.SelectedIndex >= 0) {
+                KeyValuePair<long, string> item = (KeyValuePair<long, string>) comboBoxFilterCondition.SelectedItem;
+                filterConditionEANMatch = item.Key;
+            }
+            Cursor = Cursors.WaitCursor;
+            signalUpdateDataGridView.Set();
+        }
+
+        private void comboBoxFilterThen_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            filterThenTextMatch = null;
+            if (comboBoxFilterThen.SelectedIndex >= 0)
+            {
+                KeyValuePair<long, string> item = (KeyValuePair<long, string>)comboBoxFilterThen.SelectedItem;
+                filterThenEANMatch = item.Key;
+            }
             Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }

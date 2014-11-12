@@ -123,6 +123,24 @@
   <data name="groupBox8.Text" xml:space="preserve">
     <value>Slutsats - Grupper</value>
   </data>
+  <data name="groupBox7.Text" xml:space="preserve">
+    <value>Villkor - Grupper</value>
+  </data>
+  <data name="groupBox4.Text" xml:space="preserve">
+    <value>Stöd</value>
+  </data>
+  <data name="groupBox4.ToolTip" xml:space="preserve">
+    <value>Stöd anger hur starkt underlag regeln har, med andra ord hur ofta regelns villkor med slutsats har förekommit i de analyserade transaktionerna.</value>
+  </data>
+  <data name="groupBox3.Text" xml:space="preserve">
+    <value>Lyft</value>
+  </data>
+  <data name="groupBox3.ToolTip" xml:space="preserve">
+    <value>Lyft anger hur användbar regeln är för att förutsäga slutsatsen, med andra ord hur många gånger bättre regeln är på att indikera slutsatsen jämfört med hur ofta villkoret förekommer utan något villkor.</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>Förtroende</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
@@ -130,30 +148,11 @@
   <data name="label3.Text" xml:space="preserve">
     <value>Innehåller:</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="textBoxFilterThen.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="groupBox7.Text" xml:space="preserve">
-    <value>Villkor - Grupper</value>
-  </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Innehåller:</value>
-  </data>
-  <data name="textBoxFilterCondition.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="groupBox4.Text" xml:space="preserve">
-    <value>Stöd</value>
-  </data>
-  <data name="groupBox3.Text" xml:space="preserve">
-    <value>Lyft</value>
-  </data>
-  <data name="groupBox2.Text" xml:space="preserve">
-    <value>Förtroende</value>
   </data>
   <data name="newToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -272,6 +271,7 @@
   <data name="groupBox10.Text" xml:space="preserve">
     <value>Regel</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="label9.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
