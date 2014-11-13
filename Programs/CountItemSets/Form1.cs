@@ -1869,9 +1869,15 @@ namespace CountItemSets
             dataGridViewResults.Columns["Confidence"].FillWeight = 50;
             dataGridViewResults.Columns["Lift"].FillWeight = 50;
             dataGridViewResults.Columns["Support"].FillWeight = 50;
-            //dataGridViewResults.Columns["Confidence"].HeaderText = "Förtroende";
-            //dataGridViewResults.Columns["Lift"].HeaderText = "Lyft";
-            //dataGridViewResults.Columns["Support"].HeaderText = "Stöd";
+            //Translation
+            dataGridViewResults.Columns["Condition1"].HeaderText = "Villkor1";
+            dataGridViewResults.Columns["Condition2"].HeaderText = "Villkor2";
+            dataGridViewResults.Columns["Condition3"].HeaderText = "Villkor3";
+            dataGridViewResults.Columns["Condition4"].HeaderText = "Villkor4";
+            dataGridViewResults.Columns["Then"].HeaderText = "Slutsats";            
+            dataGridViewResults.Columns["Confidence"].HeaderText = "Förtroende";
+            dataGridViewResults.Columns["Lift"].HeaderText = "Lyft";
+            dataGridViewResults.Columns["Support"].HeaderText = "Stöd";
         }
 
         private void comboBoxFilterThen_TextUpdate(object sender, EventArgs e)
