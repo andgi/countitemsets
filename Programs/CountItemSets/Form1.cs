@@ -150,6 +150,7 @@ namespace CountItemSets
 
         static int transactionCount = 0;
         double pruningMinSupport = 0.0001;
+        HashSet<long> pruningExcludeItems = new HashSet<long>();
 
         List<AssociationRule> results = new List<AssociationRule>();
         double filterMaxSupport = 1.0000;
@@ -170,6 +171,34 @@ namespace CountItemSets
 
         string fileNameItemsets = "";
         string fileNameExcludeItems = "";
+
+        private void LoadPruningExcludeItems()
+        {
+            pruningExcludeItems.Clear();
+            if(fileNameExcludeItems == "")
+                return;
+            StreamReader reader = new StreamReader(fileNameExcludeItems);
+            int rowCount = 0;
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        long eanNr = Int64.Parse(columns[0]);
+                        pruningExcludeItems.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
+        }
 
         private void CountItemSets()
         {
@@ -235,7 +264,8 @@ namespace CountItemSets
             }
             reader.Close();
             textBoxTransactionCount.Text = transactionCount.ToString();
-            dictionaryLevel1 = dictionaryLevel1.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
+            LoadPruningExcludeItems();
+            dictionaryLevel1 = dictionaryLevel1.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport && !pruningExcludeItems.Contains(item.Key)).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 10;
             dictionaryLevel2.Clear();
@@ -1013,6 +1043,7 @@ namespace CountItemSets
                 config.AppSettings.Settings.Add("EANTable", eanPath);
                 config.Save(ConfigurationSaveMode.Modified);
             }
+            dictionaryEAN.Clear();
             TextFieldParser parser = new TextFieldParser(eanPath);
             parser.SetDelimiters(";");
             parser.ReadLine();
@@ -1023,6 +1054,11 @@ namespace CountItemSets
                     string[] fields = parser.ReadFields();
                     long eanNr = Int64.Parse(fields[0]);
                     string eanDesc = fields[1];
+                    if (dictionaryEAN.ContainsKey(eanNr))
+                    {
+                        eanNr = 0;
+                    }
+                    else
                     dictionaryEAN.Add(eanNr, eanDesc);
                 }
                 catch (Exception) { }
@@ -1045,6 +1081,7 @@ namespace CountItemSets
                 config.AppSettings.Settings.Add("VGRTable", vgrPath);
                 config.Save(ConfigurationSaveMode.Modified);
             }
+            dictionaryVGR.Clear();
             parser = new TextFieldParser(vgrPath);
             parser.SetDelimiters(";");
             parser.ReadLine();
@@ -1794,7 +1831,6 @@ namespace CountItemSets
                 }
         }
 
-        DataGridViewCellStyle groupCellStyle = null;
         private void dataGridViewResults_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             dynamic item = dataGridViewResults.Rows[e.RowIndex].DataBoundItem;
@@ -1809,12 +1845,7 @@ namespace CountItemSets
                         || (e.ColumnIndex == 3 && rule.Condition4.IsGroup)
                         || (e.ColumnIndex == 4 && rule.Then.IsGroup))
                     {
-                        if (groupCellStyle == null)
-                        {
-                            e.CellStyle.ForeColor = Color.DarkBlue;
-                            groupCellStyle = e.CellStyle.Clone();
-                        }
-                        else e.CellStyle = groupCellStyle;
+                        e.CellStyle.ForeColor = Color.DarkBlue;
                     }
                 }
             }
