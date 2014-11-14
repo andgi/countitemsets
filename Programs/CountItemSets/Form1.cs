@@ -591,6 +591,83 @@ namespace CountItemSets
                 };
             }
             reader.Close();
+            // E1 V1 V2
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            vgrs = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 0 && vgrs.Count > 1)
+                            {
+                                List<string>[] keyNames = new List<string>[keys.Count];
+                                Parallel.For(0, keys.Count, i =>
+                                {
+                                    keyNames[i] = new List<string>();
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = 0; j < (vgrs.Count - 1); j++)
+                                        {
+                                            long key2 = vgrs[j];
+                                            if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
+                                                for (int k = j + 1; k < vgrs.Count; k++)
+                                                {
+                                                    long key3 = vgrs[k];
+                                                    if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3)
+                                                        && dictionaryEANtoVGR[key1] != -key2 && dictionaryEANtoVGR[key1] != -key3)
+                                                    {
+                                                        string keyName = key1 + "," + key2 + "," + key3;
+                                                        keyNames[i].Add(keyName);
+                                                    }
+                                                }
+                                        }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel3.ContainsKey(keyName))
+                                            dictionaryLevel3[keyName]++;
+                                        else
+                                            dictionaryLevel3.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            vgrs.Clear();
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        vgrs.Add(-vgrNr);
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
             // V1 V2 V3            
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
@@ -744,8 +821,95 @@ namespace CountItemSets
                 };
             }
             reader.Close();
+            // E1 E2 E3 V1
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            vgrs = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 2 && vgrs.Count > 0)
+                            {
+                                List<string>[] keyNames = new List<string>[keys.Count - 2];
+                                Parallel.For(0, keys.Count - 2, i =>
+                                {
+                                    keyNames[i] = new List<string>();
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = i + 1; j < (keys.Count - 1); j++)
+                                        {
+                                            long key2 = keys[j];
+                                            if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
+                                                for (int k = j + 1; k < (keys.Count); k++)
+                                                {
+                                                    long key3 = keys[k];
+                                                    if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3))
+                                                    {
+                                                        for (int l = 0; l < vgrs.Count; l++)
+                                                        {
+                                                            long key4 = vgrs[l];
+                                                            if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4) 
+                                                                && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4) 
+                                                                && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
+                                                                && dictionaryEANtoVGR[key1] != -key4
+                                                                && dictionaryEANtoVGR[key2] != -key4
+                                                                && dictionaryEANtoVGR[key3] != -key4)
+                                                            {
+                                                                string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
+                                                                keyNames[i].Add(keyName);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count - 2); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel4.ContainsKey(keyName))
+                                            dictionaryLevel4[keyName]++;
+                                        else
+                                            dictionaryLevel4.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            vgrs.Clear();
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        vgrs.Add(-vgrNr);
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
             // V1 V2 V3 V4
-            /*
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
             rowCount = 0;
@@ -823,7 +987,7 @@ namespace CountItemSets
                 };
             }
             reader.Close();
-            */
+            
             dictionaryLevel4 = dictionaryLevel4.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport).ToDictionary(item => item.Key, item => item.Value);
 
             progressBarLoadingData.Value = 80;
