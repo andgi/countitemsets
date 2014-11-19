@@ -117,56 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxFileName.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="browseButton1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonStart.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="dataGridViewResults.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelTransactionCount.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxTransactionCount.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelTime.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxTime.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="groupBoxAssociationRules.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelThenItemMaxSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarThenItemMaxSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelConditionItemMaxSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarConditionItemMaxSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox9.Text" xml:space="preserve">
     <value>Vara Max Stöd</value>
-  </data>
-  <data name="groupBox9.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="comboBoxFilterThen.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
@@ -175,23 +127,8 @@
   <data name="label3.Text" xml:space="preserve">
     <value>Innehåller:</value>
   </data>
-  <data name="label3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="contextMenuStripFilterLevel1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="listBoxThenFilterLevel1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox8.Text" xml:space="preserve">
     <value>Slutsats - Grupper</value>
-  </data>
-  <data name="groupBox8.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="comboBoxFilterCondition.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
@@ -199,68 +136,17 @@
   <data name="label2.Text" xml:space="preserve">
     <value>Innehåller:</value>
   </data>
-  <data name="label2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="listBoxConditionFilterLevel1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox7.Text" xml:space="preserve">
     <value>Villkor - Grupper</value>
-  </data>
-  <data name="groupBox7.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelMaxSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelMinSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarMinSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarMaxSupport.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="groupBox4.Text" xml:space="preserve">
     <value>Stöd</value>
   </data>
-  <data name="labelMinLift.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelMaxLift.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarMinLift.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarMaxLift.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox3.Text" xml:space="preserve">
     <value>Lyft</value>
   </data>
-  <data name="labelMaxConfidence.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelMinConfidence.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarMaxConfidence.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarMinConfidence.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox2.Text" xml:space="preserve">
     <value>Förtroende</value>
-  </data>
-  <data name="groupBox1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="progressBarLoadingData.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="newToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -376,98 +262,17 @@
         PdXm80/AfDokTVu+8DfPXv9XCcIPTvjvLQ8YoakAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="menuStrip1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label12.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxFileNameExcludeItems.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonBrowseFileNameExcludeItems.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox13.Text" xml:space="preserve">
     <value>Exkludera Varor</value>
-  </data>
-  <data name="groupBox13.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label11.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label10.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxNrAssociationRules.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxNrFrequentItemsets.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="groupBox12.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonSaveItemsets.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonLoadItemsets.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label5.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxFileNameItemsets.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonBrowseFileNameItemset.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="groupBox11.Text" xml:space="preserve">
     <value>Frekventa Varukombinationer</value>
   </data>
-  <data name="groupBox11.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="labelPruningMinSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="trackBarPruningMinSupport.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox6.Text" xml:space="preserve">
     <value>Min Stöd</value>
   </data>
-  <data name="groupBox6.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox5.Text" xml:space="preserve">
     <value>Grundläggande Varukorgsanalys</value>
-  </data>
-  <data name="groupBox5.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPage1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonRuleExcludeGroupThen.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonRuleExcludeGroupCondition4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonRuleExcludeGroupCondition3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonRuleExcludeGroupCondition2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="buttonRuleExcludeGroupCondition1.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="label9.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -485,9 +290,6 @@
   <data name="label9.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>TopRight</value>
   </data>
-  <data name="label9.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="label8.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
@@ -503,76 +305,7 @@
   <data name="label8.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>TopRight</value>
   </data>
-  <data name="label8.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label7.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="label6.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleSupportThen.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleSupportCondition4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleSupportCondition3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleSupportCondition2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleSupportCondition1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleGroupThen.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleGroupCondition4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleGroupCondition3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleGroupCondition2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleGroupCondition1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleEANThen.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleEANCondition4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleEANCondition3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleEANCondition2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="textBoxRuleEANCondition1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="richTextBoxSelectedRule.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="groupBox10.Text" xml:space="preserve">
     <value>Regel</value>
-  </data>
-  <data name="groupBox10.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabPage2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tabControl1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="$this.ToolTip" xml:space="preserve">
-    <value />
   </data>
 </root>

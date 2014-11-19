@@ -233,6 +233,7 @@
             this.dataGridViewResults.ShowCellErrors = false;
             this.toolTip1.SetToolTip(this.dataGridViewResults, resources.GetString("dataGridViewResults.ToolTip"));
             this.dataGridViewResults.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewResults_CellFormatting);
+            this.dataGridViewResults.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewResults_ColumnHeaderMouseClick);
             this.dataGridViewResults.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridViewResults_DataBindingComplete);
             this.dataGridViewResults.SelectionChanged += new System.EventHandler(this.dataGridViewResults_SelectionChanged);
             // 

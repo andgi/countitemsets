@@ -14,7 +14,6 @@ using Microsoft.VisualBasic.FileIO;
 using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
-using Equin.ApplicationFramework;
 using System.Resources;
 
 namespace CountItemSets
@@ -101,9 +100,9 @@ namespace CountItemSets
                     long ean = filterThenEANMatch;
                     filter = filter.Where(item => item.Then.EANCode == ean);
                 }
-                BindingListView<AssociationRule> view = new BindingListView<AssociationRule>(filter.ToList());
                 Invoke((Action)(() =>
                 {
+                    List<AssociationRule> view = filter.ToList();
                     dataGridViewResults.DataSource = view;
                     groupBoxAssociationRules.Text = localResourceManager.GetString("groupBoxAssociationRules.Text") + " " + view.Count + " of " + results.Count;
                     Cursor = Cursors.Default;
@@ -909,6 +908,183 @@ namespace CountItemSets
                 };
             }
             reader.Close();
+            // E1 E2 V1 V2
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            vgrs = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 1 && vgrs.Count > 1)
+                            {
+                                List<string>[] keyNames = new List<string>[keys.Count - 1];
+                                Parallel.For(0, keys.Count - 1, i =>
+                                {
+                                    keyNames[i] = new List<string>();
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = i + 1; j < (keys.Count - 0); j++)
+                                        {
+                                            long key2 = keys[j];
+                                            if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
+                                                for (int k = 0; k < (vgrs.Count - 1); k++)
+                                                {
+                                                    long key3 = vgrs[k];
+                                                    if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3))
+                                                    {
+                                                        for (int l = k + 1; l < vgrs.Count; l++)
+                                                        {
+                                                            long key4 = vgrs[l];
+                                                            if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
+                                                                && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
+                                                                && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
+                                                                && dictionaryEANtoVGR[key1] != -key3
+                                                                && dictionaryEANtoVGR[key2] != -key3
+                                                                && dictionaryEANtoVGR[key1] != -key4
+                                                                && dictionaryEANtoVGR[key2] != -key4)
+                                                            {
+                                                                string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
+                                                                keyNames[i].Add(keyName);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count - 1); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel4.ContainsKey(keyName))
+                                            dictionaryLevel4[keyName]++;
+                                        else
+                                            dictionaryLevel4.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            vgrs.Clear();
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        vgrs.Add(-vgrNr);
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
+            // E1 V1 V2 V3
+            reader = new StreamReader(textBoxFileName.Text);
+            transNrLast = 0;
+            rowCount = 0;
+            keys = new List<long>(10);
+            vgrs = new List<long>(10);
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        int transNr = Int32.Parse(columns[0]);
+                        long eanNr = Int64.Parse(columns[1]);
+                        int vgrNr = Int32.Parse(columns[2]);
+                        if (transNrLast == 0)
+                        {
+                            transNrLast = transNr;
+                        }
+                        if (transNrLast != transNr)
+                        {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
+                            if (keys.Count > 0 && vgrs.Count > 2)
+                            {
+                                List<string>[] keyNames = new List<string>[keys.Count - 0];
+                                Parallel.For(0, keys.Count - 0, i =>
+                                {
+                                    keyNames[i] = new List<string>();
+                                    long key1 = keys[i];
+                                    if (dictionaryLevel1.ContainsKey(key1))
+                                        for (int j = 0; j < (vgrs.Count - 2); j++)
+                                        {
+                                            long key2 = keys[j];
+                                            if (dictionaryLevel2.ContainsKey(key1 + "," + key2))
+                                                for (int k = j + 1; k < (vgrs.Count - 1); k++)
+                                                {
+                                                    long key3 = vgrs[k];
+                                                    if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3))
+                                                    {
+                                                        for (int l = k + 1; l < vgrs.Count; l++)
+                                                        {
+                                                            long key4 = vgrs[l];
+                                                            if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
+                                                                && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
+                                                                && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
+                                                                && dictionaryEANtoVGR[key1] != -key2
+                                                                && dictionaryEANtoVGR[key1] != -key3
+                                                                && dictionaryEANtoVGR[key1] != -key4)
+                                                            {
+                                                                string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
+                                                                keyNames[i].Add(keyName);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                }); //Parallel.For
+                                for (int i = 0; i < (keys.Count - 0); i++)
+                                {
+                                    foreach (string keyName in keyNames[i])
+                                    {
+                                        if (dictionaryLevel4.ContainsKey(keyName))
+                                            dictionaryLevel4[keyName]++;
+                                        else
+                                            dictionaryLevel4.Add(keyName, 1);
+                                    }
+                                }
+                            }
+                            vgrs.Clear();
+                            keys.Clear();
+                            transNrLast = transNr;
+                        }
+                        vgrs.Add(-vgrNr);
+                        keys.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
             // V1 V2 V3 V4
             reader = new StreamReader(textBoxFileName.Text);
             transNrLast = 0;
@@ -1438,14 +1614,11 @@ namespace CountItemSets
 
             public class TransactionItem: IComparable
             {
-                private string _text = null;
-
-                private string _name = null;
                 public long EANCode { get; set; }
-                public string Text { get { if (_text != null) return _text; else return _text = TranslateEANCodeFull(); } set { _text = value; } }
-                public string Name { get { if (_name != null) return _name; else return _name = TranslateEANCodeShort(); } set { _name = value; } }
+                public string Text { get { return TranslateEANCodeFull(); } }
+                public string Name { get { return TranslateEANCodeShort(); } }
                 public int GroupID { get { if (IsEmpty) return 0; else if (IsGroup) return (int)-EANCode; else return dictionaryEANtoVGR[EANCode]; } }
-                public string GroupName { get { if (IsGroup || IsItem) return dictionaryVGR[GroupID]; else return ""; } }
+                public string GroupName { get { if (IsGroup || IsItem) return dictionaryVGR[GroupID]; else return string.Empty; } }
                 public bool IsGroup { get { return EANCode < 0; } }
                 public bool IsItem { get { return EANCode > 0; } }
                 public bool IsEmpty { get { return EANCode == 0; } }
@@ -1462,7 +1635,7 @@ namespace CountItemSets
 
                 public string TranslateEANCodeShort()
                 {
-                    if (EANCode == 0) return "";
+                    if (EANCode == 0) return string.Empty;
                     string result;
                     if (EANCode < 0)
                     {
@@ -1491,7 +1664,7 @@ namespace CountItemSets
                 }
                 public string TranslateEANCodeFull()
                 {
-                    if (EANCode == 0) return "";
+                    if (EANCode == 0) return string.Empty;
                     string result;
                     if (EANCode < 0)
                     {
@@ -1722,8 +1895,7 @@ namespace CountItemSets
         {
             if (dataGridViewResults.SelectedRows.Count > 0)
             {
-                dynamic item = dataGridViewResults.SelectedRows[0].DataBoundItem;
-                AssociationRule rule = item.Object as AssociationRule;
+                AssociationRule rule = dataGridViewResults.SelectedRows[0].DataBoundItem as AssociationRule;
                 if (rule != null)
                 {
                     String text = @"{\rtf\ansi\b0"; 
@@ -1997,8 +2169,7 @@ namespace CountItemSets
 
         private void dataGridViewResults_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            dynamic item = dataGridViewResults.Rows[e.RowIndex].DataBoundItem;
-            AssociationRule rule = item.Object as AssociationRule;
+            AssociationRule rule = dataGridViewResults.Rows[e.RowIndex].DataBoundItem as AssociationRule;
             if (rule != null)
             {
                 if (e.ColumnIndex <= 4)
@@ -2105,6 +2276,44 @@ namespace CountItemSets
                     config.AppSettings.Settings.Remove("ExcludeItemsFileName");
                 config.AppSettings.Settings.Add("ExcludeItemsFileName", openFileDialog1.FileName);
                 config.Save(ConfigurationSaveMode.Modified);
+            }
+        }
+
+        private void dataGridViewResults_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            List<AssociationRule> view = dataGridViewResults.DataSource as List<AssociationRule>;
+            if (view != null)
+            {
+                IEnumerable<AssociationRule> filter;
+                switch (e.ColumnIndex)
+                {
+                    case 0:
+                        filter = view.OrderBy(item => item.Condition1.ToString());
+                        break;
+                    case 1:
+                        filter = view.OrderBy(item => item.Condition2.ToString());
+                        break;
+                    case 2:
+                        filter = view.OrderBy(item => item.Condition3.ToString());
+                        break;
+                    case 3:
+                        filter = view.OrderBy(item => item.Condition4.ToString());
+                        break;
+                    case 4:
+                        filter = view.OrderBy(item => item.Confidence);
+                        break;
+                    case 5:
+                        filter = view.OrderBy(item => item.Lift);
+                        break;
+                    case 6:
+                        filter = view.OrderBy(item => item.Support);
+                        break;
+                    default:
+                        filter = view.AsEnumerable();
+                        break;
+                }
+                dataGridViewResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
+                dataGridViewResults.DataSource = filter.ToList();
             }
         }
     }
