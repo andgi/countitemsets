@@ -2289,6 +2289,7 @@ namespace CountItemSets
                 {
                     case 0:
                         filter = view.OrderBy(item => item.Condition1.ToString());
+                        view.Sort((x,y) => x.Condition1.ToString().CompareTo(y.Condition1.ToString()));
                         break;
                     case 1:
                         filter = view.OrderBy(item => item.Condition2.ToString());
@@ -2312,8 +2313,10 @@ namespace CountItemSets
                         filter = view.AsEnumerable();
                         break;
                 }
+                dataGridViewResults.Columns[e.ColumnIndex].SortMode = DataGridViewColumnSortMode.Programmatic;
                 dataGridViewResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
-                dataGridViewResults.DataSource = filter.ToList();
+                dataGridViewResults.Refresh();
+                // dataGridViewResults.DataSource = filter.ToList();
             }
         }
     }
