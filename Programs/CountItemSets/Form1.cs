@@ -2213,6 +2213,15 @@ namespace CountItemSets
             dataGridViewResults.Columns["Confidence"].HeaderText = "Förtroende";
             dataGridViewResults.Columns["Lift"].HeaderText = "Lyft";
             dataGridViewResults.Columns["Support"].HeaderText = "Stöd";
+
+            dataGridViewResults.Columns["Condition1"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Condition2"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Condition3"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Condition4"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Then"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Confidence"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Lift"].SortMode = DataGridViewColumnSortMode.Programmatic;
+            dataGridViewResults.Columns["Support"].SortMode = DataGridViewColumnSortMode.Programmatic;
         }
 
         private void comboBoxFilterThen_TextUpdate(object sender, EventArgs e)
@@ -2284,39 +2293,83 @@ namespace CountItemSets
             List<AssociationRule> view = dataGridViewResults.DataSource as List<AssociationRule>;
             if (view != null)
             {
-                IEnumerable<AssociationRule> filter;
-                switch (e.ColumnIndex)
+                SortOrder sortOrder = dataGridViewResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection;
+                if (sortOrder == SortOrder.Ascending)
+                    sortOrder = SortOrder.Descending;
+                else if (sortOrder == SortOrder.Descending)
+                    sortOrder = SortOrder.Ascending;
+                else sortOrder = SortOrder.Ascending;
+                if(sortOrder == SortOrder.Ascending)
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            view.Sort((x, y) => x.Condition1.ToString().CompareTo(y.Condition1.ToString()));
+                            break;
+                        case 1:
+                            view.Sort((x, y) => x.Condition2.ToString().CompareTo(y.Condition2.ToString()));
+                            break;
+                        case 2:
+                            view.Sort((x, y) => x.Condition3.ToString().CompareTo(y.Condition3.ToString()));
+                            break;
+                        case 3:
+                            view.Sort((x, y) => x.Condition4.ToString().CompareTo(y.Condition4.ToString()));
+                            break;
+                        case 4:
+                            view.Sort((x, y) => x.Then.ToString().CompareTo(y.Then.ToString()));
+                            break;
+                        case 5:
+                            view.Sort((x, y) => x.Confidence.CompareTo(y.Confidence));
+                            break;
+                        case 6:
+                            view.Sort((x, y) => x.Lift.CompareTo(y.Lift));
+                            break;
+                        case 7:
+                            view.Sort((x, y) => x.Support.CompareTo(y.Support));
+                            break;
+                        default:
+                            break;
+                    }
+                else
+                    switch (e.ColumnIndex)
+                    {
+                        case 0:
+                            view.Sort((y, x) => x.Condition1.ToString().CompareTo(y.Condition1.ToString()));
+                            break;
+                        case 1:
+                            view.Sort((y, x) => x.Condition2.ToString().CompareTo(y.Condition2.ToString()));
+                            break;
+                        case 2:
+                            view.Sort((y, x) => x.Condition3.ToString().CompareTo(y.Condition3.ToString()));
+                            break;
+                        case 3:
+                            view.Sort((y, x) => x.Condition4.ToString().CompareTo(y.Condition4.ToString()));
+                            break;
+                        case 4:
+                            view.Sort((y, x) => x.Then.ToString().CompareTo(y.Then.ToString()));
+                            break;
+                        case 5:
+                            view.Sort((y, x) => x.Confidence.CompareTo(y.Confidence));
+                            break;
+                        case 6:
+                            view.Sort((y, x) => x.Lift.CompareTo(y.Lift));
+                            break;
+                        case 7:
+                            view.Sort((y, x) => x.Support.CompareTo(y.Support));
+                            break;
+                        default:
+                            break;
+                    }
+                for (int i = 0; i < dataGridViewResults.Columns.Count; i++)
                 {
-                    case 0:
-                        filter = view.OrderBy(item => item.Condition1.ToString());
-                        view.Sort((x,y) => x.Condition1.ToString().CompareTo(y.Condition1.ToString()));
-                        break;
-                    case 1:
-                        filter = view.OrderBy(item => item.Condition2.ToString());
-                        break;
-                    case 2:
-                        filter = view.OrderBy(item => item.Condition3.ToString());
-                        break;
-                    case 3:
-                        filter = view.OrderBy(item => item.Condition4.ToString());
-                        break;
-                    case 4:
-                        filter = view.OrderBy(item => item.Confidence);
-                        break;
-                    case 5:
-                        filter = view.OrderBy(item => item.Lift);
-                        break;
-                    case 6:
-                        filter = view.OrderBy(item => item.Support);
-                        break;
-                    default:
-                        filter = view.AsEnumerable();
-                        break;
+                    if (i == e.ColumnIndex)
+                        dataGridViewResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = sortOrder;
+                    else dataGridViewResults.Columns[i].HeaderCell.SortGlyphDirection = SortOrder.None;
                 }
-                dataGridViewResults.Columns[e.ColumnIndex].SortMode = DataGridViewColumnSortMode.Programmatic;
-                dataGridViewResults.Columns[e.ColumnIndex].HeaderCell.SortGlyphDirection = SortOrder.Ascending;
                 dataGridViewResults.Refresh();
-                // dataGridViewResults.DataSource = filter.ToList();
+                if (dataGridViewResults.SelectedRows.Count > 0)
+                    dataGridViewResults.SelectedRows[0].Selected = false;
+                if (dataGridViewResults.Rows.Count > 0)
+                    dataGridViewResults.Rows[0].Selected = true;
             }
         }
     }
