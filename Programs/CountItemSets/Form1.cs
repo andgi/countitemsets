@@ -1478,7 +1478,7 @@ namespace CountItemSets
         void GenerateRules()
         {
             // Building association rules
-
+            results = new List<AssociationRule>();
             foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
             {
                 String[] columns = pair.Key.Split(',');
@@ -1541,7 +1541,7 @@ namespace CountItemSets
                 results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
             }
 
-            results = new List<AssociationRule>(results.OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()).OrderByDescending(item => item.NumberOfConditions()));
+            results = new List<AssociationRule>(results.OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()));
             signalUpdateDataGridView.Set();
         }
 
@@ -2085,8 +2085,7 @@ namespace CountItemSets
         {
             if (dataGridViewResults.SelectedRows.Count > 0)
             {
-                dynamic item = dataGridViewResults.SelectedRows[0].DataBoundItem;
-                AssociationRule rule = item.Object as AssociationRule;
+                AssociationRule rule = dataGridViewResults.SelectedRows[0].DataBoundItem as AssociationRule;
                 if (rule != null)
                 {
                     Button button = sender as Button;
@@ -2370,6 +2369,34 @@ namespace CountItemSets
                     dataGridViewResults.SelectedRows[0].Selected = false;
                 if (dataGridViewResults.Rows.Count > 0)
                     dataGridViewResults.Rows[0].Selected = true;
+            }
+        }
+
+        int oldNumericUpDownRuleThenValue=0;
+        private void numericUpDownRuleThen_ValueChanged(object sender, EventArgs e)
+        {
+            int value = (int)numericUpDownRuleThen.Value;
+            oldNumericUpDownRuleThenValue = value;
+            if (dataGridViewResults.SelectedRows.Count > 0)
+            {
+                AssociationRule rule = dataGridViewResults.CurrentRow.DataBoundItem as AssociationRule;
+                if (rule != null)
+                {
+                    AssociationRule.TransactionItem eanThen = rule.Then;
+                    int index = dataGridViewResults.CurrentRow.Index;
+                    while (index < dataGridViewResults.Rows.Count)
+                    {
+                        AssociationRule rule2 = dataGridViewResults.Rows[index].DataBoundItem as AssociationRule;
+                        if (rule.Then.EANCode != rule2.Then.EANCode)
+                        {
+                            dataGridViewResults.SelectedRows[0].Selected = false;
+                            dataGridViewResults.Rows[index].Selected = true;
+                            dataGridViewResults.CurrentCell = dataGridViewResults.Rows[index].Cells[0];
+                            break;
+                        }
+                        index++;
+                    }
+                }
             }
         }
     }
