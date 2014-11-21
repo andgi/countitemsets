@@ -100,9 +100,30 @@ namespace CountItemSets
                     long ean = filterThenEANMatch;
                     filter = filter.Where(item => item.Then.EANCode == ean);
                 }
+                List<AssociationRule> view = filter.ToList();
+                Dictionary<AssociationRule.TransactionItem, int> groupsCondition1 = new Dictionary<AssociationRule.TransactionItem, int>();
+                Dictionary<AssociationRule.TransactionItem, int> groupsCondition2 = new Dictionary<AssociationRule.TransactionItem, int>();
+                Dictionary<AssociationRule.TransactionItem, int> groupsCondition3 = new Dictionary<AssociationRule.TransactionItem, int>();
+                Dictionary<AssociationRule.TransactionItem, int> groupsCondition4 = new Dictionary<AssociationRule.TransactionItem, int>();
+                Dictionary<AssociationRule.TransactionItem, int> groupsThen = new Dictionary<AssociationRule.TransactionItem, int>();
+                for (int i = 0; i < view.Count; i++)
+                {
+                    AssociationRule rule = view[i];
+                    if (!groupsCondition1.ContainsKey(rule.Condition1))
+                        groupsCondition1.Add(rule.Condition1, i);
+                    if (!groupsCondition2.ContainsKey(rule.Condition2))
+                        groupsCondition2.Add(rule.Condition2, i);
+                    if (!groupsCondition3.ContainsKey(rule.Condition3))
+                        groupsCondition3.Add(rule.Condition3, i);
+                    if (!groupsCondition4.ContainsKey(rule.Condition4))
+                        groupsCondition4.Add(rule.Condition4, i);
+                    if (!groupsThen.ContainsKey(rule.Then))
+                        groupsThen.Add(rule.Then, i);
+                }
                 Invoke((Action)(() =>
                 {
-                    List<AssociationRule> view = filter.ToList();
+                    comboBoxRuleGroupThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key,pair.Value)).ToArray());
+
                     dataGridViewResults.DataSource = view;
                     groupBoxAssociationRules.Text = localResourceManager.GetString("groupBoxAssociationRules.Text") + " " + view.Count + " of " + results.Count;
                     Cursor = Cursors.Default;
@@ -1627,7 +1648,18 @@ namespace CountItemSets
                 {
                     EANCode = eanCode;
                 }
+                public override int GetHashCode()
+                {
+                    return EANCode.GetHashCode();
+                }
+                public override bool Equals(object obj)
+                {
+                    var other = obj as TransactionItem;
+                    if (other == null)
+                        return false;
 
+                    return EANCode == other.EANCode;
+                }
                 public override string ToString()
                 {
                     return Text;
@@ -1691,8 +1723,6 @@ namespace CountItemSets
                     }
                     return result;
                 }
-
-
                 public int CompareTo(Object obj)
                 {
                     if (obj == null) return 1;
@@ -1705,6 +1735,34 @@ namespace CountItemSets
                 
             }
 
+            public class GroupIndexPair
+            {
+                public TransactionItem Group { get; set; }
+                public int Index { get; set; }
+                public GroupIndexPair(TransactionItem group, int index) {
+                    Group = group;
+                    Index = index;
+                }
+                public override string ToString()
+                {
+                    return Group.GroupName;
+                }
+            }
+
+            public class ItemIndexPair
+            {
+                public TransactionItem Item { get; set; }
+                public int Index { get; set; }
+                public ItemIndexPair(TransactionItem item, int index)
+                {
+                    Item = item;
+                    Index = index;
+                }
+                public override string ToString()
+                {
+                    return Item.Name;
+                }
+            }
         }
 
         private void trackBarMaxSupport_Scroll(object sender, EventArgs e)
@@ -1924,6 +1982,7 @@ namespace CountItemSets
                     textBoxRuleGroupCondition3.Text = rule.Condition3.GroupName;
                     textBoxRuleGroupCondition4.Text = rule.Condition4.GroupName;
                     textBoxRuleGroupThen.Text = rule.Then.GroupName;
+                    comboBoxRuleGroupThen.Text = rule.Then.GroupName;
 
                     textBoxRuleSupportCondition1.Text = rule.Condition1.Support.ToString();
                     textBoxRuleSupportCondition2.Text = rule.Condition2.IsEmpty ? "" : rule.Condition2.Support.ToString();
@@ -2395,6 +2454,24 @@ namespace CountItemSets
                             break;
                         }
                         index++;
+                    }
+                }
+            }
+        }
+
+        private void comboBoxRuleGroupThen_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewResults.Rows.Count > 0)
+            {
+                AssociationRule rule = dataGridViewResults.CurrentRow.DataBoundItem as AssociationRule;
+                if (rule != null)
+                {
+                    AssociationRule.GroupIndexPair group = comboBoxRuleGroupThen.SelectedItem as AssociationRule.GroupIndexPair;
+                    if (!group.Group.Equals(rule.Then))
+                    {
+                        dataGridViewResults.CurrentRow.Selected = false;
+                        dataGridViewResults.Rows[group.Index].Selected = true;
+                        dataGridViewResults.CurrentCell = dataGridViewResults.Rows[group.Index].Cells[0];
                     }
                 }
             }
