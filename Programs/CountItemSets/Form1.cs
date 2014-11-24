@@ -122,6 +122,18 @@ namespace CountItemSets
                 }
                 Invoke((Action)(() =>
                 {
+                    comboBoxRuleItemCondition1.Items.Clear();
+                    comboBoxRuleItemCondition2.Items.Clear();
+                    comboBoxRuleItemCondition3.Items.Clear();
+                    comboBoxRuleItemCondition4.Items.Clear();
+                    comboBoxRuleItemThen.Items.Clear();
+
+                    comboBoxRuleGroupCondition1.Items.Clear();
+                    comboBoxRuleGroupCondition2.Items.Clear();
+                    comboBoxRuleGroupCondition3.Items.Clear();
+                    comboBoxRuleGroupCondition4.Items.Clear();
+                    comboBoxRuleGroupThen.Items.Clear();
+
                     comboBoxRuleItemCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
                     comboBoxRuleItemCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
                     comboBoxRuleItemCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
@@ -1987,10 +1999,16 @@ namespace CountItemSets
                     textBoxRuleEANCondition4.Text = rule.Condition4.IsItem ? rule.Condition4.EANCode.ToString() : "";
                     textBoxRuleEANThen.Text = rule.Then.IsGroup ? "" : rule.Then.EANCode.ToString();
 
+                    comboBoxRuleItemCondition1.SelectedItem = null;
+                    comboBoxRuleItemCondition2.SelectedItem = null;
+                    comboBoxRuleItemCondition3.SelectedItem = null;
+                    comboBoxRuleItemCondition4.SelectedItem = null;
+                    comboBoxRuleItemThen.SelectedItem = null;
+
                     comboBoxRuleItemCondition1.Text = rule.Condition1.IsItem ? rule.Condition1.Name : "";
-                    comboBoxRuleItemCondition2.Text = rule.Condition1.IsItem ? rule.Condition2.Name : "";
-                    comboBoxRuleItemCondition3.Text = rule.Condition1.IsItem ? rule.Condition3.Name : "";
-                    comboBoxRuleItemCondition4.Text = rule.Condition1.IsItem ? rule.Condition4.Name : "";
+                    comboBoxRuleItemCondition2.Text = rule.Condition2.IsItem ? rule.Condition2.Name : "";
+                    comboBoxRuleItemCondition3.Text = rule.Condition3.IsItem ? rule.Condition3.Name : "";
+                    comboBoxRuleItemCondition4.Text = rule.Condition4.IsItem ? rule.Condition4.Name : "";
                     comboBoxRuleItemThen.Text = rule.Then.IsItem ? rule.Then.Name : "";
                     
                     comboBoxRuleGroupCondition1.Text = rule.Condition1.GroupName;

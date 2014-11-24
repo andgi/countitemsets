@@ -931,6 +931,7 @@
             // 
             // comboBoxRuleItemThen
             // 
+            this.comboBoxRuleItemThen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleItemThen.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemThen, "comboBoxRuleItemThen");
             this.comboBoxRuleItemThen.Name = "comboBoxRuleItemThen";
@@ -938,30 +939,35 @@
             // 
             // comboBoxRuleItemCondition4
             // 
+            this.comboBoxRuleItemCondition4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleItemCondition4.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition4, "comboBoxRuleItemCondition4");
             this.comboBoxRuleItemCondition4.Name = "comboBoxRuleItemCondition4";
             // 
             // comboBoxRuleItemCondition3
             // 
+            this.comboBoxRuleItemCondition3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleItemCondition3.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition3, "comboBoxRuleItemCondition3");
             this.comboBoxRuleItemCondition3.Name = "comboBoxRuleItemCondition3";
             // 
             // comboBoxRuleItemCondition2
             // 
+            this.comboBoxRuleItemCondition2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleItemCondition2.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition2, "comboBoxRuleItemCondition2");
             this.comboBoxRuleItemCondition2.Name = "comboBoxRuleItemCondition2";
             // 
             // comboBoxRuleItemCondition1
             // 
+            this.comboBoxRuleItemCondition1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleItemCondition1.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition1, "comboBoxRuleItemCondition1");
             this.comboBoxRuleItemCondition1.Name = "comboBoxRuleItemCondition1";
             // 
             // comboBoxRuleGroupThen
             // 
+            this.comboBoxRuleGroupThen.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleGroupThen.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupThen, "comboBoxRuleGroupThen");
             this.comboBoxRuleGroupThen.Name = "comboBoxRuleGroupThen";
@@ -969,24 +975,28 @@
             // 
             // comboBoxRuleGroupCondition4
             // 
+            this.comboBoxRuleGroupCondition4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleGroupCondition4.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition4, "comboBoxRuleGroupCondition4");
             this.comboBoxRuleGroupCondition4.Name = "comboBoxRuleGroupCondition4";
             // 
             // comboBoxRuleGroupCondition3
             // 
+            this.comboBoxRuleGroupCondition3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleGroupCondition3.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition3, "comboBoxRuleGroupCondition3");
             this.comboBoxRuleGroupCondition3.Name = "comboBoxRuleGroupCondition3";
             // 
             // comboBoxRuleGroupCondition2
             // 
+            this.comboBoxRuleGroupCondition2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleGroupCondition2.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition2, "comboBoxRuleGroupCondition2");
             this.comboBoxRuleGroupCondition2.Name = "comboBoxRuleGroupCondition2";
             // 
             // comboBoxRuleGroupCondition1
             // 
+            this.comboBoxRuleGroupCondition1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRuleGroupCondition1.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition1, "comboBoxRuleGroupCondition1");
             this.comboBoxRuleGroupCondition1.Name = "comboBoxRuleGroupCondition1";

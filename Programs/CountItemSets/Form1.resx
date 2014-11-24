@@ -2035,7 +2035,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleItemThen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleItemThen.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
@@ -2059,7 +2059,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleItemCondition4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleItemCondition4.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -2083,7 +2083,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleItemCondition3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleItemCondition3.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -2107,7 +2107,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleItemCondition2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleItemCondition2.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -2131,7 +2131,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleItemCondition1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleItemCondition1.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -2155,7 +2155,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleGroupThen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleGroupThen.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -2179,7 +2179,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleGroupCondition4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleGroupCondition4.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -2203,7 +2203,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleGroupCondition3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleGroupCondition3.TabIndex" type="System.Int32, mscorlib">
     <value>29</value>
@@ -2227,7 +2227,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleGroupCondition2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleGroupCondition2.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -2251,7 +2251,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBoxRuleGroupCondition1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+    <value>100, 21</value>
   </data>
   <data name="comboBoxRuleGroupCondition1.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
