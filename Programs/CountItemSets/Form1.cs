@@ -122,7 +122,17 @@ namespace CountItemSets
                 }
                 Invoke((Action)(() =>
                 {
-                    comboBoxRuleGroupThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key,pair.Value)).ToArray());
+                    comboBoxRuleItemCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleItemCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleItemCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleItemCondition4.Items.AddRange(groupsCondition4.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleItemThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
+
+                    comboBoxRuleGroupCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleGroupCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleGroupCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleGroupCondition4.Items.AddRange(groupsCondition4.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleGroupThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
 
                     dataGridViewResults.DataSource = view;
                     groupBoxAssociationRules.Text = localResourceManager.GetString("groupBoxAssociationRules.Text") + " " + view.Count + " of " + results.Count;
@@ -1977,11 +1987,16 @@ namespace CountItemSets
                     textBoxRuleEANCondition4.Text = rule.Condition4.IsItem ? rule.Condition4.EANCode.ToString() : "";
                     textBoxRuleEANThen.Text = rule.Then.IsGroup ? "" : rule.Then.EANCode.ToString();
 
-                    textBoxRuleGroupCondition1.Text = rule.Condition1.GroupName;
-                    textBoxRuleGroupCondition2.Text = rule.Condition2.GroupName;
-                    textBoxRuleGroupCondition3.Text = rule.Condition3.GroupName;
-                    textBoxRuleGroupCondition4.Text = rule.Condition4.GroupName;
-                    textBoxRuleGroupThen.Text = rule.Then.GroupName;
+                    comboBoxRuleItemCondition1.Text = rule.Condition1.IsItem ? rule.Condition1.Name : "";
+                    comboBoxRuleItemCondition2.Text = rule.Condition1.IsItem ? rule.Condition2.Name : "";
+                    comboBoxRuleItemCondition3.Text = rule.Condition1.IsItem ? rule.Condition3.Name : "";
+                    comboBoxRuleItemCondition4.Text = rule.Condition1.IsItem ? rule.Condition4.Name : "";
+                    comboBoxRuleItemThen.Text = rule.Then.IsItem ? rule.Then.Name : "";
+                    
+                    comboBoxRuleGroupCondition1.Text = rule.Condition1.GroupName;
+                    comboBoxRuleGroupCondition2.Text = rule.Condition2.GroupName;
+                    comboBoxRuleGroupCondition3.Text = rule.Condition3.GroupName;
+                    comboBoxRuleGroupCondition4.Text = rule.Condition4.GroupName;
                     comboBoxRuleGroupThen.Text = rule.Then.GroupName;
 
                     textBoxRuleSupportCondition1.Text = rule.Condition1.Support.ToString();
@@ -2431,35 +2446,7 @@ namespace CountItemSets
             }
         }
 
-        int oldNumericUpDownRuleThenValue=0;
-        private void numericUpDownRuleThen_ValueChanged(object sender, EventArgs e)
-        {
-            int value = (int)numericUpDownRuleThen.Value;
-            oldNumericUpDownRuleThenValue = value;
-            if (dataGridViewResults.SelectedRows.Count > 0)
-            {
-                AssociationRule rule = dataGridViewResults.CurrentRow.DataBoundItem as AssociationRule;
-                if (rule != null)
-                {
-                    AssociationRule.TransactionItem eanThen = rule.Then;
-                    int index = dataGridViewResults.CurrentRow.Index;
-                    while (index < dataGridViewResults.Rows.Count)
-                    {
-                        AssociationRule rule2 = dataGridViewResults.Rows[index].DataBoundItem as AssociationRule;
-                        if (rule.Then.EANCode != rule2.Then.EANCode)
-                        {
-                            dataGridViewResults.SelectedRows[0].Selected = false;
-                            dataGridViewResults.Rows[index].Selected = true;
-                            dataGridViewResults.CurrentCell = dataGridViewResults.Rows[index].Cells[0];
-                            break;
-                        }
-                        index++;
-                    }
-                }
-            }
-        }
-
-        private void comboBoxRuleGroupThen_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxRuleGroupThen_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (dataGridViewResults.Rows.Count > 0)
             {
@@ -2472,6 +2459,24 @@ namespace CountItemSets
                         dataGridViewResults.CurrentRow.Selected = false;
                         dataGridViewResults.Rows[group.Index].Selected = true;
                         dataGridViewResults.CurrentCell = dataGridViewResults.Rows[group.Index].Cells[0];
+                    }
+                }
+            }
+        }
+
+        private void comboBoxRuleItemThen_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (dataGridViewResults.Rows.Count > 0)
+            {
+                AssociationRule rule = dataGridViewResults.CurrentRow.DataBoundItem as AssociationRule;
+                if (rule != null)
+                {
+                    AssociationRule.ItemIndexPair item = comboBoxRuleItemThen.SelectedItem as AssociationRule.ItemIndexPair;
+                    if (!item.Item.Equals(rule.Then))
+                    {
+                        dataGridViewResults.CurrentRow.Selected = false;
+                        dataGridViewResults.Rows[item.Index].Selected = true;
+                        dataGridViewResults.CurrentCell = dataGridViewResults.Rows[item.Index].Cells[0];
                     }
                 }
             }
