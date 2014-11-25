@@ -120,6 +120,9 @@
   <data name="groupBox9.Text" xml:space="preserve">
     <value>Vara Max Stöd</value>
   </data>
+  <data name="groupBox8.Text" xml:space="preserve">
+    <value>Slutsats - Grupper</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
@@ -127,17 +130,14 @@
   <data name="label3.Text" xml:space="preserve">
     <value>Innehåller:</value>
   </data>
-  <data name="groupBox8.Text" xml:space="preserve">
-    <value>Slutsats - Grupper</value>
+  <data name="groupBox7.Text" xml:space="preserve">
+    <value>Villkor - Grupper</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 13</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Innehåller:</value>
-  </data>
-  <data name="groupBox7.Text" xml:space="preserve">
-    <value>Villkor - Grupper</value>
   </data>
   <data name="groupBox4.Text" xml:space="preserve">
     <value>Stöd</value>
@@ -268,18 +268,30 @@
   <data name="groupBox11.Text" xml:space="preserve">
     <value>Frekventa Varukombinationer</value>
   </data>
+  <data name="groupBox5.Text" xml:space="preserve">
+    <value>Grundläggande Varukorgsanalys</value>
+  </data>
   <data name="groupBox6.Text" xml:space="preserve">
     <value>Min Stöd</value>
   </data>
-  <data name="groupBox5.Text" xml:space="preserve">
-    <value>Grundläggande Varukorgsanalys</value>
+  <data name="groupBox10.Text" xml:space="preserve">
+    <value>Regel</value>
+  </data>
+  <data name="label13.Location" type="System.Drawing.Point, System.Drawing">
+    <value>54, 66</value>
+  </data>
+  <data name="label13.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 13</value>
+  </data>
+  <data name="label13.Text" xml:space="preserve">
+    <value>Vara:</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="label9.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
   <data name="label9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 94</value>
+    <value>54, 116</value>
   </data>
   <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
     <value>32, 13</value>
@@ -294,7 +306,7 @@
     <value>Top, Right</value>
   </data>
   <data name="label8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>37, 68</value>
+    <value>39, 91</value>
   </data>
   <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 13</value>
@@ -304,8 +316,5 @@
   </data>
   <data name="label8.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>TopRight</value>
-  </data>
-  <data name="groupBox10.Text" xml:space="preserve">
-    <value>Regel</value>
   </data>
 </root>

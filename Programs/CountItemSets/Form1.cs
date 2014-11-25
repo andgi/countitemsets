@@ -1529,8 +1529,8 @@ namespace CountItemSets
                 Int64.TryParse(columns[0], out eanNr1);
                 long eanNr2 = 0;
                 Int64.TryParse(columns[1], out eanNr2);
-                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel1[eanNr1] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel1[eanNr2] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
@@ -1542,9 +1542,9 @@ namespace CountItemSets
                 Int64.TryParse(columns[1], out eanNr2);
                 long eanNr3 = 0;
                 Int64.TryParse(columns[2], out eanNr3);
-                results.Add(new AssociationRule(eanNr1, eanNr2, 0, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr1 + "," + eanNr2] * (double)dictionaryLevel1[eanNr3]), (double)dictionaryLevel2[eanNr1 + "," + eanNr2] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr3, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr1 + "," + eanNr3] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel2[eanNr1 + "," + eanNr3] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr2, eanNr3, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel2[eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel2[eanNr2 + "," + eanNr3] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, 0, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr1 + "," + eanNr2] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel2[eanNr1 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr1 + "," + eanNr3] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel2[eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel2[eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel4)
@@ -1558,10 +1558,10 @@ namespace CountItemSets
                 Int64.TryParse(columns[2], out eanNr3);
                 long eanNr4 = 0;
                 Int64.TryParse(columns[3], out eanNr4);
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel5)
@@ -1577,11 +1577,11 @@ namespace CountItemSets
                 Int64.TryParse(columns[3], out eanNr4);
                 long eanNr5 = 0;
                 Int64.TryParse(columns[4], out eanNr5);
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, eanNr4, eanNr5, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr5]), (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, eanNr5, eanNr4, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5] * (double)dictionaryLevel1[eanNr4]), (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, eanNr5, eanNr3, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr3]), (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, eanNr5, eanNr2, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr2]), (double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, eanNr4, eanNr5, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr5]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, eanNr5, eanNr4, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr3 + "," + eanNr5] * (double)dictionaryLevel1[eanNr4]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, eanNr5, eanNr3, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr2 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, eanNr5, eanNr2, (double)pair.Value / (double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr1 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, eanNr5, eanNr1, (double)pair.Value / (double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel4[eanNr2 + "," + eanNr3 + "," + eanNr4 + "," + eanNr5] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
             }
 
             results = new List<AssociationRule>(results.OrderByDescending(item => item.Lift).OrderBy(item => item.Then.ToString()));
@@ -1999,11 +1999,11 @@ namespace CountItemSets
                     textBoxRuleEANCondition4.Text = rule.Condition4.IsItem ? rule.Condition4.EANCode.ToString() : "";
                     textBoxRuleEANThen.Text = rule.Then.IsGroup ? "" : rule.Then.EANCode.ToString();
 
-                    comboBoxRuleItemCondition1.SelectedItem = null;
-                    comboBoxRuleItemCondition2.SelectedItem = null;
-                    comboBoxRuleItemCondition3.SelectedItem = null;
-                    comboBoxRuleItemCondition4.SelectedItem = null;
-                    comboBoxRuleItemThen.SelectedItem = null;
+                    if (!rule.Condition1.IsItem) comboBoxRuleItemCondition1.SelectedItem = null;
+                    if (!rule.Condition2.IsItem) comboBoxRuleItemCondition2.SelectedItem = null;
+                    if (!rule.Condition3.IsItem) comboBoxRuleItemCondition3.SelectedItem = null;
+                    if (!rule.Condition4.IsItem) comboBoxRuleItemCondition4.SelectedItem = null;
+                    if (!rule.Then.IsItem) comboBoxRuleItemThen.SelectedItem = null;
 
                     comboBoxRuleItemCondition1.Text = rule.Condition1.IsItem ? rule.Condition1.Name : "";
                     comboBoxRuleItemCondition2.Text = rule.Condition2.IsItem ? rule.Condition2.Name : "";
@@ -2017,11 +2017,11 @@ namespace CountItemSets
                     comboBoxRuleGroupCondition4.Text = rule.Condition4.GroupName;
                     comboBoxRuleGroupThen.Text = rule.Then.GroupName;
 
-                    textBoxRuleSupportCondition1.Text = rule.Condition1.Support.ToString();
-                    textBoxRuleSupportCondition2.Text = rule.Condition2.IsEmpty ? "" : rule.Condition2.Support.ToString();
-                    textBoxRuleSupportCondition3.Text = rule.Condition3.IsEmpty ? "" : rule.Condition3.Support.ToString();
-                    textBoxRuleSupportCondition4.Text = rule.Condition4.IsEmpty ? "" : rule.Condition4.Support.ToString();
-                    textBoxRuleSupportThen.Text = rule.Then.Support.ToString();
+                    textBoxRuleSupportCondition1.Text = rule.Condition1.Support.ToString("P");
+                    textBoxRuleSupportCondition2.Text = rule.Condition2.IsEmpty ? "" : rule.Condition2.Support.ToString("P");
+                    textBoxRuleSupportCondition3.Text = rule.Condition3.IsEmpty ? "" : rule.Condition3.Support.ToString("P");
+                    textBoxRuleSupportCondition4.Text = rule.Condition4.IsEmpty ? "" : rule.Condition4.Support.ToString("P");
+                    textBoxRuleSupportThen.Text = rule.Then.Support.ToString("P");
                 }
             }
         }
@@ -2464,17 +2464,18 @@ namespace CountItemSets
             }
         }
 
-        private void comboBoxRuleGroupThen_SelectionChangeCommitted(object sender, EventArgs e)
+        private void comboBoxRuleGroup_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (dataGridViewResults.Rows.Count > 0)
             {
                 AssociationRule rule = dataGridViewResults.CurrentRow.DataBoundItem as AssociationRule;
                 if (rule != null)
                 {
-                    AssociationRule.GroupIndexPair group = comboBoxRuleGroupThen.SelectedItem as AssociationRule.GroupIndexPair;
+                    AssociationRule.GroupIndexPair group = (sender as ComboBox).SelectedItem as AssociationRule.GroupIndexPair;
                     if (!group.Group.Equals(rule.Then))
                     {
                         dataGridViewResults.CurrentRow.Selected = false;
+                        dataGridViewResults.FirstDisplayedScrollingRowIndex = group.Index;
                         dataGridViewResults.Rows[group.Index].Selected = true;
                         dataGridViewResults.CurrentCell = dataGridViewResults.Rows[group.Index].Cells[0];
                     }
@@ -2482,23 +2483,25 @@ namespace CountItemSets
             }
         }
 
-        private void comboBoxRuleItemThen_SelectionChangeCommitted(object sender, EventArgs e)
+        private void comboBoxRuleItem_SelectionChangeCommitted(object sender, EventArgs e)
         {
             if (dataGridViewResults.Rows.Count > 0)
             {
                 AssociationRule rule = dataGridViewResults.CurrentRow.DataBoundItem as AssociationRule;
                 if (rule != null)
                 {
-                    AssociationRule.ItemIndexPair item = comboBoxRuleItemThen.SelectedItem as AssociationRule.ItemIndexPair;
+                    AssociationRule.ItemIndexPair item = (sender as ComboBox).SelectedItem as AssociationRule.ItemIndexPair;
                     if (!item.Item.Equals(rule.Then))
                     {
                         dataGridViewResults.CurrentRow.Selected = false;
+                        dataGridViewResults.FirstDisplayedScrollingRowIndex = item.Index;
                         dataGridViewResults.Rows[item.Index].Selected = true;
                         dataGridViewResults.CurrentCell = dataGridViewResults.Rows[item.Index].Cells[0];
                     }
                 }
             }
         }
+
     }
 
 }

@@ -935,7 +935,7 @@
             this.comboBoxRuleItemThen.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemThen, "comboBoxRuleItemThen");
             this.comboBoxRuleItemThen.Name = "comboBoxRuleItemThen";
-            this.comboBoxRuleItemThen.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleItemThen_SelectionChangeCommitted);
+            this.comboBoxRuleItemThen.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleItem_SelectionChangeCommitted);
             // 
             // comboBoxRuleItemCondition4
             // 
@@ -943,6 +943,7 @@
             this.comboBoxRuleItemCondition4.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition4, "comboBoxRuleItemCondition4");
             this.comboBoxRuleItemCondition4.Name = "comboBoxRuleItemCondition4";
+            this.comboBoxRuleItemCondition4.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleItem_SelectionChangeCommitted);
             // 
             // comboBoxRuleItemCondition3
             // 
@@ -950,6 +951,7 @@
             this.comboBoxRuleItemCondition3.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition3, "comboBoxRuleItemCondition3");
             this.comboBoxRuleItemCondition3.Name = "comboBoxRuleItemCondition3";
+            this.comboBoxRuleItemCondition3.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleItem_SelectionChangeCommitted);
             // 
             // comboBoxRuleItemCondition2
             // 
@@ -957,6 +959,7 @@
             this.comboBoxRuleItemCondition2.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition2, "comboBoxRuleItemCondition2");
             this.comboBoxRuleItemCondition2.Name = "comboBoxRuleItemCondition2";
+            this.comboBoxRuleItemCondition2.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleItem_SelectionChangeCommitted);
             // 
             // comboBoxRuleItemCondition1
             // 
@@ -964,6 +967,7 @@
             this.comboBoxRuleItemCondition1.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleItemCondition1, "comboBoxRuleItemCondition1");
             this.comboBoxRuleItemCondition1.Name = "comboBoxRuleItemCondition1";
+            this.comboBoxRuleItemCondition1.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleItem_SelectionChangeCommitted);
             // 
             // comboBoxRuleGroupThen
             // 
@@ -971,7 +975,7 @@
             this.comboBoxRuleGroupThen.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupThen, "comboBoxRuleGroupThen");
             this.comboBoxRuleGroupThen.Name = "comboBoxRuleGroupThen";
-            this.comboBoxRuleGroupThen.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleGroupThen_SelectionChangeCommitted);
+            this.comboBoxRuleGroupThen.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleGroup_SelectionChangeCommitted);
             // 
             // comboBoxRuleGroupCondition4
             // 
@@ -979,6 +983,7 @@
             this.comboBoxRuleGroupCondition4.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition4, "comboBoxRuleGroupCondition4");
             this.comboBoxRuleGroupCondition4.Name = "comboBoxRuleGroupCondition4";
+            this.comboBoxRuleGroupCondition4.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleGroup_SelectionChangeCommitted);
             // 
             // comboBoxRuleGroupCondition3
             // 
@@ -986,6 +991,7 @@
             this.comboBoxRuleGroupCondition3.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition3, "comboBoxRuleGroupCondition3");
             this.comboBoxRuleGroupCondition3.Name = "comboBoxRuleGroupCondition3";
+            this.comboBoxRuleGroupCondition3.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleGroup_SelectionChangeCommitted);
             // 
             // comboBoxRuleGroupCondition2
             // 
@@ -993,6 +999,7 @@
             this.comboBoxRuleGroupCondition2.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition2, "comboBoxRuleGroupCondition2");
             this.comboBoxRuleGroupCondition2.Name = "comboBoxRuleGroupCondition2";
+            this.comboBoxRuleGroupCondition2.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleGroup_SelectionChangeCommitted);
             // 
             // comboBoxRuleGroupCondition1
             // 
@@ -1000,6 +1007,7 @@
             this.comboBoxRuleGroupCondition1.FormattingEnabled = true;
             resources.ApplyResources(this.comboBoxRuleGroupCondition1, "comboBoxRuleGroupCondition1");
             this.comboBoxRuleGroupCondition1.Name = "comboBoxRuleGroupCondition1";
+            this.comboBoxRuleGroupCondition1.SelectionChangeCommitted += new System.EventHandler(this.comboBoxRuleGroup_SelectionChangeCommitted);
             // 
             // label13
             // 
