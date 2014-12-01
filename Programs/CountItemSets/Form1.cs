@@ -134,22 +134,22 @@ namespace CountItemSets
                     comboBoxRuleGroupCondition4.Items.Clear();
                     comboBoxRuleGroupThen.Items.Clear();
 
-                    comboBoxRuleItemCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleItemCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleItemCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleItemCondition4.Items.AddRange(groupsCondition4.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleItemThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleItemCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleItemCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleItemCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleItemCondition4.Items.AddRange(groupsCondition4.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleItemThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsItem).Select(pair => new AssociationRule.ItemIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
 
-                    comboBoxRuleGroupCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleGroupCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleGroupCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleGroupCondition4.Items.AddRange(groupsCondition4.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
-                    comboBoxRuleGroupThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).ToArray());
+                    comboBoxRuleGroupCondition1.Items.AddRange(groupsCondition1.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleGroupCondition2.Items.AddRange(groupsCondition2.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleGroupCondition3.Items.AddRange(groupsCondition3.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleGroupCondition4.Items.AddRange(groupsCondition4.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
+                    comboBoxRuleGroupThen.Items.AddRange(groupsThen.Where(pair => pair.Key.IsGroup).Select(pair => new AssociationRule.GroupIndexPair(pair.Key, pair.Value)).OrderBy(p => p).ToArray());
 
                     dataGridViewResults.DataSource = view;
                     groupBoxAssociationRules.Text = localResourceManager.GetString("groupBoxAssociationRules.Text") + " " + view.Count + " of " + results.Count;
-                    Cursor = Cursors.Default;
-                    dataGridViewResults.Cursor = Cursors.Default;
+                    Application.UseWaitCursor = false; // Cursor = Cursors.Default;
+                    dataGridViewResults.UseWaitCursor = false; // dataGridViewResults.Cursor = Cursors.Default;
                 }));
             }
         }
@@ -269,6 +269,10 @@ namespace CountItemSets
                         }
                         if (transNrLast != transNr)
                         {
+                            vgrs.Sort();
+                            vgrs = new List<long>(vgrs.Distinct());
+                            keys.Sort();
+                            keys = new List<long>(keys.Distinct());
                             foreach (long eanNr in keys)
                             {
                                 if (dictionaryLevel1.ContainsKey(eanNr))
@@ -401,7 +405,7 @@ namespace CountItemSets
                                         for (int j = 0; j < vgrs.Count; j++)
                                         {
                                             long key2 = vgrs[j];
-                                            if (dictionaryLevel1.ContainsKey(key2) && dictionaryEANtoVGR[key1]!=-key2)
+                                            if (dictionaryLevel1.ContainsKey(key2) && dictionaryEANtoVGR[key1] != -key2)
                                             {
                                                 string keyName = key1 + "," + key2;
                                                 if (dictionaryLevel2.ContainsKey(keyName))
@@ -599,7 +603,7 @@ namespace CountItemSets
                                                 {
                                                     long key3 = vgrs[k];
                                                     if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3)
-                                                        && dictionaryEANtoVGR[key1] != -key3 && dictionaryEANtoVGR[key2] != -key3)
+                                                        /* && dictionaryEANtoVGR[key1] != -key3 && dictionaryEANtoVGR[key2] != -key3 */)
                                                     {
                                                         string keyName = key1 + "," + key2 + "," + key3;
                                                         keyNames[i].Add(keyName);
@@ -676,7 +680,7 @@ namespace CountItemSets
                                                 {
                                                     long key3 = vgrs[k];
                                                     if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3)
-                                                        && dictionaryEANtoVGR[key1] != -key2 && dictionaryEANtoVGR[key1] != -key3)
+                                                        /* && dictionaryEANtoVGR[key1] != -key2 && dictionaryEANtoVGR[key1] != -key3 */)
                                                     {
                                                         string keyName = key1 + "," + key2 + "," + key3;
                                                         keyNames[i].Add(keyName);
@@ -826,7 +830,7 @@ namespace CountItemSets
                                                 {
                                                     long key3 = keys[k];
                                                     if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3)) {
-                                                        for (int l = j + 1; l < keys.Count; l++)
+                                                        for (int l = k + 1; l < keys.Count; l++)
                                                         {
                                                             long key4 = keys[l];
                                                             if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4))
@@ -913,9 +917,9 @@ namespace CountItemSets
                                                             if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4) 
                                                                 && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4) 
                                                                 && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
-                                                                && dictionaryEANtoVGR[key1] != -key4
+                                                                /* && dictionaryEANtoVGR[key1] != -key4
                                                                 && dictionaryEANtoVGR[key2] != -key4
-                                                                && dictionaryEANtoVGR[key3] != -key4)
+                                                                && dictionaryEANtoVGR[key3] != -key4 */)
                                                             {
                                                                 string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
                                                                 keyNames[i].Add(keyName);
@@ -1001,10 +1005,10 @@ namespace CountItemSets
                                                             if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
                                                                 && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
                                                                 && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
-                                                                && dictionaryEANtoVGR[key1] != -key3
+                                                                /* && dictionaryEANtoVGR[key1] != -key3
                                                                 && dictionaryEANtoVGR[key2] != -key3
                                                                 && dictionaryEANtoVGR[key1] != -key4
-                                                                && dictionaryEANtoVGR[key2] != -key4)
+                                                                && dictionaryEANtoVGR[key2] != -key4 */)
                                                             {
                                                                 string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
                                                                 keyNames[i].Add(keyName);
@@ -1090,9 +1094,9 @@ namespace CountItemSets
                                                             if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
                                                                 && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
                                                                 && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
-                                                                && dictionaryEANtoVGR[key1] != -key2
+                                                                /* && dictionaryEANtoVGR[key1] != -key2
                                                                 && dictionaryEANtoVGR[key1] != -key3
-                                                                && dictionaryEANtoVGR[key1] != -key4)
+                                                                && dictionaryEANtoVGR[key1] != -key4 */)
                                                             {
                                                                 string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
                                                                 keyNames[i].Add(keyName);
@@ -1169,7 +1173,7 @@ namespace CountItemSets
                                                     long key3 = keys[k];
                                                     if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3))
                                                     {
-                                                        for (int l = j + 1; l < keys.Count; l++)
+                                                        for (int l = k + 1; l < keys.Count; l++)
                                                         {
                                                             long key4 = keys[l];
                                                             if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4))
@@ -1252,7 +1256,7 @@ namespace CountItemSets
                                                     long key3 = keys[k];
                                                     if (dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key3))
                                                     {
-                                                        for (int l = j + 1; l < (keys.Count-1); l++)
+                                                        for (int l = k + 1; l < (keys.Count-1); l++)
                                                         {
                                                             long key4 = keys[l];
                                                             if (dictionaryLevel4.ContainsKey(key1 + "," + key2 + "," + key3 + "," + key4))
@@ -1393,7 +1397,9 @@ namespace CountItemSets
         private void buttonStart_Click(object sender, EventArgs e)
         {
             buttonStart.Enabled = false;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true;
+            Application.DoEvents();
+            // Cursor = Cursors.WaitCursor;
 
             InitStaticTables();
 
@@ -1516,6 +1522,16 @@ namespace CountItemSets
                 comboBoxFilterCondition.Items.Add(item);
                 comboBoxFilterThen.Items.Add(item);
             }
+
+            labelMaxConfidence.Text = filterMaxConfidence.ToString("P");
+            labelMinConfidence.Text = filterMinConfidence.ToString("P");
+            labelMaxSupport.Text = filterMaxSupport.ToString("P4");
+            labelMinSupport.Text = filterMinSupport.ToString("P4");
+            labelMaxLift.Text = filterMaxLift.ToString();
+            labelMinLift.Text = filterMinLift.ToString();
+
+            labelConditionItemMaxSupport.Text = filterConditionItemMaxSupport.ToString("P4");
+            labelThenItemMaxSupport.Text = filterThenItemMaxSupport.ToString("P4");
         }
 
         void GenerateRules()
@@ -1640,6 +1656,8 @@ namespace CountItemSets
                 Condition3 = new TransactionItem(condition3);
                 Condition4 = new TransactionItem(condition4);
                 Then = new TransactionItem(then);
+                if (confidence > 1.00)
+                    confidence = 1.00;
                 Confidence = confidence;
                 Lift = lift;
                 Support = support;
@@ -1757,7 +1775,7 @@ namespace CountItemSets
                 
             }
 
-            public class GroupIndexPair
+            public class GroupIndexPair : IComparable
             {
                 public TransactionItem Group { get; set; }
                 public int Index { get; set; }
@@ -1769,9 +1787,23 @@ namespace CountItemSets
                 {
                     return Group.GroupName;
                 }
+                public int CompareTo(Object obj)
+                {
+                    if (obj == null) return 1;
+                    GroupIndexPair item = obj as GroupIndexPair;
+                    if (item != null)
+                    {
+                        int value = this.Group.CompareTo(item.Group);
+                        if (value == 0)
+                            return Index.CompareTo(item.Index);
+                        else return value;
+                    }
+                    else
+                        throw new ArgumentException("Object is not a GroupIndexPair");
+                }            
             }
 
-            public class ItemIndexPair
+            public class ItemIndexPair : IComparable
             {
                 public TransactionItem Item { get; set; }
                 public int Index { get; set; }
@@ -1784,32 +1816,46 @@ namespace CountItemSets
                 {
                     return Item.Name;
                 }
+                public int CompareTo(Object obj)
+                {
+                    if (obj == null) return 1;
+                    ItemIndexPair item = obj as ItemIndexPair;
+                    if (item != null)
+                    {
+                        int value = this.Item.CompareTo(item.Item);
+                        if (value == 0)
+                            return Index.CompareTo(item.Index);
+                        else return value;
+                    }
+                    else
+                        throw new ArgumentException("Object is not a ItemIndexPair");
+                }
             }
         }
 
         private void trackBarMaxSupport_Scroll(object sender, EventArgs e)
         {
             filterMaxSupport = 0.0001 * Math.Pow(10, trackBarMaxSupport.Value / 25.0);
-            labelMaxSupport.Text = filterMaxSupport.ToString("F4");
+            labelMaxSupport.Text = filterMaxSupport.ToString("P4");
         }
 
         private void trackBarMaxSupport_ValueChanged(object sender, EventArgs e)
         {
             filterMaxSupport = 0.0001 * Math.Pow(10, trackBarMaxSupport.Value / 25.0);
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
         
         private void trackBarMinSupport_Scroll(object sender, EventArgs e)
         {
             filterMinSupport = 0.0001 * Math.Pow(10, trackBarMinSupport.Value / 25.0);
-            labelMinSupport.Text = filterMinSupport.ToString("F4");
+            labelMinSupport.Text = filterMinSupport.ToString("P4");
         }
 
         private void trackBarMinSupport_ValueChanged(object sender, EventArgs e)
         {
             filterMinSupport = 0.0001 * Math.Pow(10, trackBarMinSupport.Value / 25.0);
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1822,7 +1868,7 @@ namespace CountItemSets
         private void trackBarMaxLift_ValueChanged(object sender, EventArgs e)
         {
             filterMaxLift = (double)trackBarMaxLift.Value;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1835,33 +1881,33 @@ namespace CountItemSets
         private void trackBarMinLift_ValueChanged(object sender, EventArgs e)
         {
             filterMinLift = (double)trackBarMinLift.Value;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
         private void trackBarMaxConfidence_Scroll(object sender, EventArgs e)
         {
             filterMaxConfidence = trackBarMaxConfidence.Value / 100.0;
-            labelMaxConfidence.Text = filterMaxConfidence.ToString("F4");
+            labelMaxConfidence.Text = filterMaxConfidence.ToString("P");
         }
 
         private void trackBarMaxConfidence_ValueChanged(object sender, EventArgs e)
         {
             filterMaxConfidence = trackBarMaxConfidence.Value / 100.0;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
         private void trackBarMinConfidence_Scroll(object sender, EventArgs e)
         {
             filterMinConfidence = trackBarMinConfidence.Value / 100.0;
-            labelMinConfidence.Text = filterMinConfidence.ToString("F4");
+            labelMinConfidence.Text = filterMinConfidence.ToString("P");
         }
 
         private void trackBarMinConfidence_ValueChanged(object sender, EventArgs e)
         {
             filterMinConfidence = trackBarMinConfidence.Value / 100.0;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1872,7 +1918,7 @@ namespace CountItemSets
             {
                 filterConditionLevel1.Add(pair.Key);
             }
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1883,7 +1929,7 @@ namespace CountItemSets
             {
                 filterThenLevel1.Add(pair.Key);
             }
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -1948,27 +1994,27 @@ namespace CountItemSets
         private void trackBarConditionItemMaxSupport_ValueChanged(object sender, EventArgs e)
         {
             filterConditionItemMaxSupport = 0.0001 * Math.Pow(10, trackBarConditionItemMaxSupport.Value / 25.0);
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
         private void trackBarConditionItemMaxSupport_Scroll(object sender, EventArgs e)
         {
             filterConditionItemMaxSupport = 0.0001 * Math.Pow(10, trackBarConditionItemMaxSupport.Value / 25.0);
-            labelConditionItemMaxSupport.Text = filterConditionItemMaxSupport.ToString("F4");
+            labelConditionItemMaxSupport.Text = filterConditionItemMaxSupport.ToString("P4");
         }
 
         private void trackBarThenItemMaxSupport_ValueChanged(object sender, EventArgs e)
         {
             filterThenItemMaxSupport = 0.0001 * Math.Pow(10, trackBarThenItemMaxSupport.Value / 25.0);
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
         private void trackBarThenItemMaxSupport_Scroll(object sender, EventArgs e)
         {
             filterThenItemMaxSupport = 0.0001 * Math.Pow(10, trackBarThenItemMaxSupport.Value / 25.0);
-            labelThenItemMaxSupport.Text = filterThenItemMaxSupport.ToString("F4");
+            labelThenItemMaxSupport.Text = filterThenItemMaxSupport.ToString("P4");
         }
 
         private void dataGridViewResults_SelectionChanged(object sender, EventArgs e)
@@ -2108,7 +2154,7 @@ namespace CountItemSets
 
         private void buttonLoadItemsets_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
 
             InitStaticTables();
 
@@ -2323,7 +2369,7 @@ namespace CountItemSets
                 filterThenTextMatch = null;
             else
                 filterThenTextMatch = text;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -2335,7 +2381,7 @@ namespace CountItemSets
                 filterConditionTextMatch = null;
             else
                 filterConditionTextMatch = text;
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -2346,7 +2392,7 @@ namespace CountItemSets
                 KeyValuePair<long, string> item = (KeyValuePair<long, string>) comboBoxFilterCondition.SelectedItem;
                 filterConditionEANMatch = item.Key;
             }
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -2358,7 +2404,7 @@ namespace CountItemSets
                 KeyValuePair<long, string> item = (KeyValuePair<long, string>)comboBoxFilterThen.SelectedItem;
                 filterThenEANMatch = item.Key;
             }
-            Cursor = Cursors.WaitCursor;
+            Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
             signalUpdateDataGridView.Set();
         }
 
@@ -2500,6 +2546,54 @@ namespace CountItemSets
                     }
                 }
             }
+        }
+
+        private void groupBoxFilters_Resize(object sender, EventArgs e)
+        {
+            int width = (groupBoxFilterConfidence.Left - groupBoxFilterCondition.Left - 12) / 2;
+            groupBoxFilterCondition.Width = width;
+            groupBoxFilterThen.Width = width;
+            groupBoxFilterThen.Left = groupBoxFilterCondition.Left + width + 6;
+        }
+
+        private void buttonFilterReset_Click(object sender, EventArgs e)
+        {
+            trackBarMaxSupport.Value = 100;
+            filterMaxSupport = 1.0000;
+            trackBarMinSupport.Value = 25;
+            filterMinSupport = 0.0010;
+
+            trackBarMaxLift.Value = 100;
+            filterMaxLift = 1000.0;
+            trackBarMinLift.Value = 1;
+            filterMinLift = 1.0;
+            
+            trackBarMaxConfidence.Value = 100;
+            filterMaxConfidence = 1.00;
+            trackBarMinConfidence.Value = 5;
+            filterMinConfidence = 0.05;
+
+            filterConditionLevel1 = new HashSet<int>();
+            filterThenLevel1 = new HashSet<int>();
+
+            trackBarConditionItemMaxSupport.Value = 100;
+            filterConditionItemMaxSupport = 1.00;
+            trackBarThenItemMaxSupport.Value = 100;
+            filterThenItemMaxSupport = 1.00;
+
+            comboBoxFilterCondition.SelectedItem = null;
+            comboBoxFilterCondition.Text = "";
+            filterConditionTextMatch = null;
+            filterConditionEANMatch = 0;
+            
+            comboBoxFilterThen.SelectedItem = null;
+            comboBoxFilterThen.Text = "";
+            filterThenTextMatch = null;
+            filterThenEANMatch = 0;
+
+            InitFilters();
+
+            signalUpdateDataGridView.Set();        
         }
 
     }
