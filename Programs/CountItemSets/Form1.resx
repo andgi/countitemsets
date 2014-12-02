@@ -226,7 +226,7 @@
     <value>6, 19</value>
   </data>
   <data name="dataGridViewResults.Size" type="System.Drawing.Size, System.Drawing">
-    <value>885, 290</value>
+    <value>885, 327</value>
   </data>
   <data name="dataGridViewResults.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -343,10 +343,10 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="groupBoxAssociationRules.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 224</value>
+    <value>3, 187</value>
   </data>
   <data name="groupBoxAssociationRules.Size" type="System.Drawing.Size, System.Drawing">
-    <value>899, 315</value>
+    <value>899, 352</value>
   </data>
   <data name="groupBoxAssociationRules.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -369,8 +369,11 @@
   <data name="groupBoxFilters.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
+  <data name="buttonFilterReset.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
+  </data>
   <data name="buttonFilterReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>815, 183</value>
+    <value>815, 146</value>
   </data>
   <data name="buttonFilterReset.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -424,7 +427,7 @@
     <value>0</value>
   </data>
   <data name="groupBox16.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 122</value>
+    <value>6, 85</value>
   </data>
   <data name="groupBox16.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 64</value>
@@ -502,7 +505,7 @@
     <value>1</value>
   </data>
   <data name="groupBox14.Location" type="System.Drawing.Point, System.Drawing">
-    <value>137, 122</value>
+    <value>137, 85</value>
   </data>
   <data name="groupBox14.Size" type="System.Drawing.Size, System.Drawing">
     <value>115, 64</value>
@@ -556,7 +559,7 @@
     <value>6, 14</value>
   </data>
   <data name="listBoxThenFilterLevel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 108</value>
+    <value>246, 69</value>
   </data>
   <data name="listBoxThenFilterLevel1.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -577,7 +580,7 @@
     <value>272, 14</value>
   </data>
   <data name="groupBoxFilterThen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 192</value>
+    <value>258, 155</value>
   </data>
   <data name="groupBoxFilterThen.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -628,7 +631,7 @@
     <value>0</value>
   </data>
   <data name="groupBox15.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 122</value>
+    <value>6, 85</value>
   </data>
   <data name="groupBox15.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 64</value>
@@ -706,7 +709,7 @@
     <value>1</value>
   </data>
   <data name="groupBox9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>137, 122</value>
+    <value>137, 85</value>
   </data>
   <data name="groupBox9.Size" type="System.Drawing.Size, System.Drawing">
     <value>115, 64</value>
@@ -736,7 +739,7 @@
     <value>6, 14</value>
   </data>
   <data name="listBoxConditionFilterLevel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 108</value>
+    <value>246, 69</value>
   </data>
   <data name="listBoxConditionFilterLevel1.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -757,7 +760,7 @@
     <value>7, 14</value>
   </data>
   <data name="groupBoxFilterCondition.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 192</value>
+    <value>258, 155</value>
   </data>
   <data name="groupBoxFilterCondition.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -1177,7 +1180,7 @@
     <value>6, 6</value>
   </data>
   <data name="groupBoxFilters.Size" type="System.Drawing.Size, System.Drawing">
-    <value>896, 212</value>
+    <value>896, 175</value>
   </data>
   <data name="groupBoxFilters.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>

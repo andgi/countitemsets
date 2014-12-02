@@ -42,19 +42,23 @@
             this.textBoxTime = new System.Windows.Forms.TextBox();
             this.groupBoxAssociationRules = new System.Windows.Forms.GroupBox();
             this.groupBoxFilters = new System.Windows.Forms.GroupBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.buttonFilterReset = new System.Windows.Forms.Button();
+            this.groupBoxFilterThen = new System.Windows.Forms.GroupBox();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.comboBoxFilterThen = new System.Windows.Forms.ComboBox();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.labelThenItemMaxSupport = new System.Windows.Forms.Label();
             this.trackBarThenItemMaxSupport = new System.Windows.Forms.TrackBar();
-            this.labelConditionItemMaxSupport = new System.Windows.Forms.Label();
-            this.trackBarConditionItemMaxSupport = new System.Windows.Forms.TrackBar();
-            this.groupBoxFilterThen = new System.Windows.Forms.GroupBox();
-            this.comboBoxFilterThen = new System.Windows.Forms.ComboBox();
             this.listBoxThenFilterLevel1 = new System.Windows.Forms.ListBox();
             this.contextMenuStripFilterLevel1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectAllToolStripMenuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.selectNoneToolStripMenuSelectNone = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxFilterCondition = new System.Windows.Forms.GroupBox();
+            this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.comboBoxFilterCondition = new System.Windows.Forms.ComboBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.labelConditionItemMaxSupport = new System.Windows.Forms.Label();
+            this.trackBarConditionItemMaxSupport = new System.Windows.Forms.TrackBar();
             this.listBoxConditionFilterLevel1 = new System.Windows.Forms.ListBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.labelMaxSupport = new System.Windows.Forms.Label();
@@ -159,19 +163,18 @@
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.groupBox15 = new System.Windows.Forms.GroupBox();
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.buttonFilterReset = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBoxFilters.SuspendLayout();
-            this.groupBox9.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).BeginInit();
             this.groupBoxFilterThen.SuspendLayout();
+            this.groupBox16.SuspendLayout();
+            this.groupBox14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).BeginInit();
             this.contextMenuStripFilterLevel1.SuspendLayout();
             this.groupBoxFilterCondition.SuspendLayout();
+            this.groupBox15.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).BeginInit();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMinSupport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMaxSupport)).BeginInit();
@@ -192,9 +195,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPruningMinSupport)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox10.SuspendLayout();
-            this.groupBox14.SuspendLayout();
-            this.groupBox15.SuspendLayout();
-            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -282,13 +282,44 @@
             this.groupBoxFilters.TabStop = false;
             this.groupBoxFilters.Resize += new System.EventHandler(this.groupBoxFilters_Resize);
             // 
-            // groupBox9
+            // buttonFilterReset
             // 
-            resources.ApplyResources(this.groupBox9, "groupBox9");
-            this.groupBox9.Controls.Add(this.labelConditionItemMaxSupport);
-            this.groupBox9.Controls.Add(this.trackBarConditionItemMaxSupport);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.TabStop = false;
+            resources.ApplyResources(this.buttonFilterReset, "buttonFilterReset");
+            this.buttonFilterReset.Name = "buttonFilterReset";
+            this.buttonFilterReset.UseVisualStyleBackColor = true;
+            this.buttonFilterReset.Click += new System.EventHandler(this.buttonFilterReset_Click);
+            // 
+            // groupBoxFilterThen
+            // 
+            resources.ApplyResources(this.groupBoxFilterThen, "groupBoxFilterThen");
+            this.groupBoxFilterThen.Controls.Add(this.groupBox16);
+            this.groupBoxFilterThen.Controls.Add(this.groupBox14);
+            this.groupBoxFilterThen.Controls.Add(this.listBoxThenFilterLevel1);
+            this.groupBoxFilterThen.Name = "groupBoxFilterThen";
+            this.groupBoxFilterThen.TabStop = false;
+            // 
+            // groupBox16
+            // 
+            resources.ApplyResources(this.groupBox16, "groupBox16");
+            this.groupBox16.Controls.Add(this.comboBoxFilterThen);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.TabStop = false;
+            // 
+            // comboBoxFilterThen
+            // 
+            resources.ApplyResources(this.comboBoxFilterThen, "comboBoxFilterThen");
+            this.comboBoxFilterThen.FormattingEnabled = true;
+            this.comboBoxFilterThen.Name = "comboBoxFilterThen";
+            this.comboBoxFilterThen.SelectedIndexChanged += new System.EventHandler(this.comboBoxFilterThen_SelectedIndexChanged);
+            this.comboBoxFilterThen.TextUpdate += new System.EventHandler(this.comboBoxFilterThen_TextUpdate);
+            // 
+            // groupBox14
+            // 
+            resources.ApplyResources(this.groupBox14, "groupBox14");
+            this.groupBox14.Controls.Add(this.labelThenItemMaxSupport);
+            this.groupBox14.Controls.Add(this.trackBarThenItemMaxSupport);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.TabStop = false;
             // 
             // labelThenItemMaxSupport
             // 
@@ -305,39 +336,6 @@
             this.trackBarThenItemMaxSupport.Value = 100;
             this.trackBarThenItemMaxSupport.Scroll += new System.EventHandler(this.trackBarThenItemMaxSupport_Scroll);
             this.trackBarThenItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarThenItemMaxSupport_ValueChanged);
-            // 
-            // labelConditionItemMaxSupport
-            // 
-            resources.ApplyResources(this.labelConditionItemMaxSupport, "labelConditionItemMaxSupport");
-            this.labelConditionItemMaxSupport.Name = "labelConditionItemMaxSupport";
-            // 
-            // trackBarConditionItemMaxSupport
-            // 
-            this.trackBarConditionItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            resources.ApplyResources(this.trackBarConditionItemMaxSupport, "trackBarConditionItemMaxSupport");
-            this.trackBarConditionItemMaxSupport.Maximum = 100;
-            this.trackBarConditionItemMaxSupport.Name = "trackBarConditionItemMaxSupport";
-            this.trackBarConditionItemMaxSupport.TickFrequency = 10;
-            this.trackBarConditionItemMaxSupport.Value = 100;
-            this.trackBarConditionItemMaxSupport.Scroll += new System.EventHandler(this.trackBarConditionItemMaxSupport_Scroll);
-            this.trackBarConditionItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarConditionItemMaxSupport_ValueChanged);
-            // 
-            // groupBoxFilterThen
-            // 
-            resources.ApplyResources(this.groupBoxFilterThen, "groupBoxFilterThen");
-            this.groupBoxFilterThen.Controls.Add(this.groupBox16);
-            this.groupBoxFilterThen.Controls.Add(this.groupBox14);
-            this.groupBoxFilterThen.Controls.Add(this.listBoxThenFilterLevel1);
-            this.groupBoxFilterThen.Name = "groupBoxFilterThen";
-            this.groupBoxFilterThen.TabStop = false;
-            // 
-            // comboBoxFilterThen
-            // 
-            resources.ApplyResources(this.comboBoxFilterThen, "comboBoxFilterThen");
-            this.comboBoxFilterThen.FormattingEnabled = true;
-            this.comboBoxFilterThen.Name = "comboBoxFilterThen";
-            this.comboBoxFilterThen.SelectedIndexChanged += new System.EventHandler(this.comboBoxFilterThen_SelectedIndexChanged);
-            this.comboBoxFilterThen.TextUpdate += new System.EventHandler(this.comboBoxFilterThen_TextUpdate);
             // 
             // listBoxThenFilterLevel1
             // 
@@ -377,6 +375,13 @@
             this.groupBoxFilterCondition.Name = "groupBoxFilterCondition";
             this.groupBoxFilterCondition.TabStop = false;
             // 
+            // groupBox15
+            // 
+            resources.ApplyResources(this.groupBox15, "groupBox15");
+            this.groupBox15.Controls.Add(this.comboBoxFilterCondition);
+            this.groupBox15.Name = "groupBox15";
+            this.groupBox15.TabStop = false;
+            // 
             // comboBoxFilterCondition
             // 
             resources.ApplyResources(this.comboBoxFilterCondition, "comboBoxFilterCondition");
@@ -384,6 +389,30 @@
             this.comboBoxFilterCondition.Name = "comboBoxFilterCondition";
             this.comboBoxFilterCondition.SelectedIndexChanged += new System.EventHandler(this.comboBoxFilterCondition_SelectedIndexChanged);
             this.comboBoxFilterCondition.TextUpdate += new System.EventHandler(this.comboBoxFilterCondition_TextUpdate);
+            // 
+            // groupBox9
+            // 
+            resources.ApplyResources(this.groupBox9, "groupBox9");
+            this.groupBox9.Controls.Add(this.labelConditionItemMaxSupport);
+            this.groupBox9.Controls.Add(this.trackBarConditionItemMaxSupport);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.TabStop = false;
+            // 
+            // labelConditionItemMaxSupport
+            // 
+            resources.ApplyResources(this.labelConditionItemMaxSupport, "labelConditionItemMaxSupport");
+            this.labelConditionItemMaxSupport.Name = "labelConditionItemMaxSupport";
+            // 
+            // trackBarConditionItemMaxSupport
+            // 
+            this.trackBarConditionItemMaxSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            resources.ApplyResources(this.trackBarConditionItemMaxSupport, "trackBarConditionItemMaxSupport");
+            this.trackBarConditionItemMaxSupport.Maximum = 100;
+            this.trackBarConditionItemMaxSupport.Name = "trackBarConditionItemMaxSupport";
+            this.trackBarConditionItemMaxSupport.TickFrequency = 10;
+            this.trackBarConditionItemMaxSupport.Value = 100;
+            this.trackBarConditionItemMaxSupport.Scroll += new System.EventHandler(this.trackBarConditionItemMaxSupport_Scroll);
+            this.trackBarConditionItemMaxSupport.ValueChanged += new System.EventHandler(this.trackBarConditionItemMaxSupport_ValueChanged);
             // 
             // listBoxConditionFilterLevel1
             // 
@@ -1120,35 +1149,6 @@
             this.richTextBoxSelectedRule.Name = "richTextBoxSelectedRule";
             this.richTextBoxSelectedRule.ReadOnly = true;
             // 
-            // groupBox14
-            // 
-            resources.ApplyResources(this.groupBox14, "groupBox14");
-            this.groupBox14.Controls.Add(this.labelThenItemMaxSupport);
-            this.groupBox14.Controls.Add(this.trackBarThenItemMaxSupport);
-            this.groupBox14.Name = "groupBox14";
-            this.groupBox14.TabStop = false;
-            // 
-            // groupBox15
-            // 
-            resources.ApplyResources(this.groupBox15, "groupBox15");
-            this.groupBox15.Controls.Add(this.comboBoxFilterCondition);
-            this.groupBox15.Name = "groupBox15";
-            this.groupBox15.TabStop = false;
-            // 
-            // groupBox16
-            // 
-            resources.ApplyResources(this.groupBox16, "groupBox16");
-            this.groupBox16.Controls.Add(this.comboBoxFilterThen);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.TabStop = false;
-            // 
-            // buttonFilterReset
-            // 
-            resources.ApplyResources(this.buttonFilterReset, "buttonFilterReset");
-            this.buttonFilterReset.Name = "buttonFilterReset";
-            this.buttonFilterReset.UseVisualStyleBackColor = true;
-            this.buttonFilterReset.Click += new System.EventHandler(this.buttonFilterReset_Click);
-            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -1162,13 +1162,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
             this.groupBoxAssociationRules.ResumeLayout(false);
             this.groupBoxFilters.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
-            this.groupBox9.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).EndInit();
             this.groupBoxFilterThen.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarThenItemMaxSupport)).EndInit();
             this.contextMenuStripFilterLevel1.ResumeLayout(false);
             this.groupBoxFilterCondition.ResumeLayout(false);
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarConditionItemMaxSupport)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarMinSupport)).EndInit();
@@ -1199,10 +1203,6 @@
             this.tabPage2.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);
             this.groupBox10.PerformLayout();
-            this.groupBox14.ResumeLayout(false);
-            this.groupBox14.PerformLayout();
-            this.groupBox15.ResumeLayout(false);
-            this.groupBox16.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
