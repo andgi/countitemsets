@@ -13,5 +13,8 @@ namespace CountItemSets
         IDictionary<string, int> Level3 { get; }
         IDictionary<string, int> Level4 { get; }
         IDictionary<string, int> Level5 { get; }
+
+        public delegate void GenerateCallBack();
+        public void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack);
     }
 }

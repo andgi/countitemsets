@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.IO;
 using System.Xml;
 using Microsoft.VisualBasic.FileIO;
@@ -33,12 +34,20 @@ namespace CountItemSets
         private string fileNameTransaction; // Should be handled by separate class TransactionReader
         private int transactionCount; // Should be handled by separate class TransactionReader
         Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>(); // Should be handled by separate class TransactionContext
+        private string fileNameExcludeItems; // Should be handled by separate class
 
         private int progressGenerate = 0;
         private double pruningMinSupport = 0.0001;
-
-        private void GenerateThread()
+        void BeginGenerate(string fileNameTransaction, IFrequentItemsetGenerator.GenerateCallBack callBack)
         {
+            this.fileNameTransaction = fileNameTransaction;
+            Thread thread = new Thread(new ParameterizedThreadStart(GenerateThread));
+            thread.Start(callBack);
+        }
+
+        private void GenerateThread(object obj)
+        {
+            IFrequentItemsetGenerator.GenerateCallBack callBack = obj as IFrequentItemsetGenerator.GenerateCallBack;
             progressGenerate = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -1186,6 +1195,36 @@ namespace CountItemSets
             stopwatch.Stop();
             //textBoxTime.Text = stopwatch.Elapsed.ToString();
             progressGenerate = 100;
+
+            callBack();
+        }
+
+        private void LoadPruningExcludeItems()
+        {
+            pruningExcludeItems.Clear();
+            if (fileNameExcludeItems == "")
+                return;
+            StreamReader reader = new StreamReader(fileNameExcludeItems);
+            int rowCount = 0;
+            while (!reader.EndOfStream)
+            {
+                try
+                {
+                    String line = reader.ReadLine();
+                    String[] columns = line.Split(';');
+                    if (rowCount > 0)
+                    {
+                        long eanNr = Int64.Parse(columns[0]);
+                        pruningExcludeItems.Add(eanNr);
+                    }
+                    rowCount++;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                };
+            }
+            reader.Close();
         }
 
 
