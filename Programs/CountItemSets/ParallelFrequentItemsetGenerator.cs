@@ -17,11 +17,11 @@ namespace CountItemSets
 {
     public class ParallelFrequentItemsetGenerator : IFrequentItemsetGenerator
     {
-        IDictionary<long, int> Level1 { get { return dictionaryLevel1; } }
-        IDictionary<string, int> Level2 { get { return dictionaryLevel2; } }
-        IDictionary<string, int> Level3 { get { return dictionaryLevel3; } }
-        IDictionary<string, int> Level4 { get { return dictionaryLevel4; } }
-        IDictionary<string, int> Level5 { get { return dictionaryLevel5; } }
+        public IDictionary<long, int> Level1 { get { return dictionaryLevel1; } }
+        public IDictionary<string, int> Level2 { get { return dictionaryLevel2; } }
+        public IDictionary<string, int> Level3 { get { return dictionaryLevel3; } }
+        public IDictionary<string, int> Level4 { get { return dictionaryLevel4; } }
+        public IDictionary<string, int> Level5 { get { return dictionaryLevel5; } }
 
         private Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
         private Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
@@ -33,23 +33,50 @@ namespace CountItemSets
 
         private string fileNameTransaction; // Should be handled by separate class TransactionReader
         private int transactionCount; // Should be handled by separate class TransactionReader
-        Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>(); // Should be handled by separate class TransactionContext
+        private Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>(); // Should be handled by separate class TransactionContext
         private string fileNameExcludeItems; // Should be handled by separate class
 
         private int progressGenerate = 0;
+        private Stopwatch stopwatch = new Stopwatch();
         private double pruningMinSupport = 0.0001;
-        void BeginGenerate(string fileNameTransaction, IFrequentItemsetGenerator.GenerateCallBack callBack)
+
+        public void SetPruningMinSupport(double minSupport)
+        {
+            pruningMinSupport = minSupport;
+        }
+
+        public int GetTransactionCount()
+        {
+            return transactionCount;
+        }
+
+        public int GetProgess()
+        {
+            return progressGenerate;
+        }
+
+        public Stopwatch GetStopWatch()
+        {
+            return stopwatch;
+        }
+
+        public Dictionary<long, int> GetDictionaryEANtoVGR()
+        {
+            return dictionaryEANtoVGR;
+        }
+
+        public void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack)
         {
             this.fileNameTransaction = fileNameTransaction;
             Thread thread = new Thread(new ParameterizedThreadStart(GenerateThread));
+            thread.Name = "GenaratorThread";
             thread.Start(callBack);
         }
 
         private void GenerateThread(object obj)
         {
-            IFrequentItemsetGenerator.GenerateCallBack callBack = obj as IFrequentItemsetGenerator.GenerateCallBack;
+            GenerateCallBack callBack = obj as GenerateCallBack;
             progressGenerate = 0;
-            Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             StreamReader reader = new StreamReader(fileNameTransaction);
             int rowCount = 0;

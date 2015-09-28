@@ -43,6 +43,8 @@ namespace CountItemSets
 
         public void ThreadUpdateDataGridView()
         {
+            IDictionary<long, int> dictionaryLevel1 = generator.Level1;
+            int transactionCount = generator.GetTransactionCount();
             for (; ; )
             {
                 WaitHandle.WaitAll(new WaitHandle[] { signalUpdateDataGridView });
@@ -179,18 +181,20 @@ namespace CountItemSets
             config.Save(ConfigurationSaveMode.Modified);
         }
 
+        public ParallelFrequentItemsetGenerator generator = new ParallelFrequentItemsetGenerator();
+
         static Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
         static Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
         static Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>();
         static Dictionary<string, double> dictionaryRule = new Dictionary<string, double>();
 
-        static Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
-        Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
-        Dictionary<string, int> dictionaryLevel3 = new Dictionary<string, int>();
-        Dictionary<string, int> dictionaryLevel4 = new Dictionary<string, int>();
-        Dictionary<string, int> dictionaryLevel5 = new Dictionary<string, int>();
+        //static Dictionary<long, int> dictionaryLevel1 = new Dictionary<long, int>();
+        //Dictionary<string, int> dictionaryLevel2 = new Dictionary<string, int>();
+        //Dictionary<string, int> dictionaryLevel3 = new Dictionary<string, int>();
+        //Dictionary<string, int> dictionaryLevel4 = new Dictionary<string, int>();
+        //Dictionary<string, int> dictionaryLevel5 = new Dictionary<string, int>();
 
-        static int transactionCount = 0;
+        //static int transactionCount = 0;
         double pruningMinSupport = 0.0001;
         HashSet<long> pruningExcludeItems = new HashSet<long>();
 
@@ -242,7 +246,8 @@ namespace CountItemSets
             reader.Close();
         }
 
-        private void CountItemSets()
+#if XYZ
+        private void Deprecated_CountItemSets()
         {
             progressBarLoadingData.Value = 0;
             Stopwatch stopwatch = new Stopwatch();
@@ -1393,6 +1398,7 @@ namespace CountItemSets
             textBoxTime.Text = stopwatch.Elapsed.ToString();
             progressBarLoadingData.Value = 100;
         }
+#endif
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
@@ -1403,15 +1409,47 @@ namespace CountItemSets
 
             InitStaticTables();
 
-            CountItemSets();
+            //CountItemSets();
+            generator.SetPruningMinSupport(pruningMinSupport);
+            generator.BeginGenerate(textBoxFileName.Text, buttonStart_Click_Callback);
+            Thread thread = new Thread(new ThreadStart(buttonStart_Click_Surveillance));
+            thread.Name = "SurveillanceGeneratorThread";
+            thread.Start();
+        }
 
-            InitFilters();
+        private void buttonStart_Click_Surveillance()
+        {
+            for(;;)
+            {
+                int progress = generator.GetProgess();
+                Stopwatch stopwatch = generator.GetStopWatch();
+                Invoke((Action)(() =>
+                {
+                    progressBarLoadingData.Value = progress;
+                    textBoxTime.Text = stopwatch.Elapsed.ToString();
+                }));
+                if (progress == 100) break;
+                Thread.Sleep(10);
+            }
+        }
+
+        private void buttonStart_Click_Callback()
+        {
+            dictionaryEANtoVGR = generator.GetDictionaryEANtoVGR();
+
+            Invoke((Action)(() =>
+            {
+                InitFilters();
+            }));
 
             GenerateRules();
 
-            UpdateMetaData();
+            Invoke((Action)(() =>
+            {
+                UpdateMetaData();
 
-            buttonStart.Enabled = true;
+                buttonStart.Enabled = true;
+            }));            
         }
 
         void InitStaticTables()
@@ -1489,6 +1527,7 @@ namespace CountItemSets
 
         void InitFilters()
         {
+            IDictionary<long, int> dictionaryLevel1 = generator.Level1;
             listBoxConditionFilterLevel1.Items.Clear();
             listBoxThenFilterLevel1.Items.Clear();
             List<KeyValuePair<int, string>> groupItems = new List<KeyValuePair<int, string>>();
@@ -1536,7 +1575,14 @@ namespace CountItemSets
 
         void GenerateRules()
         {
+            int transactionCount = generator.GetTransactionCount();
+            IDictionary<long, int> dictionaryLevel1 = generator.Level1;
+            IDictionary<string, int> dictionaryLevel2 = generator.Level2;
+            IDictionary<string, int> dictionaryLevel3 = generator.Level3;
+            IDictionary<string, int> dictionaryLevel4 = generator.Level4;
+            IDictionary<string, int> dictionaryLevel5 = generator.Level5;
             // Building association rules
+            AssociationRule.SetCurrentGenerator(generator); 
             results = new List<AssociationRule>();
             foreach (KeyValuePair<string, int> pair in dictionaryLevel2)
             {
@@ -1606,6 +1652,11 @@ namespace CountItemSets
 
         private void UpdateMetaData()
         {
+            int transactionCount = generator.GetTransactionCount();
+            IDictionary<string, int> dictionaryLevel2 = generator.Level2;
+            IDictionary<string, int> dictionaryLevel3 = generator.Level3;
+            IDictionary<string, int> dictionaryLevel4 = generator.Level4;
+            IDictionary<string, int> dictionaryLevel5 = generator.Level5;
             textBoxTransactionCount.Text = transactionCount.ToString();
             textBoxNrFrequentItemsets.Text = (dictionaryLevel2.Count + dictionaryLevel3.Count + dictionaryLevel4.Count + dictionaryLevel5.Count).ToString();
             textBoxNrAssociationRules.Text = (dictionaryLevel2.Count * 2 + dictionaryLevel3.Count * 3 + dictionaryLevel4.Count * 4 + dictionaryLevel5.Count * 5).ToString();
@@ -1649,6 +1700,13 @@ namespace CountItemSets
             public double Lift { get; set; }
             public double Support { get; set; }
 
+            private static IFrequentItemsetGenerator generator;
+
+            public static void SetCurrentGenerator(IFrequentItemsetGenerator generator) 
+            {
+                AssociationRule.generator = generator;
+            }
+
             public AssociationRule(long condition1, long condition2, long condition3, long condition4, long then, double confidence, double lift, double support)
             {
                 Condition1 = new TransactionItem(condition1);
@@ -1683,7 +1741,7 @@ namespace CountItemSets
                 public bool IsGroup { get { return EANCode < 0; } }
                 public bool IsItem { get { return EANCode > 0; } }
                 public bool IsEmpty { get { return EANCode == 0; } }
-                public double Support { get { if (IsGroup || IsItem) return (double)dictionaryLevel1[EANCode] / transactionCount; else return 0.0; } }
+                public double Support { get { if (IsGroup || IsItem) return (double)generator.Level1[EANCode] / generator.GetTransactionCount(); else return 0.0; } }
                 public TransactionItem(long eanCode)
                 {
                     EANCode = eanCode;
@@ -2088,6 +2146,12 @@ namespace CountItemSets
 
         private void buttonSaveItemsets_Click(object sender, EventArgs e)
         {
+            int transactionCount = generator.GetTransactionCount();
+            IDictionary<long, int> dictionaryLevel1 = generator.Level1;
+            IDictionary<string, int> dictionaryLevel2 = generator.Level2;
+            IDictionary<string, int> dictionaryLevel3 = generator.Level3;
+            IDictionary<string, int> dictionaryLevel4 = generator.Level4;
+            IDictionary<string, int> dictionaryLevel5 = generator.Level5;
             saveFileDialog1.Filter = "Xml files (*.xml)|*.xml";
             saveFileDialog1.ShowDialog();
             string fileName = saveFileDialog1.FileName;
@@ -2154,6 +2218,12 @@ namespace CountItemSets
 
         private void buttonLoadItemsets_Click(object sender, EventArgs e)
         {
+            int transactionCount = generator.GetTransactionCount();
+            IDictionary<long, int> dictionaryLevel1 = generator.Level1;
+            IDictionary<string, int> dictionaryLevel2 = generator.Level2;
+            IDictionary<string, int> dictionaryLevel3 = generator.Level3;
+            IDictionary<string, int> dictionaryLevel4 = generator.Level4;
+            IDictionary<string, int> dictionaryLevel5 = generator.Level5;
             Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
 
             InitStaticTables();

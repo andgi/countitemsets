@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace CountItemSets
 {
+    public delegate void GenerateCallBack();
+
     public interface IFrequentItemsetGenerator
     {
         IDictionary<long, int> Level1 { get; }
@@ -14,7 +16,8 @@ namespace CountItemSets
         IDictionary<string, int> Level4 { get; }
         IDictionary<string, int> Level5 { get; }
 
-        public delegate void GenerateCallBack();
-        public void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack);
+        void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack);
+        int GetTransactionCount();
+        void SetPruningMinSupport(double minSupport);
     }
 }
