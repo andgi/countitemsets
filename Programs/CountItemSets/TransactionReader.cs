@@ -11,33 +11,114 @@ namespace CountItemSets
     {
         public class Transaction
         {
+            public List<long> EANCodes { get; set; }
+            public List<long> VGRCodes { get; set; }
             public Transaction()
             {
-
+                EANCodes = new List<long>(10);
+                VGRCodes = new List<long>(10);
             }
         }
 
+        private Transaction current = new Transaction();
         private string fileName;
         private int transactionCount;
         private StreamReader reader;
-        public TransactionReader(string fileName)
+        private bool endOfFile;
+        private string lastLine = null;
+        private int lastTransNr = 0;
+        private Dictionary<long, int> dictionaryEANtoVGR;
+        public TransactionReader(string fileName, Dictionary<long, int> dictionaryEANtoVGR)
         {
             this.fileName = fileName;
+            this.dictionaryEANtoVGR = dictionaryEANtoVGR;
         }
         
         public void Begin() 
         {
-            reader = new StreamReader(fileName);
+            transactionCount = 0;
+            try
+            {
+                reader = new StreamReader(fileName);
+                endOfFile = false;
+                // Read column headers 
+                // TODO: Handle names to index mapping
+                if (!reader.EndOfStream)
+                    reader.ReadLine();
+                // Read first transaction row
+                if (!reader.EndOfStream)
+                {
+                    lastLine = reader.ReadLine();
+                    String[] columns = lastLine.Split(';');
+                    lastTransNr = Int32.Parse(columns[0]);
+                }
+                else
+                {
+                    lastLine = null;
+                    endOfFile = true;
+                }
+            }
+            catch (Exception)
+            {
+                if (reader != null)
+                    reader.Close();
+                endOfFile = true;
+            }
         }
 
-        public bool ReadNext()
+        public bool Read()
         {
-            return false;
+            if (lastLine == null)
+                endOfFile = true;
+            if (endOfFile)
+                return false;
+            transactionCount++;
+            current.EANCodes.Clear();
+            current.VGRCodes.Clear();
+            while (lastLine != null)
+            {
+                try
+                {
+                    String[] columns = lastLine.Split(';');
+                    int transNr = Int32.Parse(columns[0]);
+                    if (transNr != lastTransNr)
+                    {
+                        lastTransNr = transNr;
+                        break;
+                    }
+
+                    long eanNr = Int64.Parse(columns[1]);
+                    int vgrNr = Int32.Parse(columns[2]);
+                    if (!dictionaryEANtoVGR.ContainsKey(eanNr))
+                        dictionaryEANtoVGR.Add(eanNr, vgrNr);
+                    current.VGRCodes.Add(-vgrNr);
+                    current.EANCodes.Add(eanNr);
+                }
+                catch (Exception) { }
+                if (!reader.EndOfStream && transactionCount<40000)
+                    lastLine = reader.ReadLine();
+                else
+                {
+                    reader.Close();
+                    lastLine = null;
+                }
+            }
+            current.EANCodes.Sort();
+            current.EANCodes = new List<long>(current.EANCodes.Distinct());
+            current.VGRCodes.Sort();
+            current.VGRCodes = new List<long>(current.VGRCodes.Distinct());
+            return true;
         }
 
-        public Transaction Current()
+        public Transaction Current
         {
-            return null;
+            get
+            {
+                if (!endOfFile)
+                    return current;
+                else
+                    return null;
+            }
         }
     }
 }

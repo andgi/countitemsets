@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace CountItemSets
 {
@@ -19,5 +20,10 @@ namespace CountItemSets
         void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack);
         int GetTransactionCount();
         void SetPruningMinSupport(double minSupport);
+
+        int GetProgess();
+        Stopwatch GetStopWatch();
+        Dictionary<long, int> GetDictionaryEANtoVGR();
+
     }
 }

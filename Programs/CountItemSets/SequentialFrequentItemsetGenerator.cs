@@ -4,18 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using System.IO;
-using System.Xml;
-using Microsoft.VisualBasic.FileIO;
-using System.Configuration;
 using System.Diagnostics;
-using System.Globalization;
-using System.Resources;
-using System.Windows.Forms;
 
 namespace CountItemSets
 {
-    public class ParallelFrequentItemsetGenerator : IFrequentItemsetGenerator
+    public class SequentialFrequentItemsetGenerator : IFrequentItemsetGenerator
     {
         public IDictionary<long, int> Level1 { get { return dictionaryLevel1; } }
         public IDictionary<string, int> Level2 { get { return dictionaryLevel2; } }
@@ -89,7 +82,7 @@ namespace CountItemSets
             transactionCount = 0;
             while (reader.Read())
             {
-                transactionCount++; 
+                transactionCount++;
                 List<long> keys = reader.Current.EANCodes;
                 List<long> vgrs = reader.Current.VGRCodes;
                 foreach (long eanNr in keys)
@@ -197,10 +190,8 @@ namespace CountItemSets
                 List<long> keys = reader.Current.EANCodes;
                 if (keys.Count > 2)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 2];
-                    Parallel.For(0, keys.Count - 2, i =>
+                    for (int i = 0; i < (keys.Count - 2); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 1); j++)
@@ -213,20 +204,13 @@ namespace CountItemSets
                                         if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3))
                                         {
                                             string keyName = key1 + "," + key2 + "," + key3;
-                                            keyNames[i].Add(keyName);
+                                            if (dictionaryLevel3.ContainsKey(keyName))
+                                                dictionaryLevel3[keyName]++;
+                                            else
+                                                dictionaryLevel3.Add(keyName, 1);
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 2); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel3.ContainsKey(keyName))
-                                dictionaryLevel3[keyName]++;
-                            else
-                                dictionaryLevel3.Add(keyName, 1);
-                        }
                     }
                 }
             }
@@ -238,10 +222,8 @@ namespace CountItemSets
                 List<long> vgrs = reader.Current.VGRCodes;
                 if (keys.Count > 1 && vgrs.Count > 0)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 1];
-                    Parallel.For(0, keys.Count - 1, i =>
+                    for (int i = 0; i < (keys.Count - 1); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 0); j++)
@@ -255,20 +237,13 @@ namespace CountItemSets
                                             /* && dictionaryEANtoVGR[key1] != -key3 && dictionaryEANtoVGR[key2] != -key3 */)
                                         {
                                             string keyName = key1 + "," + key2 + "," + key3;
-                                            keyNames[i].Add(keyName);
+                                            if (dictionaryLevel3.ContainsKey(keyName))
+                                                dictionaryLevel3[keyName]++;
+                                            else
+                                                dictionaryLevel3.Add(keyName, 1);
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 1); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel3.ContainsKey(keyName))
-                                dictionaryLevel3[keyName]++;
-                            else
-                                dictionaryLevel3.Add(keyName, 1);
-                        }
                     }
                 }
             }
@@ -280,10 +255,8 @@ namespace CountItemSets
                 List<long> vgrs = reader.Current.VGRCodes;
                 if (keys.Count > 0 && vgrs.Count > 1)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count];
-                    Parallel.For(0, keys.Count, i =>
+                    for (int i = 0; i < (keys.Count); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = 0; j < (vgrs.Count - 1); j++)
@@ -297,20 +270,13 @@ namespace CountItemSets
                                             /* && dictionaryEANtoVGR[key1] != -key2 && dictionaryEANtoVGR[key1] != -key3 */)
                                         {
                                             string keyName = key1 + "," + key2 + "," + key3;
-                                            keyNames[i].Add(keyName);
+                                            if (dictionaryLevel3.ContainsKey(keyName))
+                                                dictionaryLevel3[keyName]++;
+                                            else
+                                                dictionaryLevel3.Add(keyName, 1);
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel3.ContainsKey(keyName))
-                                dictionaryLevel3[keyName]++;
-                            else
-                                dictionaryLevel3.Add(keyName, 1);
-                        }
                     }
                 }
             }
@@ -322,10 +288,8 @@ namespace CountItemSets
                 List<long> keys = reader.Current.VGRCodes;
                 if (keys.Count > 2)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 2];
-                    Parallel.For(0, keys.Count - 2, i =>
+                    for (int i = 0; i < (keys.Count - 2); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 1); j++)
@@ -338,20 +302,13 @@ namespace CountItemSets
                                         if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3))
                                         {
                                             string keyName = key1 + "," + key2 + "," + key3;
-                                            keyNames[i].Add(keyName);
+                                            if (dictionaryLevel3.ContainsKey(keyName))
+                                                dictionaryLevel3[keyName]++;
+                                            else
+                                                dictionaryLevel3.Add(keyName, 1);
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 2); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel3.ContainsKey(keyName))
-                                dictionaryLevel3[keyName]++;
-                            else
-                                dictionaryLevel3.Add(keyName, 1);
-                        }
                     }
                 }
             }
@@ -367,10 +324,8 @@ namespace CountItemSets
                 List<long> keys = reader.Current.EANCodes;
                 if (keys.Count > 3)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 3];
-                    Parallel.For(0, keys.Count - 3, i =>
+                    for (int i = 0; i < (keys.Count - 3); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 2); j++)
@@ -388,26 +343,19 @@ namespace CountItemSets
                                                 if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4))
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
-                                                    keyNames[i].Add(keyName);
+                                                    if (dictionaryLevel4.ContainsKey(keyName))
+                                                        dictionaryLevel4[keyName]++;
+                                                    else
+                                                        dictionaryLevel4.Add(keyName, 1);
                                                 }
                                             }
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 3); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel4.ContainsKey(keyName))
-                                dictionaryLevel4[keyName]++;
-                            else
-                                dictionaryLevel4.Add(keyName, 1);
-                        }
                     }
                 }
             }
-            
+
             // E1 E2 E3 V1
             reader.Begin();
             while (reader.Read())
@@ -416,10 +364,8 @@ namespace CountItemSets
                 List<long> vgrs = reader.Current.VGRCodes;
                 if (keys.Count > 2 && vgrs.Count > 0)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 2];
-                    Parallel.For(0, keys.Count - 2, i =>
+                    for (int i = 0; i < (keys.Count - 2); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 1); j++)
@@ -442,26 +388,19 @@ namespace CountItemSets
                                                     && dictionaryEANtoVGR[key3] != -key4 */)
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
-                                                    keyNames[i].Add(keyName);
+                                                    if (dictionaryLevel4.ContainsKey(keyName))
+                                                        dictionaryLevel4[keyName]++;
+                                                    else
+                                                        dictionaryLevel4.Add(keyName, 1);
                                                 }
                                             }
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 2); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel4.ContainsKey(keyName))
-                                dictionaryLevel4[keyName]++;
-                            else
-                                dictionaryLevel4.Add(keyName, 1);
-                        }
                     }
                 }
             }
-            
+
             // E1 E2 V1 V2
             reader.Begin();
             while (reader.Read())
@@ -470,10 +409,8 @@ namespace CountItemSets
                 List<long> vgrs = reader.Current.VGRCodes;
                 if (keys.Count > 1 && vgrs.Count > 1)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 1];
-                    Parallel.For(0, keys.Count - 1, i =>
+                    for (int i = 0; i < (keys.Count - 1); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 0); j++)
@@ -497,26 +434,19 @@ namespace CountItemSets
                                                     && dictionaryEANtoVGR[key2] != -key4 */)
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
-                                                    keyNames[i].Add(keyName);
+                                                    if (dictionaryLevel4.ContainsKey(keyName))
+                                                        dictionaryLevel4[keyName]++;
+                                                    else
+                                                        dictionaryLevel4.Add(keyName, 1);
                                                 }
                                             }
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 1); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel4.ContainsKey(keyName))
-                                dictionaryLevel4[keyName]++;
-                            else
-                                dictionaryLevel4.Add(keyName, 1);
-                        }
                     }
                 }
             }
-            
+
             // E1 V1 V2 V3
             reader.Begin();
             while (reader.Read())
@@ -525,10 +455,8 @@ namespace CountItemSets
                 List<long> vgrs = reader.Current.VGRCodes;
                 if (keys.Count > 0 && vgrs.Count > 2)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 0];
-                    Parallel.For(0, keys.Count - 0, i =>
+                    for (int i = 0; i < (keys.Count - 0); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = 0; j < (vgrs.Count - 2); j++)
@@ -551,26 +479,19 @@ namespace CountItemSets
                                                     && dictionaryEANtoVGR[key1] != -key4 */)
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
-                                                    keyNames[i].Add(keyName);
+                                                    if (dictionaryLevel4.ContainsKey(keyName))
+                                                        dictionaryLevel4[keyName]++;
+                                                    else
+                                                        dictionaryLevel4.Add(keyName, 1);
                                                 }
                                             }
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 0); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel4.ContainsKey(keyName))
-                                dictionaryLevel4[keyName]++;
-                            else
-                                dictionaryLevel4.Add(keyName, 1);
-                        }
                     }
                 }
             }
-            
+
             // V1 V2 V3 V4
             reader.Begin();
             while (reader.Read())
@@ -578,10 +499,8 @@ namespace CountItemSets
                 List<long> keys = reader.Current.VGRCodes;
                 if (keys.Count > 3)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 3];
-                    Parallel.For(0, keys.Count - 3, i =>
+                    for (int i = 0; i < (keys.Count - 3); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 2); j++)
@@ -599,22 +518,15 @@ namespace CountItemSets
                                                 if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4) && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4))
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
-                                                    keyNames[i].Add(keyName);
+                                                    if (dictionaryLevel4.ContainsKey(keyName))
+                                                        dictionaryLevel4[keyName]++;
+                                                    else
+                                                        dictionaryLevel4.Add(keyName, 1);
                                                 }
                                             }
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 3); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel4.ContainsKey(keyName))
-                                dictionaryLevel4[keyName]++;
-                            else
-                                dictionaryLevel4.Add(keyName, 1);
-                        }
                     }
                 }
             }
@@ -631,10 +543,8 @@ namespace CountItemSets
                 List<long> vgrs = reader.Current.VGRCodes;
                 if (keys.Count > 4)
                 {
-                    List<string>[] keyNames = new List<string>[keys.Count - 4];
-                    Parallel.For(0, keys.Count - 4, i =>
+                    for (int i = 0; i < (keys.Count - 4); i++)
                     {
-                        keyNames[i] = new List<string>();
                         long key1 = keys[i];
                         if (dictionaryLevel1.ContainsKey(key1))
                             for (int j = i + 1; j < (keys.Count - 3); j++)
@@ -657,7 +567,10 @@ namespace CountItemSets
                                                         if (dictionaryLevel4.ContainsKey(key2 + "," + key3 + "," + key4 + "," + key5) && dictionaryLevel4.ContainsKey(key1 + "," + key3 + "," + key4 + "," + key5) && dictionaryLevel4.ContainsKey(key1 + "," + key2 + "," + key4 + "," + key5) && dictionaryLevel4.ContainsKey(key1 + "," + key2 + "," + key3 + "," + key5))
                                                         {
                                                             string keyName = key1 + "," + key2 + "," + key3 + "," + key4 + "," + key5;
-                                                            keyNames[i].Add(keyName);
+                                                            if (dictionaryLevel5.ContainsKey(keyName))
+                                                                dictionaryLevel5[keyName]++;
+                                                            else
+                                                                dictionaryLevel5.Add(keyName, 1);
                                                         }
                                                     }
                                                 }
@@ -665,20 +578,10 @@ namespace CountItemSets
                                         }
                                     }
                             }
-                    }); //Parallel.For
-                    for (int i = 0; i < (keys.Count - 4); i++)
-                    {
-                        foreach (string keyName in keyNames[i])
-                        {
-                            if (dictionaryLevel5.ContainsKey(keyName))
-                                dictionaryLevel5[keyName]++;
-                            else
-                                dictionaryLevel5.Add(keyName, 1);
-                        }
                     }
                 }
             }
-            
+
             // V1 V2 V3 V4 V5
             /*            
             reader.Begin();
@@ -743,35 +646,5 @@ namespace CountItemSets
 
             callBack();
         }
-
-        private void LoadPruningExcludeItems()
-        {
-            pruningExcludeItems.Clear();
-            if (fileNameExcludeItems == "")
-                return;
-            StreamReader reader = new StreamReader(fileNameExcludeItems);
-            int rowCount = 0;
-            while (!reader.EndOfStream)
-            {
-                try
-                {
-                    String line = reader.ReadLine();
-                    String[] columns = line.Split(';');
-                    if (rowCount > 0)
-                    {
-                        long eanNr = Int64.Parse(columns[0]);
-                        pruningExcludeItems.Add(eanNr);
-                    }
-                    rowCount++;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                };
-            }
-            reader.Close();
-        }
-
-
     }
 }

@@ -181,7 +181,7 @@ namespace CountItemSets
             config.Save(ConfigurationSaveMode.Modified);
         }
 
-        public ParallelFrequentItemsetGenerator generator = new ParallelFrequentItemsetGenerator();
+        public IFrequentItemsetGenerator generator = new ParallelFrequentItemsetGenerator();
 
         static Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
         static Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
@@ -2218,69 +2218,16 @@ namespace CountItemSets
 
         private void buttonLoadItemsets_Click(object sender, EventArgs e)
         {
-            int transactionCount = generator.GetTransactionCount();
-            IDictionary<long, int> dictionaryLevel1 = generator.Level1;
-            IDictionary<string, int> dictionaryLevel2 = generator.Level2;
-            IDictionary<string, int> dictionaryLevel3 = generator.Level3;
-            IDictionary<string, int> dictionaryLevel4 = generator.Level4;
-            IDictionary<string, int> dictionaryLevel5 = generator.Level5;
             Application.UseWaitCursor = true; Application.DoEvents(); // Cursor = Cursors.WaitCursor;
 
             InitStaticTables();
 
-            XmlDocument document = new XmlDocument();
-            document.Load(fileNameItemsets);
-            XmlNode nodeDictionary = document.FirstChild.NextSibling.ChildNodes[0];
-            transactionCount = int.Parse(nodeDictionary.InnerText);
+            XMLFileGenerator generator = new XMLFileGenerator();
+            generator.Load(fileNameItemsets);
+            this.generator = generator;
+            int transactionCount = generator.GetTransactionCount();
             textBoxTransactionCount.Text = transactionCount.ToString();
-            nodeDictionary = nodeDictionary.NextSibling;
-            dictionaryEANtoVGR = new Dictionary<long, int>();
-            foreach (XmlNode node in nodeDictionary.ChildNodes)
-            {
-                long key = long.Parse(node.ChildNodes[0].InnerText);
-                int value = int.Parse(node.ChildNodes[1].InnerText);
-                dictionaryEANtoVGR.Add(key, value);
-            }
-            nodeDictionary = nodeDictionary.NextSibling;
-            dictionaryLevel1 = new Dictionary<long, int>();
-            foreach (XmlNode node in nodeDictionary.ChildNodes)
-            {
-                long key = long.Parse(node.ChildNodes[0].InnerText);
-                int value = int.Parse(node.ChildNodes[1].InnerText);
-                dictionaryLevel1.Add(key, value);
-            }
-            nodeDictionary = nodeDictionary.NextSibling;
-            dictionaryLevel2 = new Dictionary<string, int>();
-            foreach (XmlNode node in nodeDictionary.ChildNodes)
-            {
-                string key = node.ChildNodes[0].InnerText;
-                int value = int.Parse(node.ChildNodes[1].InnerText);
-                dictionaryLevel2.Add(key, value);
-            }
-            nodeDictionary = nodeDictionary.NextSibling;
-            dictionaryLevel3 = new Dictionary<string, int>();
-            foreach (XmlNode node in nodeDictionary.ChildNodes)
-            {
-                string key = node.ChildNodes[0].InnerText;
-                int value = int.Parse(node.ChildNodes[1].InnerText);
-                dictionaryLevel3.Add(key, value);
-            }
-            nodeDictionary = nodeDictionary.NextSibling;
-            dictionaryLevel4 = new Dictionary<string, int>();
-            foreach (XmlNode node in nodeDictionary.ChildNodes)
-            {
-                string key = node.ChildNodes[0].InnerText;
-                int value = int.Parse(node.ChildNodes[1].InnerText);
-                dictionaryLevel4.Add(key, value);
-            }
-            nodeDictionary = nodeDictionary.NextSibling;
-            dictionaryLevel5 = new Dictionary<string, int>();
-            foreach (XmlNode node in nodeDictionary.ChildNodes)
-            {
-                string key = node.ChildNodes[0].InnerText;
-                int value = int.Parse(node.ChildNodes[1].InnerText);
-                dictionaryLevel5.Add(key, value);
-            }
+            dictionaryEANtoVGR = generator.GetDictionaryEANtoVGR();
 
             InitFilters();
 
