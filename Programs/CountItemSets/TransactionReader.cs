@@ -27,11 +27,16 @@ namespace CountItemSets
         private bool endOfFile;
         private string lastLine = null;
         private int lastTransNr = 0;
+        private int maxNrTransactions = 1000000000;
         private Dictionary<long, int> dictionaryEANtoVGR;
         public TransactionReader(string fileName, Dictionary<long, int> dictionaryEANtoVGR)
         {
             this.fileName = fileName;
             this.dictionaryEANtoVGR = dictionaryEANtoVGR;
+        }
+        public void SetMaxNrTransactions(int maxNrTransactions)
+        {
+            this.maxNrTransactions = maxNrTransactions;
         }
         
         public void Begin() 
@@ -95,7 +100,7 @@ namespace CountItemSets
                     current.EANCodes.Add(eanNr);
                 }
                 catch (Exception) { }
-                if (!reader.EndOfStream && transactionCount<40000)
+                if (!reader.EndOfStream && transactionCount < maxNrTransactions)
                     lastLine = reader.ReadLine();
                 else
                 {

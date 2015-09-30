@@ -39,11 +39,17 @@ namespace CountItemSets
         private int progressGenerate = 0;
         private Stopwatch stopwatch = new Stopwatch();
         private double pruningMinSupport = 0.0001;
+        private int maxNrTransactions = 1000000000;
+        public void SetMaxNrTransactions(int maxNrTransactions)
+        {
+            this.maxNrTransactions = maxNrTransactions;
+        }
 
         public void SetPruningMinSupport(double minSupport)
         {
             pruningMinSupport = minSupport;
         }
+
 
         public int GetTransactionCount()
         {
@@ -73,6 +79,11 @@ namespace CountItemSets
             thread.Start(callBack);
         }
 
+        public void Generate(string fileNameTransaction)
+        {
+            GenerateThread(null);
+        }
+
         private void GenerateThread(object obj)
         {
             GenerateCallBack callBack = obj as GenerateCallBack;
@@ -80,6 +91,7 @@ namespace CountItemSets
             stopwatch.Restart();
 
             TransactionReader reader = new TransactionReader(fileNameTransaction, dictionaryEANtoVGR);
+            reader.SetMaxNrTransactions(maxNrTransactions);
 
             // Level 1
             dictionaryLevel1.Clear();
@@ -741,7 +753,7 @@ namespace CountItemSets
             //textBoxTime.Text = stopwatch.Elapsed.ToString();
             progressGenerate = 100;
 
-            callBack();
+            if (callBack != null) callBack();
         }
 
         private void LoadPruningExcludeItems()

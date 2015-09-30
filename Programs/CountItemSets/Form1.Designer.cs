@@ -163,6 +163,9 @@
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonExperiment = new System.Windows.Forms.Button();
+            this.textBoxExperimentLog = new System.Windows.Forms.TextBox();
+            this.textBoxFileNameExperimentLog = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBoxFilters.SuspendLayout();
@@ -865,6 +868,9 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.textBoxFileNameExperimentLog);
+            this.groupBox5.Controls.Add(this.textBoxExperimentLog);
+            this.groupBox5.Controls.Add(this.buttonExperiment);
             this.groupBox5.Controls.Add(this.label4);
             this.groupBox5.Controls.Add(this.textBoxTime);
             this.groupBox5.Controls.Add(this.groupBox6);
@@ -1149,6 +1155,23 @@
             this.richTextBoxSelectedRule.Name = "richTextBoxSelectedRule";
             this.richTextBoxSelectedRule.ReadOnly = true;
             // 
+            // buttonExperiment
+            // 
+            resources.ApplyResources(this.buttonExperiment, "buttonExperiment");
+            this.buttonExperiment.Name = "buttonExperiment";
+            this.buttonExperiment.UseVisualStyleBackColor = true;
+            this.buttonExperiment.Click += new System.EventHandler(this.buttonExperiment_Click);
+            // 
+            // textBoxExperimentLog
+            // 
+            resources.ApplyResources(this.textBoxExperimentLog, "textBoxExperimentLog");
+            this.textBoxExperimentLog.Name = "textBoxExperimentLog";
+            // 
+            // textBoxFileNameExperimentLog
+            // 
+            resources.ApplyResources(this.textBoxFileNameExperimentLog, "textBoxFileNameExperimentLog");
+            this.textBoxFileNameExperimentLog.Name = "textBoxFileNameExperimentLog";
+            // 
             // Form1
             // 
             resources.ApplyResources(this, "$this");
@@ -1343,6 +1366,9 @@
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.Button buttonFilterReset;
+        private System.Windows.Forms.Button buttonExperiment;
+        private System.Windows.Forms.TextBox textBoxFileNameExperimentLog;
+        private System.Windows.Forms.TextBox textBoxExperimentLog;
     }
 }
 

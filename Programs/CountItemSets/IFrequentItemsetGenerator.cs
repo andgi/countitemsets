@@ -18,9 +18,10 @@ namespace CountItemSets
         IDictionary<string, int> Level5 { get; }
 
         void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack);
+        void Generate(string fileNameTransaction);
         int GetTransactionCount();
         void SetPruningMinSupport(double minSupport);
-
+        void SetMaxNrTransactions(int maxNrTransactions);
         int GetProgess();
         Stopwatch GetStopWatch();
         Dictionary<long, int> GetDictionaryEANtoVGR();

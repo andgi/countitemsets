@@ -144,7 +144,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>7</value>
   </data>
   <data name="textBoxFileName.Location" type="System.Drawing.Point, System.Drawing">
     <value>65, 19</value>
@@ -165,7 +165,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;textBoxFileName.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>9</value>
   </data>
   <metadata name="openFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -192,7 +192,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;browseButton1.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>10</value>
   </data>
   <data name="buttonStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>359, 17</value>
@@ -216,7 +216,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;buttonStart.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>11</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="dataGridViewResults.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -316,7 +316,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;labelTime.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
   </data>
   <data name="textBoxTime.Location" type="System.Drawing.Point, System.Drawing">
     <value>221, 47</value>
@@ -337,7 +337,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;textBoxTime.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="groupBoxAssociationRules.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -1219,7 +1219,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;progressBarLoadingData.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>8</value>
   </data>
   <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>157, 17</value>
@@ -1507,7 +1507,7 @@
     <value>&amp;Options</value>
   </data>
   <data name="toolsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 20</value>
+    <value>47, 20</value>
   </data>
   <data name="toolsToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Tools</value>
@@ -1651,7 +1651,7 @@
     <value>2</value>
   </data>
   <data name="groupBox13.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 108</value>
+    <value>8, 151</value>
   </data>
   <data name="groupBox13.Size" type="System.Drawing.Size, System.Drawing">
     <value>863, 46</value>
@@ -1938,6 +1938,75 @@
   <data name="&gt;&gt;groupBox11.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="textBoxFileNameExperimentLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>65, 102</value>
+  </data>
+  <data name="textBoxFileNameExperimentLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>207, 20</value>
+  </data>
+  <data name="textBoxFileNameExperimentLog.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;textBoxFileNameExperimentLog.Name" xml:space="preserve">
+    <value>textBoxFileNameExperimentLog</value>
+  </data>
+  <data name="&gt;&gt;textBoxFileNameExperimentLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxFileNameExperimentLog.Parent" xml:space="preserve">
+    <value>groupBox5</value>
+  </data>
+  <data name="&gt;&gt;textBoxFileNameExperimentLog.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="textBoxExperimentLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>459, 56</value>
+  </data>
+  <data name="textBoxExperimentLog.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="textBoxExperimentLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>254, 66</value>
+  </data>
+  <data name="textBoxExperimentLog.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;textBoxExperimentLog.Name" xml:space="preserve">
+    <value>textBoxExperimentLog</value>
+  </data>
+  <data name="&gt;&gt;textBoxExperimentLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBoxExperimentLog.Parent" xml:space="preserve">
+    <value>groupBox5</value>
+  </data>
+  <data name="&gt;&gt;textBoxExperimentLog.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="buttonExperiment.Location" type="System.Drawing.Point, System.Drawing">
+    <value>458, 17</value>
+  </data>
+  <data name="buttonExperiment.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="buttonExperiment.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="buttonExperiment.Text" xml:space="preserve">
+    <value>EXPERIMENT</value>
+  </data>
+  <data name="&gt;&gt;buttonExperiment.Name" xml:space="preserve">
+    <value>buttonExperiment</value>
+  </data>
+  <data name="&gt;&gt;buttonExperiment.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;buttonExperiment.Parent" xml:space="preserve">
+    <value>groupBox5</value>
+  </data>
+  <data name="&gt;&gt;buttonExperiment.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1963,7 +2032,7 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="labelPruningMinSupport.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2035,13 +2104,13 @@
     <value>groupBox5</value>
   </data>
   <data name="&gt;&gt;groupBox6.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
   </data>
   <data name="groupBox5.Location" type="System.Drawing.Point, System.Drawing">
     <value>8, 6</value>
   </data>
   <data name="groupBox5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>863, 96</value>
+    <value>863, 139</value>
   </data>
   <data name="groupBox5.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>

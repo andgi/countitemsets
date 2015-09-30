@@ -29,6 +29,11 @@ namespace CountItemSets
         {
         }
 
+        public void SetMaxNrTransactions(int maxNrTransactions)
+        {
+
+        }
+
         public int GetTransactionCount()
         {
             return transactionCount;
@@ -49,6 +54,10 @@ namespace CountItemSets
             return dictionaryEANtoVGR;
         }
         public void BeginGenerate(string fileNameTransaction, GenerateCallBack callBack)
+        {
+        }
+
+        public void Generate(string fileNameTransaction)
         {
         }
 
