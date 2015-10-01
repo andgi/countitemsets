@@ -265,18 +265,26 @@ namespace CountItemSets
 
         private void buttonStart_Click_Surveillance()
         {
-            for(;;)
+            try
             {
-                int progress = generator.GetProgess();
-                Stopwatch stopwatch = generator.GetStopWatch();
-                Invoke((Action)(() =>
+                for (; ; )
                 {
-                    progressBarLoadingData.Value = progress;
-                    textBoxTime.Text = stopwatch.Elapsed.ToString();
-                }));
-                if (progress == 100) break;
-                Thread.Sleep(10);
+                    int progress = generator.GetProgess();
+                    Stopwatch stopwatch = generator.GetStopWatch();
+                    Invoke((Action)(() =>
+                    {
+                        try
+                        {
+                            progressBarLoadingData.Value = progress;
+                            textBoxTime.Text = stopwatch.Elapsed.ToString();
+                        }
+                        catch (Exception) { }
+                    }));
+                    if (progress == 100) break;
+                    Thread.Sleep(100);
+                }
             }
+            catch (Exception) { }
         }
 
         private void buttonStart_Click_Callback()
@@ -1479,18 +1487,54 @@ namespace CountItemSets
             string fileName = textBoxFileNameExperimentLog.Text;
             StreamWriter writer = new StreamWriter(fileName);
 
-            generator = new SequentialFrequentItemsetGenerator();
-            generator.SetPruningMinSupport(0.0010);
-            generator.SetMaxNrTransactions(20000);
-            generator.Generate(textBoxFileName.Text);
-            Invoke((Action)(() =>
+            for (int type = 0; type < 2; type++)
             {
-                stopWatch = generator.GetStopWatch();
-                nrTransactions = generator.GetTransactionCount();
-                nrFrequentItemsets = generator.Level2.Count + generator.Level3.Count + generator.Level4.Count + generator.Level5.Count;
-                textBoxExperimentLog.Text += "Time:" + stopWatch + "Transactions: " + nrTransactions + "NrFrequentItemset: " + nrFrequentItemsets + "\n";
-                writer.WriteLine("Time:" + stopWatch + "Transactions: " + nrTransactions + "NrFrequentItemset: " + nrFrequentItemsets + "\n");
-            }));
+                Invoke((Action)(() =>
+                {
+                    String text;
+                    if (type == 0)
+                        text = "Sequential Frequent Itemset Generator\n";
+                    else
+                        text = "Parallel Frequent Itemset Generator\n";
+                    textBoxExperimentLog.Text += text + "\r\n";
+                    writer.WriteLine(text);
+                    text = "Transactions;PruningSupport;FrequentItemset;Time";
+                    textBoxExperimentLog.Text += text + "\r\n";
+                    writer.WriteLine(text);
+                }));
+
+                foreach (double minSupport in new double[] { 0.01, 0.005, 0.0010, 0.0005 })
+                {
+                    for (int maxTransactions = 20000; maxTransactions <= 100000; maxTransactions += 20000)
+                    {
+                        if (type == 0)
+                            generator = new SequentialFrequentItemsetGenerator();
+                        else
+                            generator = new ParallelFrequentItemsetGenerator();
+                        generator.SetPruningMinSupport(minSupport);
+                        generator.SetMaxNrTransactions(maxTransactions);
+                        Thread thread = new Thread(new ThreadStart(buttonStart_Click_Surveillance));
+                        thread.Name = "SurveillanceGeneratorThread";
+                        thread.Start();
+                        generator.Generate(textBoxFileName.Text);
+                        thread.Abort();
+                        stopWatch = generator.GetStopWatch();
+                        nrTransactions = generator.GetTransactionCount();
+                        nrFrequentItemsets = generator.Level2.Count + generator.Level3.Count + generator.Level4.Count + generator.Level5.Count;
+                        try
+                        {
+                            Invoke((Action)(() =>
+                            {
+                                String text = nrTransactions + ";" + minSupport + ";" + nrFrequentItemsets + ";" + stopWatch.ElapsedMilliseconds;
+                                textBoxExperimentLog.Text += text + "\r\n";
+                                writer.WriteLine(text);
+                            }));
+                        }
+                        catch (Exception) { }
+                    }
+                }
+            }
+            writer.Close();
         }
 
     }

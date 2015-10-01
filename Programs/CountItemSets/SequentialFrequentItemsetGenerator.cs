@@ -72,6 +72,7 @@ namespace CountItemSets
         }
         public void Generate(string fileNameTransaction)
         {
+            this.fileNameTransaction = fileNameTransaction;
             GenerateThread(null);
         }
 
