@@ -1487,15 +1487,17 @@ namespace CountItemSets
             string fileName = textBoxFileNameExperimentLog.Text;
             StreamWriter writer = new StreamWriter(fileName);
 
-            for (int type = 0; type < 2; type++)
+            for (int type = 2; type < 3; type++)
             {
                 Invoke((Action)(() =>
                 {
                     String text;
                     if (type == 0)
                         text = "Sequential Frequent Itemset Generator\n";
-                    else
+                    else if(type == 1)
                         text = "Parallel Frequent Itemset Generator\n";
+                    else
+                        text = "Parallel Transaction Frequent Itemset Generator\n";
                     textBoxExperimentLog.Text += text + "\r\n";
                     writer.WriteLine(text);
                     text = "Transactions;PruningSupport;FrequentItemset;Time";
@@ -1509,8 +1511,10 @@ namespace CountItemSets
                     {
                         if (type == 0)
                             generator = new SequentialFrequentItemsetGenerator();
-                        else
+                        else if(type == 1)
                             generator = new ParallelFrequentItemsetGenerator();
+                        else if (type == 2)
+                            generator = new ParallelTransactionFrequentItemsetGenerator();
                         generator.SetPruningMinSupport(minSupport);
                         generator.SetMaxNrTransactions(maxTransactions);
                         Thread thread = new Thread(new ThreadStart(buttonStart_Click_Surveillance));

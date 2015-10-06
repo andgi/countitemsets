@@ -92,16 +92,10 @@ namespace CountItemSets
             // V1
             reader.Begin();
             transactionCount = 0;
-            bool moreTransactions = true;
-            while (moreTransactions)
+            List<TransactionReader.Transaction> transactions;
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactionCount++; 
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
+                transactionCount += transactions.Count; 
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -126,15 +120,8 @@ namespace CountItemSets
             dictionaryLevel2.Clear();
             // E1 E2
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -159,38 +146,10 @@ namespace CountItemSets
                     }
                 });
             }
-
-            reader.Begin();
-            while (reader.Read())
-            {
-                List<long> keys = reader.Current.EANCodes;
-                if (keys.Count > 1)
-                    for (int i = 0; i < (keys.Count - 1); i++)
-                    {
-                        long key1 = keys[i];
-                        if (dictionaryLevel1.ContainsKey(key1))
-                            for (int j = i + 1; j < keys.Count; j++)
-                            {
-                                long key2 = keys[j];
-                                if (dictionaryLevel1.ContainsKey(key2))
-                                {
-                                    string keyName = key1 + "," + key2;
-                                    dictionaryLevel2.AddOrUpdate(keyName, 1, (key, value) => value + 1);
-                                }
-                            }
-                    }
-            }
             // E1 V1
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -215,18 +174,10 @@ namespace CountItemSets
                     }
                 });
             }
-
             // V1 V2
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -258,15 +209,8 @@ namespace CountItemSets
             dictionaryLevel3.Clear();
             // E1 E2 E3
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -300,15 +244,8 @@ namespace CountItemSets
             }
             // E1 E2 V1
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -343,15 +280,8 @@ namespace CountItemSets
             }
             // E1 V1 V2
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -387,15 +317,8 @@ namespace CountItemSets
 
             // V1 V2 V3                        
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -433,15 +356,8 @@ namespace CountItemSets
             dictionaryLevel4.Clear();
             // E1 E2 E3 E4
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -483,15 +399,8 @@ namespace CountItemSets
 
             // E1 E2 E3 V1
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -538,15 +447,8 @@ namespace CountItemSets
 
             // E1 E2 V1 V2
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -594,15 +496,8 @@ namespace CountItemSets
 
             // E1 V1 V2 V3
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -649,15 +544,8 @@ namespace CountItemSets
 
             // V1 V2 V3 V4
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
@@ -702,15 +590,8 @@ namespace CountItemSets
             dictionaryLevel5.Clear();
             // E1 E2 E3 E4 E5
             reader.Begin();
-            moreTransactions = true;
-            while (moreTransactions)
+            while ((transactions = reader.ReadList(1000)) != null)
             {
-                List<TransactionReader.Transaction> transactions = new List<TransactionReader.Transaction>();
-                while (moreTransactions = reader.Read())
-                {
-                    transactions.Add(new TransactionReader.Transaction(reader.Current));
-                    if (transactions.Count >= 1000) break;
-                }
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
                 {
                     for (int t = range.Item1; t < range.Item2; t++)
