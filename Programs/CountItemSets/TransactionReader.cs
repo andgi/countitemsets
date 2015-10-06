@@ -18,6 +18,12 @@ namespace CountItemSets
                 EANCodes = new List<long>(10);
                 VGRCodes = new List<long>(10);
             }
+
+            public Transaction(Transaction obj)
+            {
+                EANCodes = new List<long>(obj.EANCodes);
+                VGRCodes = new List<long>(obj.VGRCodes);
+            }
         }
 
         private Transaction current = new Transaction();

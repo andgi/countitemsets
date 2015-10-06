@@ -181,7 +181,7 @@ namespace CountItemSets
             config.Save(ConfigurationSaveMode.Modified);
         }
 
-        public IFrequentItemsetGenerator generator = new ParallelFrequentItemsetGenerator();
+        public IFrequentItemsetGenerator generator = new ParallelTransactionFrequentItemsetGenerator();
 
         static Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
         static Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
