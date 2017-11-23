@@ -101,19 +101,20 @@ namespace CountItemSets
                     for (int t = range.Item1; t < range.Item2; t++)
                     {
                         List<long> keys = transactions[t].EANCodes;
-                        List<long> vgrs = transactions[t].VGRCodes;
+                        //List<long> vgrs = transactions[t].VGRCodes;
                         foreach (long eanNr in keys)
                         {
                             dictionaryLevel1.AddOrUpdate(eanNr, 1, (key, value) => value + 1);
                         }
-                        foreach (long vgrNr in vgrs)
+                        /*foreach (long vgrNr in vgrs)
                         {
                             dictionaryLevel1.AddOrUpdate(vgrNr, 1, (key, value) => value + 1);
-                        }
+                        }*/
                     }
                 });
             }
             dictionaryLevel1 = new ConcurrentDictionary<long,int>(dictionaryLevel1.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport && !pruningExcludeItems.Contains(item.Key)));
+            Console.Out.WriteLine("Found " + dictionaryLevel1.Count + " interesting 1-tuples.");
             progressGenerate = 10;
 
             // Level 2
@@ -147,7 +148,7 @@ namespace CountItemSets
                 });
             }
             // E1 V1
-            reader.Begin();
+            /*reader.Begin();
             while ((transactions = reader.ReadList(1000)) != null)
             {
                 Parallel.ForEach(Partitioner.Create(0, transactions.Count), range =>
@@ -201,8 +202,9 @@ namespace CountItemSets
                             }
                     }
                 });
-            }
+            }*/
             dictionaryLevel2 = new ConcurrentDictionary<string,int>(dictionaryLevel2.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
+            Console.Out.WriteLine("Found " + dictionaryLevel2.Count + " interesting 2-tuples.");
             progressGenerate = 40;
 
             // Level 3
@@ -242,6 +244,7 @@ namespace CountItemSets
                     }
                 });
             }
+            /*
             // E1 E2 V1
             reader.Begin();
             while ((transactions = reader.ReadList(1000)) != null)
@@ -266,7 +269,8 @@ namespace CountItemSets
                                             {
                                                 long key3 = vgrs[k];
                                                 if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3)
-                                                    /* && dictionaryEANtoVGR[key1] != -key3 && dictionaryEANtoVGR[key2] != -key3 */)
+                                                    // && dictionaryEANtoVGR[key1] != -key3 && dictionaryEANtoVGR[key2] != -key3
+                                                    )
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3;
                                                     dictionaryLevel3.AddOrUpdate(keyName, 1, (key, value) => value + 1);
@@ -302,7 +306,8 @@ namespace CountItemSets
                                             {
                                                 long key3 = vgrs[k];
                                                 if (dictionaryLevel2.ContainsKey(key2 + "," + key3) && dictionaryLevel2.ContainsKey(key1 + "," + key3)
-                                                    /* && dictionaryEANtoVGR[key1] != -key2 && dictionaryEANtoVGR[key1] != -key3 */)
+                                                    // && dictionaryEANtoVGR[key1] != -key2 && dictionaryEANtoVGR[key1] != -key3
+                                                    )
                                                 {
                                                     string keyName = key1 + "," + key2 + "," + key3;
                                                     dictionaryLevel3.AddOrUpdate(keyName, 1, (key, value) => value + 1);
@@ -349,7 +354,9 @@ namespace CountItemSets
                     }
                 });
             }
+            */
             dictionaryLevel3 = new ConcurrentDictionary<string,int>(dictionaryLevel3.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
+            Console.Out.WriteLine("Found " + dictionaryLevel3.Count + " interesting 3-tuples.");
             progressGenerate = 60;
 
             // Level 4
@@ -396,7 +403,7 @@ namespace CountItemSets
                     }
                 });
             }
-
+            /*
             // E1 E2 E3 V1
             reader.Begin();
             while ((transactions = reader.ReadList(1000)) != null)
@@ -428,9 +435,9 @@ namespace CountItemSets
                                                         if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
                                                             && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
                                                             && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
-                                                            /* && dictionaryEANtoVGR[key1] != -key4
-                                                            && dictionaryEANtoVGR[key2] != -key4
-                                                            && dictionaryEANtoVGR[key3] != -key4 */)
+                                                            //&& dictionaryEANtoVGR[key1] != -key4
+                                                            //&& dictionaryEANtoVGR[key2] != -key4
+                                                            //&& dictionaryEANtoVGR[key3] != -key4 *)
                                                         {
                                                             string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
                                                             dictionaryLevel4.AddOrUpdate(keyName, 1, (key, value) => value + 1);
@@ -476,10 +483,11 @@ namespace CountItemSets
                                                         if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
                                                             && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
                                                             && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
-                                                            /* && dictionaryEANtoVGR[key1] != -key3
-                                                            && dictionaryEANtoVGR[key2] != -key3
-                                                            && dictionaryEANtoVGR[key1] != -key4
-                                                            && dictionaryEANtoVGR[key2] != -key4 */)
+                                                            //&& dictionaryEANtoVGR[key1] != -key3
+                                                            //&& dictionaryEANtoVGR[key2] != -key3
+                                                            //&& dictionaryEANtoVGR[key1] != -key4
+                                                            //&& dictionaryEANtoVGR[key2] != -key4
+                                                           )
                                                         {
                                                             string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
                                                             dictionaryLevel4.AddOrUpdate(keyName, 1, (key, value) => value + 1);
@@ -525,9 +533,10 @@ namespace CountItemSets
                                                         if (dictionaryLevel3.ContainsKey(key2 + "," + key3 + "," + key4)
                                                             && dictionaryLevel3.ContainsKey(key1 + "," + key2 + "," + key4)
                                                             && dictionaryLevel3.ContainsKey(key1 + "," + key3 + "," + key4)
-                                                            /* && dictionaryEANtoVGR[key1] != -key2
-                                                            && dictionaryEANtoVGR[key1] != -key3
-                                                            && dictionaryEANtoVGR[key1] != -key4 */)
+                                                            //&& dictionaryEANtoVGR[key1] != -key2
+                                                            //&& dictionaryEANtoVGR[key1] != -key3
+                                                            //&& dictionaryEANtoVGR[key1] != -key4
+                                                           )
                                                         {
                                                             string keyName = key1 + "," + key2 + "," + key3 + "," + key4;
                                                             dictionaryLevel4.AddOrUpdate(keyName, 1, (key, value) => value + 1);
@@ -583,7 +592,9 @@ namespace CountItemSets
                     }
                 });
             }
+            */
             dictionaryLevel4 = new ConcurrentDictionary<string,int>(dictionaryLevel4.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
+            Console.Out.WriteLine("Found " + dictionaryLevel4.Count + " interesting 4-tuples.");
             progressGenerate = 80;
 
             // Level 5
@@ -695,6 +706,7 @@ namespace CountItemSets
             }
             */
             dictionaryLevel5 = new ConcurrentDictionary<string,int>(dictionaryLevel5.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
+            Console.Out.WriteLine("Found " + dictionaryLevel5.Count + " interesting 5-tuples.");
 
             stopwatch.Stop();
             //textBoxTime.Text = stopwatch.Elapsed.ToString();

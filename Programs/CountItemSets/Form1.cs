@@ -181,7 +181,9 @@ namespace CountItemSets
             config.Save(ConfigurationSaveMode.Modified);
         }
 
-        public IFrequentItemsetGenerator generator = new ParallelTransactionFrequentItemsetGenerator();
+        public IFrequentItemsetGenerator generator =
+            //new ParallelTransactionFrequentItemsetGenerator();
+            new GPUTransactionFrequentItemsetGenerator();
 
         static Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
         static Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
@@ -445,8 +447,12 @@ namespace CountItemSets
                 Int64.TryParse(columns[0], out eanNr1);
                 long eanNr2 = 0;
                 Int64.TryParse(columns[1], out eanNr2);
-                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
+                try // FIXME: Should not be needed. Why are there unknown EANs in the GPU dictionary?!
+                {
+                    results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                    results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
+                }
+                catch { }
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
@@ -474,10 +480,14 @@ namespace CountItemSets
                 Int64.TryParse(columns[2], out eanNr3);
                 long eanNr4 = 0;
                 Int64.TryParse(columns[3], out eanNr4);
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)pair.Value / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
-                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
+                try // FIXME: Should not be needed. Why are there unknown EANs in the GPU dictionary?!
+                {
+                    results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)pair.Value / (double)transactionCount));
+                    results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
+                    results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                    results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
+                }
+                catch { }
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel5)
@@ -1487,17 +1497,26 @@ namespace CountItemSets
             string fileName = textBoxFileNameExperimentLog.Text;
             StreamWriter writer = new StreamWriter(fileName);
 
-            for (int type = 2; type < 3; type++)
+            for (int type = 2; type < 4; type++)
             {
                 Invoke((Action)(() =>
                 {
-                    String text;
-                    if (type == 0)
-                        text = "Sequential Frequent Itemset Generator\n";
-                    else if(type == 1)
-                        text = "Parallel Frequent Itemset Generator\n";
-                    else
-                        text = "Parallel Transaction Frequent Itemset Generator\n";
+                    String text = "";
+                    switch (type)
+                    {
+                        case 0:
+                            text = "Sequential Frequent Itemset Generator\n";
+                            break;
+                        case 1:
+                            text = "Parallel Frequent Itemset Generator\n";
+                            break;
+                        case 2:
+                            text = "Parallel Transaction Frequent Itemset Generator\n";
+                            break;
+                        case 3:
+                            text = "GPU Transaction Frequent Itemset Generator\n";
+                            break;
+                    }
                     textBoxExperimentLog.Text += text + "\r\n";
                     writer.WriteLine(text);
                     text = "Transactions;PruningSupport;FrequentItemset;Time";
@@ -1505,16 +1524,25 @@ namespace CountItemSets
                     writer.WriteLine(text);
                 }));
 
-                foreach (double minSupport in new double[] { 0.01, 0.005, 0.0010, 0.0005 })
+                foreach (double minSupport in new double[] { 0.01, 0.005, /*0.0010, 0.0005*/ })
                 {
                     for (int maxTransactions = 20000; maxTransactions <= 100000; maxTransactions += 20000)
                     {
-                        if (type == 0)
-                            generator = new SequentialFrequentItemsetGenerator();
-                        else if(type == 1)
-                            generator = new ParallelFrequentItemsetGenerator();
-                        else if (type == 2)
-                            generator = new ParallelTransactionFrequentItemsetGenerator();
+                        switch (type)
+                        {
+                            case 0:
+                                generator = new SequentialFrequentItemsetGenerator();
+                                break;
+                            case 1:
+                                generator = new ParallelFrequentItemsetGenerator();
+                                break;
+                            case 2:
+                                generator = new ParallelTransactionFrequentItemsetGenerator();
+                                break;
+                            case 3:
+                                generator = new GPUTransactionFrequentItemsetGenerator();
+                                break;
+                        }
                         generator.SetPruningMinSupport(minSupport);
                         generator.SetMaxNrTransactions(maxTransactions);
                         Thread thread = new Thread(new ThreadStart(buttonStart_Click_Surveillance));
