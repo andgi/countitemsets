@@ -167,7 +167,8 @@ namespace CountItemSets
                 Console.Out.WriteLine("  " + p.Name + ", " + p.Profile + ", " + p.Vendor);
                 foreach (ComputeDevice d in p.Devices)
                 {
-                    Console.Out.WriteLine("    " + d.Name + ", " + d.Type + ", " + d.Available);
+                    Console.Out.WriteLine("    " + d.Name + ", " + d.Type + ", " + d.MaxComputeUnits +
+                                          ", " + d.OpenCLCVersionString + ", " + d.Available);
                     if (d.Type == ComputeDeviceTypes.Gpu)
                     {
                         platform = p;
@@ -522,8 +523,8 @@ namespace CountItemSets
             private static string PhaseNb(int n)
             {
                 return @"
-__kernel void clip_" + n + @"tuple_frequencies(__global __read_write uint* frequencies,
-                                               __read_only  uint  limit)
+__kernel void clip_" + n + @"tuple_frequencies(__global /*__read_write*/ uint* frequencies,
+                                                        /*__read_only*/  uint  limit)
 {
     // Vector element index: index into hashtable denotes frequency of item-pair i.
     int i = " + (n + 1) + @"*get_global_id(0) + " + n + @";
@@ -537,8 +538,8 @@ __kernel void clip_" + n + @"tuple_frequencies(__global __read_write uint* frequ
 ";
             private string Phase1aOpenCL =
                 @"
-__kernel void count_1tuple_frequencies(__global __read_only  uint* transaction_items,
-                                       __global __read_write uint* frequencies)
+__kernel void count_1tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
+                                       __global /*__read_write*/ uint* frequencies)
 {
     // Vector element index: denotes item of a transaction.
     int idx = get_global_id(0);
@@ -546,8 +547,8 @@ __kernel void count_1tuple_frequencies(__global __read_only  uint* transaction_i
 }";
             private string Phase1bOpenCL =
                 @"
-__kernel void clip_1tuple_frequencies(__global __read_write uint* frequencies,
-                                               __read_only  uint  limit)
+__kernel void clip_1tuple_frequencies(__global /*__read_write*/ uint* frequencies,
+                                               /*__read_only*/  uint  limit)
 {
     // Vector element index: denotes frequency of item ID i.
     int i = get_global_id(0);
@@ -556,9 +557,9 @@ __kernel void clip_1tuple_frequencies(__global __read_write uint* frequencies,
 
             private string Phase2aOpenCL =
                 @"
-__kernel void count_2tuple_frequencies(__global __read_only  uint* transaction_items,
-                                       __global __read_only  uint* frequencies_1tuple,
-                                       __global __read_write uint* frequencies_2tuple)
+__kernel void count_2tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
+                                       __global /*__read_only*/  uint* frequencies_1tuple,
+                                       __global /*__read_write*/ uint* frequencies_2tuple)
 {
     // Vector element index: denotes item of a transaction.
     int i = get_global_id(0);
@@ -578,10 +579,10 @@ __kernel void count_2tuple_frequencies(__global __read_only  uint* transaction_i
 
             private string Phase3aOpenCL =
     @"
-__kernel void count_3tuple_frequencies(__global __read_only  uint* transaction_items,
-                                       __global __read_only  uint* frequencies_1tuple,
-                                       __global __read_only  uint* frequencies_2tuple,
-                                       __global __read_write uint* frequencies_3tuple)
+__kernel void count_3tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
+                                       __global /*__read_only*/  uint* frequencies_1tuple,
+                                       __global /*__read_only*/  uint* frequencies_2tuple,
+                                       __global /*__read_write*/ uint* frequencies_3tuple)
 {
     // Vector element index: denotes item of a transaction.
     int i = get_global_id(0);
@@ -610,11 +611,11 @@ __kernel void count_3tuple_frequencies(__global __read_only  uint* transaction_i
 
             private string Phase4aOpenCL =
 @"
-__kernel void count_4tuple_frequencies(__global __read_only  uint* transaction_items,
-                                       __global __read_only  uint* frequencies_1tuple,
-                                       __global __read_only  uint* frequencies_2tuple,
-                                       __global __read_only  uint* frequencies_3tuple,
-                                       __global __read_write uint* frequencies_4tuple)
+__kernel void count_4tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
+                                       __global /*__read_only*/  uint* frequencies_1tuple,
+                                       __global /*__read_only*/  uint* frequencies_2tuple,
+                                       __global /*__read_only*/  uint* frequencies_3tuple,
+                                       __global /*__read_write*/ uint* frequencies_4tuple)
 {
     // Vector element index: denotes item of a transaction.
     int i = get_global_id(0);
@@ -651,12 +652,12 @@ __kernel void count_4tuple_frequencies(__global __read_only  uint* transaction_i
 
             private string Phase5aOpenCL =
 @"
-__kernel void count_5tuple_frequencies(__global __read_only  uint* transaction_items,
-                                       __global __read_only  uint* frequencies_1tuple,
-                                       __global __read_only  uint* frequencies_2tuple,
-                                       __global __read_only  uint* frequencies_3tuple,
-                                       __global __read_only  uint* frequencies_4tuple,
-                                       __global __read_write uint* frequencies_5tuple)
+__kernel void count_5tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
+                                       __global /*__read_only*/  uint* frequencies_1tuple,
+                                       __global /*__read_only*/  uint* frequencies_2tuple,
+                                       __global /*__read_only*/  uint* frequencies_3tuple,
+                                       __global /*__read_only*/  uint* frequencies_4tuple,
+                                       __global /*__read_write*/ uint* frequencies_5tuple)
 {
     // Vector element index: denotes item of a transaction.
     int i = get_global_id(0);

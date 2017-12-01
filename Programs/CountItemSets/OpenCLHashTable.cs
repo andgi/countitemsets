@@ -99,13 +99,14 @@ namespace CountItemSets
             get
             {
                 return @"
-void " + AddOrIncreaseFunctionName + @"(__global __read_write  uint* hashtable" +
+void " + AddOrIncreaseFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
                                         SourceKeyFormalArguments + @")
 {
     int idx = (" + keyParts + @" + 1) * " + SourceComputeHash + @";
     for (int t = 1; t < " + MAX_RETRIES + @"; t++) {
         if (" + SourceIsEmpty("hashtable", "idx") + @") {
-            if (" + SourceStoreKeys("hashtable", "idx") + @") {
+            if (" + SourceCASFirstKeyPart("hashtable", "idx") + @") {
+                " + SourceStoreOtherKeyParts("hashtable", "idx") + @"
                 atomic_inc(&hashtable[idx + " + keyParts + @"]);
                 return;
             }
@@ -128,7 +129,7 @@ void " + AddOrIncreaseFunctionName + @"(__global __read_write  uint* hashtable" 
             get
             {
                 return @"
-uint " + LookupFunctionName + @"(__global __read_write  uint* hashtable" +
+uint " + LookupFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
                                  SourceKeyFormalArguments + @")
 {
     int idx = (" + keyParts + @" + 1) * " + SourceComputeHash + @";
@@ -199,16 +200,19 @@ uint " + LookupFunctionName + @"(__global __read_write  uint* hashtable" +
             return result;
         }
 
-        protected string SourceStoreKeys(string hashtable, string index)
+        protected string SourceCASFirstKeyPart(string hashtable, string index)
         {
-            string assignments = "(1";
-            for (int i = 0; i < keyParts; i++)
+            return "(0 == atomic_cmpxchg(&" + hashtable + "[" + index + "], 0, key1))";
+        }
+
+        protected string SourceStoreOtherKeyParts(string hashtable, string index)
+        {
+            string statements = "";
+            for (int i = 1; i < keyParts; i++)
             {
-                assignments += " && (0 == atomic_cmpxchg(&" + hashtable + "[" + index + " + " + i + "], " +
-                               "0, key" + (i+1) + "))";
+                statements += hashtable + "[" + index + " + " + i + "] = key" + (i+1) + "; ";
             }
-            assignments += ")";
-            return assignments;
+            return statements;
         }
 
         protected string SourceIsEmpty(string hashtable, string index)
