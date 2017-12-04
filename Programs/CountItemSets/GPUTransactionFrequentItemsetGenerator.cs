@@ -216,6 +216,8 @@ namespace CountItemSets
             uint[] transactionItems;
             int lastIdx;
             uint[] itemFrequencies; // NOTE: index 0 is unassigned.
+            string[] keyVar;
+            char[] loopVar;
 
             public GPUAlgorithm(ComputeContext context, TransactionReader reader,
                                 double pruningMinSupport)
@@ -314,6 +316,15 @@ namespace CountItemSets
 
             private void SetUpProgram(ComputeContext context)
             {
+                const int MAX_TUPLE_SIZE = 5;
+                keyVar = new string[MAX_TUPLE_SIZE];
+                loopVar = new char[MAX_TUPLE_SIZE];
+                for (int i = 0; i < MAX_TUPLE_SIZE; i++)
+                {
+                    keyVar[i] = "key" + (i + 1);
+                    loopVar[i] = (char)('i' + i);
+                }
+
                 program = new ComputeProgram(context,
                                              new string[] {
                                                             tuple2Dictionary.SourceOpenCL,
@@ -322,10 +333,10 @@ namespace CountItemSets
                                                             tuple5Dictionary.SourceOpenCL,
                                                             constantsOpenCL,
                                                             Phase1aOpenCL, Phase1bOpenCL,
-                                                            Phase2aOpenCL, Phase2bOpenCL,
-                                                            Phase3aOpenCL, Phase3bOpenCL,
-                                                            Phase4aOpenCL, Phase4bOpenCL,
-                                                            Phase5aOpenCL, Phase5bOpenCL
+                                                            Phase2aOpenCL, PhaseNb(2),
+                                                            PhaseNa(3),    PhaseNb(3),
+                                                            PhaseNa(4),    PhaseNb(4),
+                                                            PhaseNa(5),    PhaseNb(5)
                                                           });
                 // Compile the program.
                 try
@@ -361,7 +372,12 @@ namespace CountItemSets
                                             ComputeMemoryFlags.WriteOnly| ComputeMemoryFlags.UseHostPointer,
                                             itemFrequencies);
 
-                Console.Out.WriteLine(tuple3Dictionary.SourceOpenCL);
+                //Console.Out.WriteLine(tuple3Dictionary.SourceOpenCL);
+                {
+                    int p = 5;
+                    //Console.Out.WriteLine(PhaseNa(p));
+                    //Console.Out.WriteLine(PhaseNb(p));
+                }
             }
 
             private void SetUpTranslations(TransactionReader reader)
@@ -520,11 +536,107 @@ namespace CountItemSets
                 queue.Execute(phase5bKernel, new long[] { 0 }, new long[] { tuple5Dictionary.MaxSize }, null, null);
             }
 
+            private string PhaseNa(int n)
+            {
+                string source = @"
+__kernel void count_" + n + @"tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
+" + PhaseNaFormalArgs(n) +
+@"                                       __global /*__read_write*/ uint* frequencies_" + n + @"tuple)
+{
+    // Vector element index: denotes item of a transaction.
+    int i = get_global_id(0);
+    uint key1 = transaction_items[i];
+    if (key1 > 0 && frequencies_1tuple[key1] > 0) {
+";
+                for (int i = 1; i < n; i++)
+                {
+                    source += indent(2*i) + "int " + loopVar[i] + " = " + loopVar[i - 1] + " + 1;\n";
+                    source += indent(2*i) + "while (transaction_items[" + loopVar[i] + "] > 0) {\n";
+                    source += indent(2*i + 1) + "uint " + keyVar[i] + " = transaction_items[" + loopVar[i] + "];\n";
+                    if (i == n - 1) continue;
+                    source += indent(2*i + 1) + "if (ht" + (i+1) + "_lookup(frequencies_" + (i+1) + "tuple, " +
+                                                     KeyArgs(i+1) + ") > 0) {\n";
+                }
+                source += indent(2*n - 1) + "if (" + CheckSubTuples(n) + ") {\n";
+                source += indent(2 * n) + "ht" + n + "_add_or_increase(frequencies_" + n + "tuple, " +
+                                                                       KeyArgs(n) + ");\n";
+                for (int i = n-1; i > 0; i--)
+                {
+                    source += indent(2*i + 1) + "}\n";
+                    source += indent(2*i + 1) + loopVar[i] + "++;\n";
+                    source += indent(2*i) + "}\n";
+                }
+                source += @"
+    }
+}
+";
+                return source;
+            }
+
+            private static string indent(int level)
+            {
+                string indent = "";
+                for (int i = 0; i < level; i++)
+                {
+                    indent += "    ";
+                }
+                return indent;
+            }
+
+            private static string PhaseNaFormalArgs(int n)
+            {
+                string source = "";
+                for (int i = 1; i < n; i++)
+                {
+                    source +=
+@"                                       __global /*__read_only*/  uint * frequencies_" + i + @"tuple,
+";
+                }
+                return source;
+            }
+
+            private string KeyArgs(int n)
+            {
+                string source = "";
+                for (int i = 0; i < n-1; i++)
+                {
+                    source += keyVar[i] + ", ";
+                }
+                source += keyVar[n-1];
+                return source;
+            }
+
+            private string CheckSubTuples(int n)
+            {
+                // FIXME: Only works for n=3!
+                string source = "1";
+                for (int without = n-2; without >= 0; without--)
+                {
+                    source += " &&\n";
+                    source += indent(2 * n) + "ht" + (n - 1) + "_lookup(frequencies_" + (n - 1) + "tuple, " +
+                              GetKeySubTuple(n-1, without) + "key" + n + ") > 0";
+                }
+                return source;
+            }
+
+            private string GetKeySubTuple(int max, int without)
+            {
+                string keys = "";
+                for (int i = 0; i < max; i++)
+                {
+                    if (i != without)
+                    {
+                        keys += keyVar[i] + ", ";
+                    }
+                }
+                return keys;
+            }
+
             private static string PhaseNb(int n)
             {
                 return @"
 __kernel void clip_" + n + @"tuple_frequencies(__global /*__read_write*/ uint* frequencies,
-                                                        /*__read_only*/  uint  limit)
+                                               /*__read_only*/  uint  limit)
 {
     // Vector element index: index into hashtable denotes frequency of item-pair i.
     int i = " + (n + 1) + @"*get_global_id(0) + " + n + @";
@@ -574,131 +686,6 @@ __kernel void count_2tuple_frequencies(__global /*__read_only*/  uint* transacti
         }
     }
 }";
-
-            private string Phase2bOpenCL = PhaseNb(2);
-
-            private string Phase3aOpenCL =
-    @"
-__kernel void count_3tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
-                                       __global /*__read_only*/  uint* frequencies_1tuple,
-                                       __global /*__read_only*/  uint* frequencies_2tuple,
-                                       __global /*__read_write*/ uint* frequencies_3tuple)
-{
-    // Vector element index: denotes item of a transaction.
-    int i = get_global_id(0);
-    uint key1 = transaction_items[i];
-    if (key1 > 0 && frequencies_1tuple[key1] > 0) {
-        int j = i + 1;
-        while (transaction_items[j] > 0) {
-            uint key2 = transaction_items[j];
-            if (ht2_lookup(frequencies_2tuple, key1, key2) > 0) {
-                int k = j + 1;
-                while (transaction_items[k] > 0) {
-                    uint key3 = transaction_items[k];
-                    if (ht2_lookup(frequencies_2tuple, key1, key3) > 0 &&
-                        ht2_lookup(frequencies_2tuple, key2, key3) > 0) {
-                        ht3_add_or_increase(frequencies_3tuple, key1, key2, transaction_items[k]);
-                    }
-                    k++;
-                }
-            }
-            j++;
-        }
-    }
-}";
-
-            private string Phase3bOpenCL = PhaseNb(3);
-
-            private string Phase4aOpenCL =
-@"
-__kernel void count_4tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
-                                       __global /*__read_only*/  uint* frequencies_1tuple,
-                                       __global /*__read_only*/  uint* frequencies_2tuple,
-                                       __global /*__read_only*/  uint* frequencies_3tuple,
-                                       __global /*__read_write*/ uint* frequencies_4tuple)
-{
-    // Vector element index: denotes item of a transaction.
-    int i = get_global_id(0);
-    uint key1 = transaction_items[i];
-    if (key1 > 0 && frequencies_1tuple[key1] > 0) {
-        int j = i + 1;
-        while (transaction_items[j] > 0) {
-            uint key2 = transaction_items[j];
-            if (ht2_lookup(frequencies_2tuple, key1, key2) > 0) {
-                int k = j + 1;
-                while (transaction_items[k] > 0) {
-                    uint key3 = transaction_items[k];
-                    if (ht3_lookup(frequencies_3tuple, key1, key2, key3) > 0) {
-                        int l = k + 1;
-                        while (transaction_items[l] > 0) {
-                            uint key4 = transaction_items[l];
-                            if (ht3_lookup(frequencies_3tuple, key1, key3, key4) > 0 &&
-                                ht3_lookup(frequencies_3tuple, key1, key2, key4) > 0 &&
-                                ht3_lookup(frequencies_3tuple, key2, key3, key4) > 0) {
-                                ht4_add_or_increase(frequencies_4tuple, key1, key2, key3, key4);
-                            }
-                            l++;
-                        }
-                    }
-                    k++;
-                }
-            }
-            j++;
-        }
-    }
-}";
-
-            private string Phase4bOpenCL = PhaseNb(4);
-
-            private string Phase5aOpenCL =
-@"
-__kernel void count_5tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
-                                       __global /*__read_only*/  uint* frequencies_1tuple,
-                                       __global /*__read_only*/  uint* frequencies_2tuple,
-                                       __global /*__read_only*/  uint* frequencies_3tuple,
-                                       __global /*__read_only*/  uint* frequencies_4tuple,
-                                       __global /*__read_write*/ uint* frequencies_5tuple)
-{
-    // Vector element index: denotes item of a transaction.
-    int i = get_global_id(0);
-    uint key1 = transaction_items[i];
-    if (key1 > 0 && frequencies_1tuple[key1] > 0) {
-        int j = i + 1;
-        while (transaction_items[j] > 0) {
-            uint key2 = transaction_items[j];
-            if (ht2_lookup(frequencies_2tuple, key1, key2) > 0) {
-                int k = j + 1;
-                while (transaction_items[k] > 0) {
-                    uint key3 = transaction_items[k];
-                    if (ht3_lookup(frequencies_3tuple, key1, key2, key3) > 0) {
-                        int l = k + 1;
-                        while (transaction_items[l] > 0) {
-                            uint key4 = transaction_items[l];
-                            if (ht4_lookup(frequencies_4tuple, key1, key2, key3, key4) > 0) {
-                                int m = l + 1;
-                                while (transaction_items[m] > 0) {
-                                    uint key5 = transaction_items[m];
-                                    if (ht4_lookup(frequencies_4tuple, key1, key3, key4, key5) > 0 &&
-                                        ht4_lookup(frequencies_4tuple, key1, key2, key4, key5) > 0 &&
-                                        ht4_lookup(frequencies_4tuple, key1, key2, key3, key5) > 0 &&
-                                        ht4_lookup(frequencies_4tuple, key2, key3, key4, key5) > 0) {
-                                        ht5_add_or_increase(frequencies_5tuple, key1, key2, key3, key4, key5);
-                                    }
-                                    m++;
-                                }
-                            }
-                            l++;
-                        }
-                    }
-                    k++;
-                }
-            }
-            j++;
-        }
-    }
-}";
-
-            private string Phase5bOpenCL = PhaseNb(5);
 
             #region IDisposable Support
             private bool disposedValue = false; // To detect redundant calls
