@@ -31,10 +31,10 @@ namespace CountItemSets
         private Dictionary<long, int> dictionaryEANtoVGR = new Dictionary<long, int>(); // Should be handled by separate class TransactionContext
         private string fileNameExcludeItems; // Should be handled by separate class
 
-        private int progressGenerate = 0;
         private Stopwatch stopwatch = new Stopwatch();
         private double pruningMinSupport = 0.0001;
         private int maxNrTransactions = 1000000000;
+        private GPUAlgorithm gpuAlg;
 
         public void SetMaxNrTransactions(int maxNrTransactions)
         {
@@ -53,7 +53,7 @@ namespace CountItemSets
 
         public int GetProgess()
         {
-            return progressGenerate;
+            return gpuAlg == null ? 0 : gpuAlg.Progress;
         }
 
         public Stopwatch GetStopWatch()
@@ -91,7 +91,6 @@ namespace CountItemSets
             }
 
             GenerateCallBack callBack = obj as GenerateCallBack;
-            progressGenerate = 0;
             stopwatch.Restart();
 
             TransactionReader reader = new TransactionReader(fileNameTransaction, dictionaryEANtoVGR);
@@ -99,9 +98,8 @@ namespace CountItemSets
 
             // Level 1
             reader.Begin();
-            GPUAlgorithm gpuAlg = new GPUAlgorithm(gpuContext, reader,
-                                                   pruningMinSupport); // First pass through the transactions.
-            progressGenerate = 10;
+            gpuAlg = new GPUAlgorithm(gpuContext, reader,
+                                      pruningMinSupport); // First pass through the transactions.
 
             // E1
             // V1
@@ -111,24 +109,21 @@ namespace CountItemSets
             dictionaryLevel1 = new ConcurrentDictionary<long, int>(gpuAlg.Get1TupleResult(gpuCmdQueue).Where(item => (!pruningExcludeItems.Contains(item.Key))));
             transactionCount = gpuAlg.GetNoTransactions();
             Console.Out.WriteLine("Found " + dictionaryLevel1.Count + " interesting 1-tuples.");
-            progressGenerate = 20;
 
             // Level 2
             // E1 E2
             // E1 V1
             // V1 V2
-            dictionaryLevel2 = gpuAlg.Get2TupleResult(gpuCmdQueue);
+            dictionaryLevel2 = gpuAlg.GetNTupleResult(2, gpuCmdQueue);
             Console.Out.WriteLine("Found " + dictionaryLevel2.Count + " interesting 2-tuples.");
-            progressGenerate = 40;
 
             // Level 3
             // E1 E2 E3
             // E1 E2 V1
             // E1 V1 V2
             // V1 V2 V3
-            dictionaryLevel3 = gpuAlg.Get3TupleResult(gpuCmdQueue);
+            dictionaryLevel3 = gpuAlg.GetNTupleResult(3, gpuCmdQueue);
             Console.Out.WriteLine("Found " + dictionaryLevel3.Count + " interesting 3-tuples.");
-            progressGenerate = 60;
 
             // Level 4
             // E1 E2 E3 E4
@@ -136,19 +131,17 @@ namespace CountItemSets
             // E1 E2 V1 V2
             // E1 V1 V2 V3
             // V1 V2 V3 V4
-            dictionaryLevel4 = gpuAlg.Get4TupleResult(gpuCmdQueue);
+            dictionaryLevel4 = gpuAlg.GetNTupleResult(4, gpuCmdQueue);
             Console.Out.WriteLine("Found " + dictionaryLevel4.Count + " interesting 4-tuples.");
-            progressGenerate = 80;
 
             // Level 5
             // E1 E2 E3 E4 E5
             // V1 V2 V3 V4 V5
-            dictionaryLevel5 = gpuAlg.Get5TupleResult(gpuCmdQueue);
+            dictionaryLevel5 = gpuAlg.GetNTupleResult(5, gpuCmdQueue);
             Console.Out.WriteLine("Found " + dictionaryLevel5.Count + " interesting 5-tuples.");
 
             stopwatch.Stop();
             //textBoxTime.Text = stopwatch.Elapsed.ToString();
-            progressGenerate = 100;
 
             if (callBack != null) callBack();
 
@@ -192,24 +185,13 @@ namespace CountItemSets
 
         private class GPUAlgorithm : IDisposable
         {
+            int MAX_TUPLE_SIZE = 5;
             double pruningMinSupport = 0.0;
             ComputeProgram program;
-            ComputeKernel phase1aKernel;
-            ComputeKernel phase1bKernel;
-            ComputeKernel phase2aKernel;
-            ComputeKernel phase2bKernel;
-            ComputeKernel phase3aKernel;
-            ComputeKernel phase3bKernel;
-            ComputeKernel phase4aKernel;
-            ComputeKernel phase4bKernel;
-            ComputeKernel phase5aKernel;
-            ComputeKernel phase5bKernel;
+            ComputeKernel[,] kernel;
             ComputeBuffer<uint> transactionsArg, tuple1FrequenciesArg;
             System.Runtime.InteropServices.GCHandle tuple1Handle;
-            OpenCLHashTable tuple2Dictionary;
-            OpenCLHashTable tuple3Dictionary;
-            OpenCLHashTable tuple4Dictionary;
-            OpenCLHashTable tuple5Dictionary;
+            OpenCLHashTable[] tupleDictionary;
             long[] EANfromID; // NOTE: index/ID 0 is unassigned (and EOT marker in transactionItems).
             Dictionary<long, int> IDfromEAN;
             int noTransactions;
@@ -219,39 +201,46 @@ namespace CountItemSets
             string[] keyVar;
             char[] loopVar;
 
+            public int Progress { get; private set; }
+
             public GPUAlgorithm(ComputeContext context, TransactionReader reader,
                                 double pruningMinSupport)
             {
+                Progress = 0;
                 this.pruningMinSupport = pruningMinSupport;
                 SetUpTranslations(reader);
+                Progress = 5;
                 transactionItems = new uint[16 * 1024 * 1024];
                 itemFrequencies  = new uint[EANfromID.Length];
-                tuple2Dictionary = new OpenCLHashTable(context, 2, 16 * 1024 * 1024);
-                tuple3Dictionary = new OpenCLHashTable(context, 3, 16 * 1024 * 1024);
-                tuple4Dictionary = new OpenCLHashTable(context, 4, 16 * 1024 * 1024);
-                tuple5Dictionary = new OpenCLHashTable(context, 5, 16 * 1024 * 1024);
+                tupleDictionary = new OpenCLHashTable[] {
+                        null,
+                        new OpenCLHashTable(context, 2, 16 * 1024 * 1024),
+                        new OpenCLHashTable(context, 3, 16 * 1024 * 1024),
+                        new OpenCLHashTable(context, 4, 16 * 1024 * 1024),
+                        new OpenCLHashTable(context, 5, 16 * 1024 * 1024)
+                    };
                 SetUpProgram(context);
             }
 
             public void Run(ComputeCommandQueue queue, TransactionReader reader)
             {
+                Progress = 5;
                 lastIdx = ReadTransactions(reader);
+                Progress = 10;
 
                 // Set up the transaction items argument.
                 transactionsArg =
-                    new ComputeBuffer<uint>(phase1aKernel.Context,
+                    new ComputeBuffer<uint>(kernel[0,0].Context,
                                             ComputeMemoryFlags.ReadOnly | ComputeMemoryFlags.CopyHostPointer,
                                             transactionItems);
-                RunPhase1(queue);
-                queue.AddBarrier();
-                RunPhase2(queue);
-                queue.AddBarrier();
-                RunPhase3(queue);
-                queue.AddBarrier();
-                RunPhase4(queue);
-                queue.AddBarrier();
-                RunPhase5(queue);
+                for (int tupleSize = 1; tupleSize <= MAX_TUPLE_SIZE; tupleSize++)
+                {
+                    queue.AddBarrier();
+                    RunPhase(tupleSize, queue);
+                    Progress += 80/MAX_TUPLE_SIZE;
+                }
                 queue.Finish();
+                Progress = 100;
             }
 
             public int GetNoTransactions()
@@ -294,29 +283,22 @@ namespace CountItemSets
                 return result;
             }
 
-            public IDictionary<string, int> Get2TupleResult(ComputeCommandQueue queue)
+            public IDictionary<string, int> GetNTupleResult(int n, ComputeCommandQueue queue)
             {
-                return tuple2Dictionary.AsDictionary(queue, EANfromID);
-            }
-
-            public IDictionary<string, int> Get3TupleResult(ComputeCommandQueue queue)
-            {
-                return tuple3Dictionary.AsDictionary(queue, EANfromID);
-            }
-
-            public IDictionary<string, int> Get4TupleResult(ComputeCommandQueue queue)
-            {
-                return tuple4Dictionary.AsDictionary(queue, EANfromID);
-            }
-
-            public IDictionary<string, int> Get5TupleResult(ComputeCommandQueue queue)
-            {
-                return tuple5Dictionary.AsDictionary(queue, EANfromID);
+                if (1 < n && n <= MAX_TUPLE_SIZE)
+                {
+                    return tupleDictionary[n - 1].AsDictionary(queue, EANfromID);
+                }
+                else
+                {
+                    throw new ArgumentException("the tuple size N must be between 2 and " +
+                                                MAX_TUPLE_SIZE + ".");
+                }
             }
 
             private void SetUpProgram(ComputeContext context)
             {
-                const int MAX_TUPLE_SIZE = 5;
+                kernel = new ComputeKernel[MAX_TUPLE_SIZE, 2];
                 keyVar = new string[MAX_TUPLE_SIZE];
                 loopVar = new char[MAX_TUPLE_SIZE];
                 for (int i = 0; i < MAX_TUPLE_SIZE; i++)
@@ -325,19 +307,18 @@ namespace CountItemSets
                     loopVar[i] = (char)('i' + i);
                 }
 
-                program = new ComputeProgram(context,
-                                             new string[] {
-                                                            tuple2Dictionary.SourceOpenCL,
-                                                            tuple3Dictionary.SourceOpenCL,
-                                                            tuple4Dictionary.SourceOpenCL,
-                                                            tuple5Dictionary.SourceOpenCL,
-                                                            constantsOpenCL,
-                                                            Phase1aOpenCL, Phase1bOpenCL,
-                                                            Phase2aOpenCL, PhaseNb(2),
-                                                            PhaseNa(3),    PhaseNb(3),
-                                                            PhaseNa(4),    PhaseNb(4),
-                                                            PhaseNa(5),    PhaseNb(5)
-                                                          });
+                IEnumerable<string> htSource = from d in tupleDictionary
+                                               where d != null
+                                               select d.SourceOpenCL;
+                List<string> code =
+                    new List<string>(htSource.Concat(new string[] { Phase1aOpenCL, Phase1bOpenCL,
+                                                                    Phase2aOpenCL, PhaseNb(2) }));
+                for (int p = 3; p <= MAX_TUPLE_SIZE; p++)
+                {
+                    code.Add(PhaseNa(p));
+                    code.Add(PhaseNb(p));
+                }
+                program = new ComputeProgram(context, code.ToArray());
                 // Compile the program.
                 try
                 {
@@ -348,20 +329,11 @@ namespace CountItemSets
                     string message = program.GetBuildLog(context.Devices[0]);
                     throw new ArgumentException(message);
                 }
-                phase1aKernel = program.CreateKernel("count_1tuple_frequencies");
-                phase1bKernel = program.CreateKernel("clip_1tuple_frequencies");
-
-                phase2aKernel = program.CreateKernel("count_2tuple_frequencies");
-                phase2bKernel = program.CreateKernel("clip_2tuple_frequencies");
-
-                phase3aKernel = program.CreateKernel("count_3tuple_frequencies");
-                phase3bKernel = program.CreateKernel("clip_3tuple_frequencies");
-
-                phase4aKernel = program.CreateKernel("count_4tuple_frequencies");
-                phase4bKernel = program.CreateKernel("clip_4tuple_frequencies");
-
-                phase5aKernel = program.CreateKernel("count_5tuple_frequencies");
-                phase5bKernel = program.CreateKernel("clip_5tuple_frequencies");
+                for (int p = 0; p < MAX_TUPLE_SIZE; p++)
+                {
+                    kernel[p, 0] = program.CreateKernel("count_" + (p+1) + "tuple_frequencies");
+                    kernel[p, 1] = program.CreateKernel("clip_" + (p+1) + "tuple_frequencies");
+                }
 
                 // Create some of the arguments.
                 tuple1Handle =
@@ -444,96 +416,37 @@ namespace CountItemSets
                 return idx;
             }
 
-            private void RunPhase1(ComputeCommandQueue queue)
+            private void RunPhase(int tupleSize, ComputeCommandQueue queue)
             {
-                Console.Out.WriteLine("Executing " + phase1aKernel.FunctionName + " on " + lastIdx +
+                ComputeKernel kernelA = kernel[tupleSize-1, 0];
+                ComputeKernel kernelB = kernel[tupleSize-1, 1];
+                Console.Out.WriteLine("Executing " + kernelA.FunctionName + " on " + lastIdx +
                                       " GPU threads.");
-                phase1aKernel.SetMemoryArgument(0, transactionsArg);
-                phase1aKernel.SetMemoryArgument(1, tuple1FrequenciesArg);
-                queue.Execute(phase1aKernel, new long[] { 0 }, new long[] { lastIdx }, null, null);
+                kernelA.SetMemoryArgument(0, transactionsArg);
+                kernelA.SetMemoryArgument(1, tuple1FrequenciesArg);
+                for (int argNo = 2; argNo <= tupleSize; argNo++)
+                {
+                    // The first tuple size is 2 which is at index 1.
+                    tupleDictionary[argNo-1].SetAsArgument(kernelA, argNo);
+                }
+                queue.Execute(kernelA, new long[] { 0 }, new long[] { lastIdx }, null, null);
                 queue.AddBarrier();
 
-                Console.Out.WriteLine("Executing " + phase1bKernel.FunctionName + " on " +
-                                      itemFrequencies.Length + " GPU threads.");
-                phase1bKernel.SetMemoryArgument(0, tuple1FrequenciesArg);
-                phase1bKernel.SetValueArgument<uint>(1, (uint)(pruningMinSupport * noTransactions));
-                queue.Execute(phase1bKernel, new long[] { 0 }, new long[] { itemFrequencies.Length }, null, null);
-            }
-
-            private void RunPhase2(ComputeCommandQueue queue)
-            {
-                Console.Out.WriteLine("Executing " + phase2aKernel.FunctionName + " on " + lastIdx +
-                                      " GPU threads.");
-                phase2aKernel.SetMemoryArgument(0, transactionsArg);
-                phase2aKernel.SetMemoryArgument(1, tuple1FrequenciesArg);
-                tuple2Dictionary.SetAsArgument(phase2aKernel, 2);
-                queue.Execute(phase2aKernel, new long[] { 0 }, new long[] { lastIdx }, null, null);
-                queue.AddBarrier();
-
-                Console.Out.WriteLine("Executing " + phase2bKernel.FunctionName + " on " +
-                    tuple2Dictionary.MaxSize + " GPU threads.");
-                tuple2Dictionary.SetAsArgument(phase2bKernel, 0);
-                phase2bKernel.SetValueArgument<uint>(1, (uint)(pruningMinSupport * noTransactions));
-                queue.Execute(phase2bKernel, new long[] { 0 }, new long[] { tuple2Dictionary.MaxSize }, null, null);
-            }
-
-            private void RunPhase3(ComputeCommandQueue queue)
-            {
-                Console.Out.WriteLine("Executing " + phase3aKernel.FunctionName + " on " + lastIdx +
-                                      " GPU threads.");
-                phase3aKernel.SetMemoryArgument(0, transactionsArg);
-                phase3aKernel.SetMemoryArgument(1, tuple1FrequenciesArg);
-                tuple2Dictionary.SetAsArgument(phase3aKernel, 2);
-                tuple3Dictionary.SetAsArgument(phase3aKernel, 3);
-                queue.Execute(phase3aKernel, new long[] { 0 }, new long[] { lastIdx }, null, null);
-                queue.AddBarrier();
-
-                Console.Out.WriteLine("Executing " + phase3bKernel.FunctionName + " on " +
-                    tuple3Dictionary.MaxSize + " GPU threads.");
-                tuple3Dictionary.SetAsArgument(phase3bKernel, 0);
-                phase3bKernel.SetValueArgument<uint>(1, (uint)(pruningMinSupport * noTransactions));
-                queue.Execute(phase3bKernel, new long[] { 0 }, new long[] { tuple3Dictionary.MaxSize }, null, null);
-            }
-
-            private void RunPhase4(ComputeCommandQueue queue)
-            {
-                Console.Out.WriteLine("Executing " + phase4aKernel.FunctionName + " on " + lastIdx +
-                                      " GPU threads.");
-                phase4aKernel.SetMemoryArgument(0, transactionsArg);
-                phase4aKernel.SetMemoryArgument(1, tuple1FrequenciesArg);
-                tuple2Dictionary.SetAsArgument(phase4aKernel, 2);
-                tuple3Dictionary.SetAsArgument(phase4aKernel, 3);
-                tuple4Dictionary.SetAsArgument(phase4aKernel, 4);
-
-                queue.Execute(phase4aKernel, new long[] { 0 }, new long[] { lastIdx }, null, null);
-                queue.AddBarrier();
-
-                Console.Out.WriteLine("Executing " + phase4bKernel.FunctionName + " on " +
-                    tuple4Dictionary.MaxSize + " GPU threads.");
-                tuple4Dictionary.SetAsArgument(phase4bKernel, 0);
-                phase4bKernel.SetValueArgument<uint>(1, (uint)(pruningMinSupport * noTransactions));
-                queue.Execute(phase4bKernel, new long[] { 0 }, new long[] { tuple4Dictionary.MaxSize }, null, null);
-            }
-
-            private void RunPhase5(ComputeCommandQueue queue)
-            {
-                Console.Out.WriteLine("Executing " + phase5aKernel.FunctionName + " on " + lastIdx +
-                                      " GPU threads.");
-                phase5aKernel.SetMemoryArgument(0, transactionsArg);
-                phase5aKernel.SetMemoryArgument(1, tuple1FrequenciesArg);
-                tuple2Dictionary.SetAsArgument(phase5aKernel, 2);
-                tuple3Dictionary.SetAsArgument(phase5aKernel, 3);
-                tuple4Dictionary.SetAsArgument(phase5aKernel, 4);
-                tuple5Dictionary.SetAsArgument(phase5aKernel, 5);
-
-                queue.Execute(phase5aKernel, new long[] { 0 }, new long[] { lastIdx }, null, null);
-                queue.AddBarrier();
-
-                Console.Out.WriteLine("Executing " + phase5bKernel.FunctionName + " on " +
-                    tuple4Dictionary.MaxSize + " GPU threads.");
-                tuple5Dictionary.SetAsArgument(phase5bKernel, 0);
-                phase5bKernel.SetValueArgument<uint>(1, (uint)(pruningMinSupport * noTransactions));
-                queue.Execute(phase5bKernel, new long[] { 0 }, new long[] { tuple5Dictionary.MaxSize }, null, null);
+                int noThreads;
+                if (tupleSize == 1)
+                {
+                    noThreads = (int)tuple1FrequenciesArg.Count;
+                    kernelB.SetMemoryArgument(0, tuple1FrequenciesArg);
+                }
+                else
+                {
+                    noThreads = tupleDictionary[tupleSize-1].MaxSize;
+                    tupleDictionary[tupleSize-1].SetAsArgument(kernelB, 0);
+                }
+                Console.Out.WriteLine("Executing " + kernelB.FunctionName + " on " +
+                                      noThreads + " GPU threads.");
+                kernelB.SetValueArgument<uint>(1, (uint)(pruningMinSupport * noTransactions));
+                queue.Execute(kernelB, new long[] { 0 }, new long[] { noThreads }, null, null);
             }
 
             private string PhaseNa(int n)
@@ -644,10 +557,6 @@ __kernel void clip_" + n + @"tuple_frequencies(__global /*__read_write*/ uint* f
 }";
             }
 
-
-            private string constantsOpenCL =
-                @"
-";
             private string Phase1aOpenCL =
                 @"
 __kernel void count_1tuple_frequencies(__global /*__read_only*/  uint* transaction_items,
@@ -700,20 +609,14 @@ __kernel void count_2tuple_frequencies(__global /*__read_only*/  uint* transacti
                         transactionsArg.Dispose();
                         tuple1Handle.Free();
                         tuple1FrequenciesArg.Dispose();
-                        tuple2Dictionary.Dispose();
-                        tuple3Dictionary.Dispose();
-                        tuple4Dictionary.Dispose();
-                        tuple5Dictionary.Dispose();
-                        phase1aKernel.Dispose();
-                        phase1bKernel.Dispose();
-                        phase2aKernel.Dispose();
-                        phase2bKernel.Dispose();
-                        phase3aKernel.Dispose();
-                        phase3bKernel.Dispose();
-                        phase4aKernel.Dispose();
-                        phase4bKernel.Dispose();
-                        phase5aKernel.Dispose();
-                        phase5bKernel.Dispose();
+                        foreach (OpenCLHashTable d in tupleDictionary.Where(d => d != null))
+                        {
+                            d.Dispose();
+                        }
+                        foreach (ComputeKernel k in kernel)
+                        {
+                            k.Dispose();
+                        }
                         program.Dispose();
                     }
 
