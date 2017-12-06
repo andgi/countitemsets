@@ -22,6 +22,13 @@ namespace CountItemSets
             get; private set;
         }
 
+        public int MaxSizeInBytes
+        {
+            get {
+                return  (keyParts + 1) * sizeof(uint) * MaxSize;
+            }
+        }
+
         public string SourceOpenCL
         {
             get

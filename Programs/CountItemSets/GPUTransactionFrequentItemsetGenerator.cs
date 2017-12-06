@@ -219,6 +219,7 @@ namespace CountItemSets
                         new OpenCLHashTable(context, 4, 16 * 1024 * 1024),
                         new OpenCLHashTable(context, 5, 16 * 1024 * 1024)
                     };
+                CheckGPUMemory(context);
                 SetUpProgram(context);
             }
 
@@ -291,8 +292,27 @@ namespace CountItemSets
                 }
                 else
                 {
-                    throw new ArgumentException("the tuple size N must be between 2 and " +
-                                                MAX_TUPLE_SIZE + ".");
+                    throw new ArgumentOutOfRangeException(nameof(n), n,
+                                                          "the tuple size must be between 2 and " +
+                                                          MAX_TUPLE_SIZE + ".");
+                }
+            }
+
+            private void CheckGPUMemory(ComputeContext context)
+            {
+                long bytesRequired = 0;
+
+                bytesRequired += sizeof(uint) * transactionItems.Length;
+                bytesRequired += sizeof(uint) * itemFrequencies.Length;
+                foreach (OpenCLHashTable d in tupleDictionary.Where(d => d != null))
+                {
+                    bytesRequired += d.MaxSizeInBytes;
+                }
+                Console.Out.WriteLine("Available GPU memory: " + context.Devices.First().GlobalMemorySize + " bytes.");
+                Console.Out.WriteLine("Required GPU memory: " + bytesRequired + " bytes.");
+                if (bytesRequired > context.Devices.First().GlobalMemorySize)
+                {
+                    throw new InvalidOperationException("insufficient GPU memory.");
                 }
             }
 
