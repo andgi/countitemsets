@@ -181,6 +181,7 @@ namespace CountItemSets
                 context = null;
                 cmdQueue = null;
             }
+            Console.Out.Flush();
         }
 
         private class GPUAlgorithm : IDisposable
@@ -364,11 +365,19 @@ namespace CountItemSets
                                             ComputeMemoryFlags.WriteOnly| ComputeMemoryFlags.UseHostPointer,
                                             itemFrequencies);
 
-                //Console.Out.WriteLine(tuple3Dictionary.SourceOpenCL);
-                {
-                    int p = 5;
-                    //Console.Out.WriteLine(PhaseNa(p));
-                    //Console.Out.WriteLine(PhaseNb(p));
+                // Write out representative OpenCL code.
+                if (false) {
+                    Console.Out.WriteLine(Phase1aOpenCL);
+                    Console.Out.WriteLine(Phase1bOpenCL);
+                    Console.Out.WriteLine(Phase2aOpenCL);
+                    Console.Out.WriteLine(PhaseNb(2));
+                    Console.Out.WriteLine(tupleDictionary[1].SourceOpenCL);
+                    foreach (int p in new int[] {3, 4, 5})
+                    {
+                        Console.Out.WriteLine(PhaseNa(p));
+                        Console.Out.WriteLine(PhaseNb(p));
+                        Console.Out.WriteLine(tupleDictionary[p-1].SourceOpenCL);
+                    }
                 }
             }
 
@@ -541,7 +550,6 @@ __kernel void count_" + n + @"tuple_frequencies(__global /*__read_only*/  uint* 
 
             private string CheckSubTuples(int n)
             {
-                // FIXME: Only works for n=3!
                 string source = "1";
                 for (int without = n-2; without >= 0; without--)
                 {
