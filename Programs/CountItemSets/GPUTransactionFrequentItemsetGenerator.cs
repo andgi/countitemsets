@@ -215,10 +215,10 @@ namespace CountItemSets
                 itemFrequencies  = new uint[EANfromID.Length];
                 tupleDictionary = new OpenCLHashTable[] {
                         null,
-                        new OpenCLHashTable(context, 2, 16 * 1024 * 1024),
-                        new OpenCLHashTable(context, 3, 16 * 1024 * 1024),
-                        new OpenCLHashTable(context, 4, 16 * 1024 * 1024),
-                        new OpenCLHashTable(context, 5, 16 * 1024 * 1024)
+                        new OpenCLHashTable(context, 2, 32 * 1024 * 1024 - 1),
+                        new OpenCLHashTable(context, 3, 16 * 1024 * 1024 - 1),
+                        new OpenCLHashTable(context, 4, 4 * 1024 * 1024 - 1),
+                        new OpenCLHashTable(context, 5, 2 * 1024 * 1024 - 1)
                     };
                 CheckGPUMemory(context);
                 SetUpProgram(context);
@@ -366,7 +366,7 @@ namespace CountItemSets
                                             itemFrequencies);
 
                 // Write out representative OpenCL code.
-                if (false) {
+                if (true) {
                     Console.Out.WriteLine(Phase1aOpenCL);
                     Console.Out.WriteLine(Phase1bOpenCL);
                     Console.Out.WriteLine(Phase2aOpenCL);

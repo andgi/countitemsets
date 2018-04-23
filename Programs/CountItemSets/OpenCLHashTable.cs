@@ -15,7 +15,7 @@ namespace CountItemSets
         const uint P = 4294967291;
         const uint A = 628346;
         const uint B = 94967291;
-        const uint MAX_RETRIES = 7;
+        const uint MAX_RETRIES = 8;
 
         public int MaxSize
         {
@@ -91,13 +91,23 @@ namespace CountItemSets
         {
             get
             {
-                string hash = "((((0";
+                string hash = "((((1";
                 for (int i = 1; i <= keyParts; i++)
                 {
                     hash += "+key" + i;
                 }
-                hash += ") ^ " + A  + " + " + B + ") % " + P + ") % " + MaxSize + ")";
+                hash += ") ^ " + A + " + " + B + ") % " + P + ") % " + MaxSize + ")";
                 return hash;
+            }
+        }
+
+        protected string SourceProbe
+        {
+            get
+            {
+                return
+                    //"idx = (idx + (" + keyParts + @" + 1)*1) % ((" + keyParts + @" + 1)*" + MaxSize + @"); // Linear probing.";
+                    "idx = (idx + (" + keyParts + @" + 1) * t) % ((" + keyParts + @" + 1) * " + MaxSize + @"); // ? probing.";
             }
         }
 
@@ -122,11 +132,13 @@ void " + AddOrIncreaseFunctionName + @"(__global /*__read_write*/  uint* hashtab
             t--;
         } else if (" + SourceKeysMatch("hashtable", "idx") + @") {
             atomic_inc(&hashtable[idx + " + keyParts + @"]);
+            return;
         } else {
-            //idx = (idx + (" + keyParts + @" + 1)*1) % ((" + keyParts + @" + 1)*" + MaxSize + @"); // Linear probing.
-            idx = (idx + (" + keyParts + @" + 1)*t) % ((" + keyParts + @" + 1)*" + MaxSize + @"); // ? probing.
+            " + SourceProbe + @"
         }
     }
+    /* This update was lost. Increase the counter for lost updates. */
+    atomic_inc(&hashtable[(" + keyParts + " + 1)*" + MaxSize + @"]);
 }";
             }
         }
@@ -146,7 +158,7 @@ uint " + LookupFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
         } else if (" + SourceKeysMatch("hashtable", "idx") + @") {
             return hashtable[idx + " + keyParts + @"];
         } else {
-            idx = (idx + (" + keyParts + @" + 1)*t) % ((" + keyParts + @" + 1)*" + MaxSize + @"); // ? probing.
+            " + SourceProbe + @"
         }
     }
     return 0;
@@ -158,7 +170,7 @@ uint " + LookupFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
         {
             this.keyParts = keyParts;
             MaxSize = maxSize;
-            hashtable = new uint[MaxSize * (keyParts + 1)];
+            hashtable = new uint[MaxSize * (keyParts + 1) + 1]; // One extra cell to count lost updates.
             hashtableHandle =
                 System.Runtime.InteropServices.GCHandle.Alloc(hashtable,
                                                               System.Runtime.InteropServices.GCHandleType.Pinned);
@@ -183,14 +195,18 @@ uint " + LookupFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
                              null);
             Dictionary<string, int> result = new Dictionary<string, int>();
             long[] CPUKeys = new long[keyParts];
-            for (int i = 0; i < hashtable.Length; i += keyParts + 1)
+            int badBuckets = 0;
+            for (int i = 0; i < (keyParts + 1)*MaxSize; i += keyParts + 1)
             {
                 if (hashtable[i + keyParts] > 0)
                 {
                     // FIXME: Why needed?!
                     if (hashtable[i] == 0 || hashtable[i + 1] == 0 ||
                         hashtable[i] >= GPUtoCPU.Length || hashtable[i + 1] >= GPUtoCPU.Length)
+                    {
+                        badBuckets++;
                         continue;
+                    }
                     for (int k = 0; k < keyParts; k++)
                     {
                         CPUKeys[k] = GPUtoCPU[hashtable[i + k]];
@@ -204,6 +220,9 @@ uint " + LookupFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
                     result[key] = (int)hashtable[i + keyParts];
                 }
             }
+            Console.Out.WriteLine("OpenCLHashTable<" + keyParts + ">: Lost updates " +
+                                  hashtable[(keyParts + 1) * MaxSize] + ", " +
+                                  "Bad buckets " + badBuckets + ".");
             return result;
         }
 

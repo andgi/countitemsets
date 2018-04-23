@@ -51,9 +51,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cloo, Version=0.9.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sourceforge.Cloo.0.9.1\lib\net35\Cloo.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Cloo.clSharp">
+      <HintPath>..\packages\Cloo.clSharp.0.9.2.7\lib\net20\Cloo.clSharp.dll</HintPath>
     </Reference>
     <Reference Include="Equin.ApplicationFramework.BindingListView">
       <HintPath>..\Library\Equin.ApplicationFramework.BindingListView.dll</HintPath>

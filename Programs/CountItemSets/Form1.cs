@@ -1495,6 +1495,7 @@ namespace CountItemSets
             int nrTransactions = 0;
             int nrFrequentItemsets = 0;
             string fileName = textBoxFileNameExperimentLog.Text;
+            fileName = @"C:\Temp\count-item-sets-" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
             StreamWriter writer = new StreamWriter(fileName);
 
             for (int type = 2; type < 4; type++)

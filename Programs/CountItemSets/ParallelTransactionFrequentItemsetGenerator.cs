@@ -113,6 +113,7 @@ namespace CountItemSets
                     }
                 });
             }
+            Console.Out.WriteLine("Found " + dictionaryLevel1.Count + " 1-tuples.");
             dictionaryLevel1 = new ConcurrentDictionary<long,int>(dictionaryLevel1.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport && !pruningExcludeItems.Contains(item.Key)));
             Console.Out.WriteLine("Found " + dictionaryLevel1.Count + " interesting 1-tuples.");
             progressGenerate = 10;
@@ -203,6 +204,7 @@ namespace CountItemSets
                     }
                 });
             }*/
+            Console.Out.WriteLine("Found " + dictionaryLevel2.Count + " 2-tuples.");
             dictionaryLevel2 = new ConcurrentDictionary<string,int>(dictionaryLevel2.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
             Console.Out.WriteLine("Found " + dictionaryLevel2.Count + " interesting 2-tuples.");
             progressGenerate = 40;
@@ -355,6 +357,7 @@ namespace CountItemSets
                 });
             }
             */
+            Console.Out.WriteLine("Found " + dictionaryLevel3.Count + " 3-tuples.");
             dictionaryLevel3 = new ConcurrentDictionary<string,int>(dictionaryLevel3.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
             Console.Out.WriteLine("Found " + dictionaryLevel3.Count + " interesting 3-tuples.");
             progressGenerate = 60;
@@ -593,6 +596,7 @@ namespace CountItemSets
                 });
             }
             */
+            Console.Out.WriteLine("Found " + dictionaryLevel4.Count + " 4-tuples.");
             dictionaryLevel4 = new ConcurrentDictionary<string,int>(dictionaryLevel4.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
             Console.Out.WriteLine("Found " + dictionaryLevel4.Count + " interesting 4-tuples.");
             progressGenerate = 80;
@@ -705,6 +709,7 @@ namespace CountItemSets
                 }
             }
             */
+            Console.Out.WriteLine("Found " + dictionaryLevel5.Count + " 5-tuples.");
             dictionaryLevel5 = new ConcurrentDictionary<string,int>(dictionaryLevel5.Where(item => ((double)item.Value / transactionCount) >= pruningMinSupport));
             Console.Out.WriteLine("Found " + dictionaryLevel5.Count + " interesting 5-tuples.");
 
