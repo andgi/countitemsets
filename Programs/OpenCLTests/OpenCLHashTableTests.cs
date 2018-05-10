@@ -8,47 +8,8 @@ using CountItemSets;
 namespace OpenCLTests
 {
     [TestClass]
-    public class OpenCLHashTableTests
+    public class OpenCLHashTableTests : AbstractOpenCLTest
     {
-        public OpenCLHashTableTests()
-        {
-            SetUpOpenCL();
-        }
-
-        public void SetUpOpenCL()
-        {
-            ComputePlatform platform = null;
-            ComputeDevice gpu = null;
-            Console.Out.WriteLine("OpenCL platforms:");
-            foreach (ComputePlatform p in ComputePlatform.Platforms)
-            {
-                Console.Out.WriteLine("  " + p.Name + ", " + p.Profile + ", " + p.Vendor);
-                foreach (ComputeDevice d in p.Devices)
-                {
-                    Console.Out.WriteLine("    " + d.Name + ", " + d.Type + ", " + d.MaxComputeUnits +
-                                          ", " + d.OpenCLCVersionString + ", " + d.Available);
-                    if (d.Type == ComputeDeviceTypes.Gpu)
-                    {
-                        platform = p;
-                        gpu = d;
-                    }
-                }
-            }
-            if (gpu != null)
-            {
-                computeContext = new ComputeContext(new ComputeDevice[] { gpu },
-                                             new ComputeContextPropertyList(platform), null, IntPtr.Zero);
-                computeCmdQueue = new ComputeCommandQueue(computeContext, gpu, ComputeCommandQueueFlags.None);
-                Console.Out.WriteLine("Selected OpenCL platform: " + computeContext.Platform.Name + " and device: " + gpu.Name + ".");
-            }
-            else
-            {
-                computeContext = null;
-                computeCmdQueue = null;
-            }
-            Console.Out.Flush();
-        }
-
         [TestMethod]
         public void OCLHT_CanCreate()
         {
@@ -69,38 +30,51 @@ namespace OpenCLTests
         public void OCLHT_CanCompile()
         {
             OCLHT_CanCreate();
-            Console.Out.WriteLine(unitUnderTest.SourceOpenCL + OpenCLcode);
+            Console.Out.WriteLine(unitUnderTest.SourceOpenCL + OpenCLcodeInsert);
             computeProgram = new ComputeProgram(computeContext,
-                                                unitUnderTest.SourceOpenCL + OpenCLcode);
+                                                unitUnderTest.SourceOpenCL +
+                                                OpenCLcodeInsert + OpenCLcodeLookup);
             try {
                 computeProgram.Build(null, null, null, IntPtr.Zero);
             } catch (Exception e) {
                 Console.Out.WriteLine(e);
                 throw;
             }
-            computeKernel = computeProgram.CreateKernel("insert_tuples");
+            computeKernelInsert = computeProgram.CreateKernel("insert_tuples");
+            computeKernelLookup = computeProgram.CreateKernel("lookup_tuples");
         }
 
         [TestMethod]
-        public void OCLHT_CanRun()
+        public void OCLHT_CanRunInsert()
         {
             OCLHT_CanCompile();
 
-            unitUnderTest.SetAsArgument(computeKernel, 0);
-            Console.Out.WriteLine("Executing " + computeKernel.FunctionName + " on " +
+            unitUnderTest.SetAsArgument(computeKernelInsert, 0);
+            Console.Out.WriteLine("Executing " + computeKernelInsert.FunctionName + " on " +
                                   NO_THREADS + " GPU threads.");
-            computeCmdQueue.Execute(computeKernel, new long[] { 0 }, new long[] { NO_THREADS }, null, null);
+            computeCmdQueue.Execute(computeKernelInsert, new long[] { 0 }, new long[] { NO_THREADS }, null, null);
+            computeCmdQueue.Finish();
+        }
+
+        [TestMethod]
+        public void OCLHT_CanRunLookup()
+        {
+            OCLHT_CanRunInsert();
+            unitUnderTest.SetAsArgument(computeKernelLookup, 0);
+            Console.Out.WriteLine("Executing " + computeKernelLookup.FunctionName + " on " +
+                                  MAX_SIZE + " GPU threads.");
+            computeCmdQueue.Execute(computeKernelLookup, new long[] { 0 }, new long[] { MAX_SIZE }, null, null);
             computeCmdQueue.Finish();
         }
 
         [TestMethod]
         public void OCLHT_CanReadFilled()
         {
-            OCLHT_CanRun();
+            OCLHT_CanRunLookup();
             IDictionary<string, int> dict = unitUnderTest.AsDictionary(computeCmdQueue,
                                                                        GetTranslation(NO_THREADS));
             Assert.IsNotNull(dict);
-            Assert.AreEqual(MAX_SIZE, dict.Count); // We fill it completely..
+            Assert.AreEqual(MAX_SIZE, dict.Count); // We filled it completely..
             for (int t = 1; t <= MAX_SIZE; t++) {
                 string key = t.ToString();
                 for (int k = 1; k < TUPLE_SIZE; k++) {
@@ -119,19 +93,40 @@ namespace OpenCLTests
             return translation;
         }
 
-        private string OpenCLcode {
+        private string OpenCLcodeInsert {
             get {
                 string code = @"
 __kernel void insert_tuples(__global /*__read_write*/ uint* hashtable)
 {
     // Vector element index: denotes keys of an entry.
     uint idx = get_global_id(0) % " + MAX_SIZE + @" + 1;
-    ht" + TUPLE_SIZE + @"_add_or_increase(hashtable";
+    " + unitUnderTest.AddOrIncreaseFunctionName + "(hashtable";
                 for (int i = 0; i < TUPLE_SIZE; i++) {
                     code += ", 1";
                 }
                 code += @");
-    ht" + TUPLE_SIZE + @"_add_or_increase(hashtable";
+    " + unitUnderTest.AddOrIncreaseFunctionName + "(hashtable";
+                for (int i = 0; i < TUPLE_SIZE; i++)
+                {
+                    code += ", idx";
+                }
+                code += @");
+}
+";
+                return code;
+            }
+        }
+
+        private string OpenCLcodeLookup
+        {
+            get
+            {
+                string code = @"
+__kernel void lookup_tuples(__global /*__read_write*/ uint* hashtable)
+{
+    // Vector element index: denotes keys of an entry.
+    uint idx = get_global_id(0) % " + MAX_SIZE + @" + 1;
+    uint count = " + unitUnderTest.LookupFunctionName + "(hashtable";
                 for (int i = 0; i < TUPLE_SIZE; i++)
                 {
                     code += ", idx";
@@ -144,12 +139,11 @@ __kernel void insert_tuples(__global /*__read_write*/ uint* hashtable)
         }
 
         private const int TUPLE_SIZE = 2;
-        private const int MAX_SIZE = 4 * 1024 * 1024;
+        private const int MAX_SIZE = 1 * 1024 * 1024;
         private const int NO_THREADS = 2*MAX_SIZE;
-        private ComputeContext computeContext;
-        private ComputeCommandQueue computeCmdQueue;
         private OpenCLHashTable unitUnderTest;
         private ComputeProgram computeProgram;
-        private ComputeKernel computeKernel;
+        private ComputeKernel computeKernelInsert;
+        private ComputeKernel computeKernelLookup;
     }
 }

@@ -178,6 +178,8 @@ uint " + LookupFunctionName + @"(__global /*__read_write*/  uint* hashtable" +
                 new ComputeBuffer<uint>(context,
                                         ComputeMemoryFlags.WriteOnly | ComputeMemoryFlags.UseHostPointer,
                                         hashtable);
+            Console.Out.WriteLine("OpenCLHashTable<" + keyParts + "> Created size " + MaxSize +
+                                  " entries, " + MaxSizeInBytes + " bytes.");
         }
 
         public void SetAsArgument(ComputeKernel kernel, int index)
