@@ -10,7 +10,7 @@ using Cloo;
 
 namespace CountItemSets
 {
-    class GPUTransactionFrequentItemsetGenerator : IFrequentItemsetGenerator
+    public class GPUTransactionFrequentItemsetGenerator : IFrequentItemsetGenerator
     {
         public IDictionary<long, int> Level1 { get { return dictionaryLevel1; } }
         public IDictionary<string, int> Level2 { get { return dictionaryLevel2; } }
@@ -93,7 +93,7 @@ namespace CountItemSets
             GenerateCallBack callBack = obj as GenerateCallBack;
             stopwatch.Restart();
 
-            TransactionReader reader = new TransactionReader(fileNameTransaction, dictionaryEANtoVGR);
+            ITransactionReader reader = new TransactionReader(fileNameTransaction, dictionaryEANtoVGR);
             reader.SetMaxNrTransactions(maxNrTransactions);
 
             // Level 1
@@ -184,7 +184,7 @@ namespace CountItemSets
             Console.Out.Flush();
         }
 
-        private class GPUAlgorithm : IDisposable
+        public class GPUAlgorithm : IDisposable
         {
             int MAX_TUPLE_SIZE = 5;
             double pruningMinSupport = 0.0;
@@ -204,7 +204,7 @@ namespace CountItemSets
 
             public int Progress { get; private set; }
 
-            public GPUAlgorithm(ComputeContext context, TransactionReader reader,
+            public GPUAlgorithm(ComputeContext context, ITransactionReader reader,
                                 double pruningMinSupport)
             {
                 Progress = 0;
@@ -224,7 +224,7 @@ namespace CountItemSets
                 SetUpProgram(context);
             }
 
-            public void Run(ComputeCommandQueue queue, TransactionReader reader)
+            public void Run(ComputeCommandQueue queue, ITransactionReader reader)
             {
                 Progress = 5;
                 lastIdx = ReadTransactions(reader);
@@ -381,7 +381,7 @@ namespace CountItemSets
                 }
             }
 
-            private void SetUpTranslations(TransactionReader reader)
+            private void SetUpTranslations(ITransactionReader reader)
             {
                 // There are EAN codes not present in the EAN translation table so
                 // get all codes from the transactions, instead.
@@ -412,7 +412,7 @@ namespace CountItemSets
                 }
             }
 
-            private int ReadTransactions(TransactionReader reader)
+            private int ReadTransactions(ITransactionReader reader)
             {
                 noTransactions = 0;
                 int idx = 0;

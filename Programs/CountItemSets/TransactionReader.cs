@@ -9,7 +9,7 @@ using System.Collections.Concurrent;
 
 namespace CountItemSets
 {
-    public class TransactionReader
+    public class TransactionReader : ITransactionReader
     {
         public class Transaction
         {

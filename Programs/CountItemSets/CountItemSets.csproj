@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="GPUTransactionFrequentItemsetGenerator.cs" />
     <Compile Include="IFrequentItemsetGenerator.cs" />
+    <Compile Include="ITransactionReader.cs" />
     <Compile Include="OpenCLHashTable.cs" />
     <Compile Include="ParallelFrequentItemsetGenerator.cs" />
     <Compile Include="Program.cs" />
