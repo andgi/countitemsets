@@ -8,12 +8,18 @@ namespace CountItemSets
 {
     public class FakeTransactionReader : ITransactionReader
     {
+        /// <summary>
+        ///  The number of transactions.
+        /// </summary>
         public int NoTransactions {
             get {
                 return transactions.Count;
             }
         }
 
+        /// <summary>
+        ///  The collection of all EANs in the transactions.
+        /// </summary>
         public ICollection<long> AllEANs {
             get {
                 return transactions.
@@ -22,6 +28,9 @@ namespace CountItemSets
             }
         }
 
+        /// <summary>
+        ///  The frequency of each EAN in the transactions.
+        /// </summary>
         public IDictionary<long, int> EANFrequencies {
             get {
                 return transactions.
@@ -32,6 +41,9 @@ namespace CountItemSets
             }
         }
 
+        /// <summary>
+        ///  The frequency of each pair/2-tuple (within a transaction) of EANs in the transactions.
+        /// </summary>
         public IDictionary<string, int> EAN2TupleFrequencies {
             get {
                 return transactions.SelectMany
@@ -45,6 +57,9 @@ namespace CountItemSets
             }
         }
 
+        /// <summary>
+        ///  The frequency of each 3-tuple (within a transaction) of EANs in the transactions.
+        /// </summary>
         public IDictionary<string, int> EAN3TupleFrequencies {
             get {
                 return transactions.SelectMany
@@ -65,13 +80,18 @@ namespace CountItemSets
             }
         }
 
-        public FakeTransactionReader()
+        public FakeTransactionReader() : this(400, 20, 3)
+        { }
+
+        public FakeTransactionReader(int noTransactions, int noUniqueEANs, int maxTransactionSize)
         {
-            transactions = new List<TransactionReader.Transaction>(1);
-            for (int i = 0; i < 1000; i++) {
+            transactions = new List<TransactionReader.Transaction>(noTransactions);
+            for (int i = 0; i < noTransactions; i++) {
                 TransactionReader.Transaction transaction = new TransactionReader.Transaction();
-                long baseEAN = i % 500;
-                transaction.EANCodes.InsertRange(0, new long[]{baseEAN + 1, baseEAN + 2, baseEAN + 3 });
+                for (int j = 0; j < maxTransactionSize; j++) {
+                    long EAN = (i+j) % noUniqueEANs;
+                    transaction.EANCodes.Add(EAN);
+                }
                 transactions.Add(transaction);
             }
         }
