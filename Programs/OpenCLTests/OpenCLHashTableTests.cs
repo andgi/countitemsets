@@ -138,8 +138,8 @@ __kernel void lookup_tuples(__global /*__read_write*/ uint* hashtable)
             }
         }
 
-        private const int TUPLE_SIZE = 2;
-        private const int MAX_SIZE = 1 * 1024 * 1024;
+        private const int TUPLE_SIZE = 5;
+        private const int MAX_SIZE = 4 * 1024 * 1024;
         private const int NO_THREADS = 2*MAX_SIZE;
         private OpenCLHashTable unitUnderTest;
         private ComputeProgram computeProgram;
