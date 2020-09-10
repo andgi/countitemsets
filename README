@@ -1,0 +1,16 @@
+﻿CIS - Count Item Sets
+=====================
+
+Copyright (C) 2014 - 2020  Håkan Sundell
+Copyright (C) 2017 - 2020  Anders Gidenstam
+
+CIS is a C# and GPU program for finding frequent item sets.
+
+CIS is released under the GNU Lesser General Public License (LGPL)
+version 3 or later - see the LICENSE file for license details.
+
+The development of CIS is partially funded by
+the Swedish Knowledge Foundation (KK-stiftelsen) through the project
+Data-Driven Innovation: Algorithms, Platforms and Ecosystems (DDI) 2016-2021.
+
+See the INSTALL file for help on building CIS.
