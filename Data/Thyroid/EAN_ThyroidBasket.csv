@@ -1,0 +1,56 @@
+EAN;BEN;VGR
+1201;on thyroxine_t;12
+1202;query on thyroxine_t;12
+1203;on antithyroid medication_t;12
+1204;sick_t;12
+1205;pregnant_t;12
+1206;thyroid surgery_t;12
+1207;I131 treatment_t;12
+1208;query hypothyroid_t;12
+1209;query hyperthyroid_t;12
+1210;lithium_t;12
+1211;goitre_t;12
+1212;tumor_t;12
+1213;hypopituitary_t;12
+1214;psych_t;12
+1001;age [Binned]_Bin 1;10
+1002;age [Binned]_Bin 2;10
+1003;age [Binned]_Bin 3;10
+1004;age [Binned]_Bin 4;10
+1005;age [Binned]_Bin 5;10
+1101;sex_F;11
+1102;sex_M;11
+2001;referral source_other;20
+2002;referral source_STMW;20
+2003;referral source_SVHC;20
+2004;referral source_SVHD;20
+2005;referral source_SVI;20
+10001;diagnosis_negative;100
+10002;diagnosis_overreplacement;100
+10003;diagnosis_replacement therapy;100
+10004;diagnosis_underreplacement;100
+11001;TSH [Binned]_Bin 1;110
+11002;TSH [Binned]_Bin 2;110
+11003;TSH [Binned]_Bin 3;110
+11004;TSH [Binned]_Bin 4;110
+11005;TSH [Binned]_Bin 5;110
+12001;T3 [Binned]_Bin 1;120
+12002;T3 [Binned]_Bin 2;120
+12003;T3 [Binned]_Bin 3;120
+12004;T3 [Binned]_Bin 4;120
+12005;T3 [Binned]_Bin 5;120
+13001;TT4 [Binned]_Bin 1;130
+13002;TT4 [Binned]_Bin 2;130
+13003;TT4 [Binned]_Bin 3;130
+13004;TT4 [Binned]_Bin 4;130
+13005;TT4 [Binned]_Bin 5;130
+14001;T4U [Binned]_Bin 1;140
+14002;T4U [Binned]_Bin 2;140
+14003;T4U [Binned]_Bin 3;140
+14004;T4U [Binned]_Bin 4;140
+14005;T4U [Binned]_Bin 5;140
+15001;FTI [Binned]_Bin 1;150
+15002;FTI [Binned]_Bin 2;150
+15003;FTI [Binned]_Bin 3;150
+15004;FTI [Binned]_Bin 4;150
+15005;FTI [Binned]_Bin 5;150
