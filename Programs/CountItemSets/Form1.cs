@@ -32,6 +32,7 @@ namespace CountItemSets
 
             try
             {
+                comboBoxCPUorGPU.SelectedIndex = 0;
                 textBoxFileName.Text = ConfigurationManager.AppSettings["TransactionFileName"];
                 textBoxFileNameItemsets.Text = ConfigurationManager.AppSettings["ItemsetsFileName"];
                 fileNameItemsets = textBoxFileNameItemsets.Text;
@@ -181,9 +182,9 @@ namespace CountItemSets
             config.Save(ConfigurationSaveMode.Modified);
         }
 
-        public IFrequentItemsetGenerator generator =
+        public IFrequentItemsetGenerator generator;
             //new ParallelTransactionFrequentItemsetGenerator();
-            new GPUTransactionFrequentItemsetGenerator();
+            //new GPUTransactionFrequentItemsetGenerator();
 
         static Dictionary<long, string> dictionaryEAN = new Dictionary<long, string>();
         static Dictionary<int, string> dictionaryVGR = new Dictionary<int, string>();
@@ -1570,6 +1571,18 @@ namespace CountItemSets
             writer.Close();
         }
 
+        private void comboBoxCPUorGPU_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selected = (string)comboBoxCPUorGPU.Items[comboBoxCPUorGPU.SelectedIndex];
+            if (selected == "On CPU")
+            {
+                generator = new ParallelTransactionFrequentItemsetGenerator();
+            }
+            else
+            {
+                generator = new GPUTransactionFrequentItemsetGenerator();
+            }
+        }
     }
 
 }

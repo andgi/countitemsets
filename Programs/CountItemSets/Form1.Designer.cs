@@ -124,6 +124,9 @@
             this.textBoxFileNameItemsets = new System.Windows.Forms.TextBox();
             this.buttonBrowseFileNameItemset = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.textBoxFileNameExperimentLog = new System.Windows.Forms.TextBox();
+            this.textBoxExperimentLog = new System.Windows.Forms.TextBox();
+            this.buttonExperiment = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.labelPruningMinSupport = new System.Windows.Forms.Label();
@@ -163,9 +166,7 @@
             this.richTextBoxSelectedRule = new System.Windows.Forms.RichTextBox();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonExperiment = new System.Windows.Forms.Button();
-            this.textBoxExperimentLog = new System.Windows.Forms.TextBox();
-            this.textBoxFileNameExperimentLog = new System.Windows.Forms.TextBox();
+            this.comboBoxCPUorGPU = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.groupBoxAssociationRules.SuspendLayout();
             this.groupBoxFilters.SuspendLayout();
@@ -351,6 +352,7 @@
             // 
             // contextMenuStripFilterLevel1
             // 
+            this.contextMenuStripFilterLevel1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripFilterLevel1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAllToolStripMenuSelectAll,
             this.selectNoneToolStripMenuSelectNone});
@@ -565,6 +567,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
@@ -868,6 +871,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.comboBoxCPUorGPU);
             this.groupBox5.Controls.Add(this.textBoxFileNameExperimentLog);
             this.groupBox5.Controls.Add(this.textBoxExperimentLog);
             this.groupBox5.Controls.Add(this.buttonExperiment);
@@ -883,6 +887,23 @@
             resources.ApplyResources(this.groupBox5, "groupBox5");
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.TabStop = false;
+            // 
+            // textBoxFileNameExperimentLog
+            // 
+            resources.ApplyResources(this.textBoxFileNameExperimentLog, "textBoxFileNameExperimentLog");
+            this.textBoxFileNameExperimentLog.Name = "textBoxFileNameExperimentLog";
+            // 
+            // textBoxExperimentLog
+            // 
+            resources.ApplyResources(this.textBoxExperimentLog, "textBoxExperimentLog");
+            this.textBoxExperimentLog.Name = "textBoxExperimentLog";
+            // 
+            // buttonExperiment
+            // 
+            resources.ApplyResources(this.buttonExperiment, "buttonExperiment");
+            this.buttonExperiment.Name = "buttonExperiment";
+            this.buttonExperiment.UseVisualStyleBackColor = true;
+            this.buttonExperiment.Click += new System.EventHandler(this.buttonExperiment_Click);
             // 
             // label4
             // 
@@ -1155,22 +1176,20 @@
             this.richTextBoxSelectedRule.Name = "richTextBoxSelectedRule";
             this.richTextBoxSelectedRule.ReadOnly = true;
             // 
-            // buttonExperiment
+            // comboBoxCPUorGPU
             // 
-            resources.ApplyResources(this.buttonExperiment, "buttonExperiment");
-            this.buttonExperiment.Name = "buttonExperiment";
-            this.buttonExperiment.UseVisualStyleBackColor = true;
-            this.buttonExperiment.Click += new System.EventHandler(this.buttonExperiment_Click);
-            // 
-            // textBoxExperimentLog
-            // 
-            resources.ApplyResources(this.textBoxExperimentLog, "textBoxExperimentLog");
-            this.textBoxExperimentLog.Name = "textBoxExperimentLog";
-            // 
-            // textBoxFileNameExperimentLog
-            // 
-            resources.ApplyResources(this.textBoxFileNameExperimentLog, "textBoxFileNameExperimentLog");
-            this.textBoxFileNameExperimentLog.Name = "textBoxFileNameExperimentLog";
+            this.comboBoxCPUorGPU.AutoCompleteCustomSource.AddRange(new string[] {
+            resources.GetString("comboBoxCPUorGPU.AutoCompleteCustomSource"),
+            resources.GetString("comboBoxCPUorGPU.AutoCompleteCustomSource1")});
+            this.comboBoxCPUorGPU.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.comboBoxCPUorGPU.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxCPUorGPU.Items.AddRange(new object[] {
+            resources.GetString("comboBoxCPUorGPU.Items"),
+            resources.GetString("comboBoxCPUorGPU.Items1")});
+            resources.ApplyResources(this.comboBoxCPUorGPU, "comboBoxCPUorGPU");
+            this.comboBoxCPUorGPU.Name = "comboBoxCPUorGPU";
+            this.comboBoxCPUorGPU.Sorted = true;
+            this.comboBoxCPUorGPU.SelectedIndexChanged += new System.EventHandler(this.comboBoxCPUorGPU_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -1369,6 +1388,7 @@
         private System.Windows.Forms.Button buttonExperiment;
         private System.Windows.Forms.TextBox textBoxFileNameExperimentLog;
         private System.Windows.Forms.TextBox textBoxExperimentLog;
+        private System.Windows.Forms.ComboBox comboBoxCPUorGPU;
     }
 }
 
