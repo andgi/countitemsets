@@ -15,7 +15,7 @@ namespace CountItemSets
         const uint P = 4294967291;
         const uint A = 628346;
         const uint B = 94967291;
-        const uint MAX_RETRIES = 8;
+        const uint MAX_RETRIES = 9;
 
         public int MaxSize
         {
