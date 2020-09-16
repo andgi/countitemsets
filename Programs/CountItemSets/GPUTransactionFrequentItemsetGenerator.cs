@@ -215,7 +215,7 @@ namespace CountItemSets
                 itemFrequencies  = new uint[EANfromID.Length];
                 tupleDictionary = new OpenCLHashTable[] {
                         null,
-                        new OpenCLHashTable(context, 2, 32 * 1024 * 1024 - 1),
+                        new OpenCLHashTable(context, 2, 16 * 1024 * 1024 - 1),
                         new OpenCLHashTable(context, 3, 16 * 1024 * 1024 - 1),
                         new OpenCLHashTable(context, 4, 4 * 1024 * 1024 - 1),
                         new OpenCLHashTable(context, 5, 2 * 1024 * 1024 - 1)
