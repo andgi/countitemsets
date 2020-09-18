@@ -94,9 +94,10 @@ namespace CountItemSets
                 string hash = "((((1";
                 for (int i = 1; i <= keyParts; i++)
                 {
-                    hash += "+key" + i;
+                    int n = 5 * (i - 1);
+                    hash += "+(key" + i + "<<" + n + ") | (key" + i + ">>(" + (-n) + "& 31))";
                 }
-                hash += ") ^ " + A + " + " + B + ") % " + P + ") % " + MaxSize + ")";
+                hash += ") + " + B + ") % " + P + ") % " + MaxSize + ")";
                 return hash;
             }
         }

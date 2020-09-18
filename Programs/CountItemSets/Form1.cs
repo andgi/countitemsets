@@ -448,12 +448,8 @@ namespace CountItemSets
                 Int64.TryParse(columns[0], out eanNr1);
                 long eanNr2 = 0;
                 Int64.TryParse(columns[1], out eanNr2);
-                try // FIXME: Should not be needed. Why are there unknown EANs in the GPU dictionary?!
-                {
-                    results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
-                    results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
-                }
-                catch { }
+                results.Add(new AssociationRule(eanNr1, 0, 0, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel1[eanNr1], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr1] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, 0, 0, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel1[eanNr2], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel1[eanNr2] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel3)
@@ -481,14 +477,10 @@ namespace CountItemSets
                 Int64.TryParse(columns[2], out eanNr3);
                 long eanNr4 = 0;
                 Int64.TryParse(columns[3], out eanNr4);
-                try // FIXME: Should not be needed. Why are there unknown EANs in the GPU dictionary?!
-                {
-                    results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)pair.Value / (double)transactionCount));
-                    results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
-                    results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
-                    results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
-                }
-                catch { }
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr3, 0, eanNr4, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr3] * (double)dictionaryLevel1[eanNr4]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr2, eanNr4, 0, eanNr3, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr2 + "," + eanNr4] * (double)dictionaryLevel1[eanNr3]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr1, eanNr3, eanNr4, 0, eanNr2, (double)pair.Value / (double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr1 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr2]), (double)pair.Value / (double)transactionCount));
+                results.Add(new AssociationRule(eanNr2, eanNr3, eanNr4, 0, eanNr1, (double)pair.Value / (double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4], ((double)pair.Value * (double)transactionCount) / ((double)dictionaryLevel3[eanNr2 + "," + eanNr3 + "," + eanNr4] * (double)dictionaryLevel1[eanNr1]), (double)pair.Value / (double)transactionCount));
             }
 
             foreach (KeyValuePair<string, int> pair in dictionaryLevel5)

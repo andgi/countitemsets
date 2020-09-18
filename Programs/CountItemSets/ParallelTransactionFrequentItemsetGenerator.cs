@@ -129,7 +129,7 @@ namespace CountItemSets
                     for (int t = range.Item1; t < range.Item2; t++)
                     {
                         List<long> keys = transactions[t].EANCodes;
-                        List<long> vgrs = transactions[t].VGRCodes;
+                        //List<long> vgrs = transactions[t].VGRCodes;
                         if (keys.Count > 1)
                             for (int i = 0; i < (keys.Count - 1); i++)
                             {
@@ -220,7 +220,7 @@ namespace CountItemSets
                     for (int t = range.Item1; t < range.Item2; t++)
                     {
                         List<long> keys = transactions[t].EANCodes;
-                        List<long> vgrs = transactions[t].VGRCodes;
+                        //List<long> vgrs = transactions[t].VGRCodes;
                         if (keys.Count > 2)
                         {
                             for (int i = 0; i < (keys.Count - 2); i++)
@@ -373,7 +373,7 @@ namespace CountItemSets
                     for (int t = range.Item1; t < range.Item2; t++)
                     {
                         List<long> keys = transactions[t].EANCodes;
-                        List<long> vgrs = transactions[t].VGRCodes;
+                        //List<long> vgrs = transactions[t].VGRCodes;
                         if (keys.Count > 3)
                         {
                             for (int i = 0; i < (keys.Count - 3); i++)
@@ -612,7 +612,7 @@ namespace CountItemSets
                     for (int t = range.Item1; t < range.Item2; t++)
                     {
                         List<long> keys = transactions[t].EANCodes;
-                        List<long> vgrs = transactions[t].VGRCodes;
+                        //List<long> vgrs = transactions[t].VGRCodes;
                         if (keys.Count > 4)
                         {
                             for (int i = 0; i < (keys.Count - 4); i++)
